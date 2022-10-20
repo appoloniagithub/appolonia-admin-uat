@@ -20,7 +20,7 @@ import logo from "../../assets/images/logo.svg"
 import logoLight from "../../assets/images/logo-light.png"
 import logoLightSvg from "../../assets/images/logo-light.svg"
 import logoDark from "../../assets/images/logo-dark.png"
-
+import applogo from "../../assets/images/applogo.png"
 // import images
 import github from "../../assets/images/brands/github.png"
 import bitbucket from "../../assets/images/brands/bitbucket.png"
@@ -65,50 +65,29 @@ const Header = props => {
   }
   return (
     <React.Fragment>
-      <header id="page-topbar">
+      <header
+        style={{ backgroundColor: "#20507b", color: "white" }}
+        id="page-topbar"
+      >
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
               <Link to="/" className="logo logo-dark">
-                <span className="logo-sm">
-                  <img
-                    src={
-                      "https://o.remove.bg/downloads/6ae35794-7cf1-475b-966e-c5c3862da98d/Screen_Shot_2022-10-07_at_4.10.43_PM-removebg-preview.png"
-                    }
-                    alt=""
-                    height="22"
-                  />
-                </span>
                 <span className="logo-lg">
-                  <img
-                    src={
-                      "https://o.remove.bg/downloads/6ae35794-7cf1-475b-966e-c5c3862da98d/Screen_Shot_2022-10-07_at_4.10.43_PM-removebg-preview.png"
-                    }
-                    alt=""
-                    height="17"
-                  />
+                  <img src={applogo} alt="" height="35" />
                 </span>
+                {/* <span className="logo-lg">
+                  <img src={applogo} alt="" height="17" />
+                </span> */}
               </Link>
 
               <Link to="/" className="logo logo-light">
-                <span className="logo-sm">
-                  <img
-                    src={
-                      "https://o.remove.bg/downloads/6ae35794-7cf1-475b-966e-c5c3862da98d/Screen_Shot_2022-10-07_at_4.10.43_PM-removebg-preview.png"
-                    }
-                    alt=""
-                    height="22"
-                  />
-                </span>
                 <span className="logo-lg">
-                  <img
-                    src={
-                      "https://o.remove.bg/downloads/6ae35794-7cf1-475b-966e-c5c3862da98d/Screen_Shot_2022-10-07_at_4.10.43_PM-removebg-preview.png"
-                    }
-                    alt=""
-                    height="19"
-                  />
+                  <img src={applogo} alt="" height="35" />
                 </span>
+                {/* <span className="logo-lg">
+                  <img src={applogo} alt="" height="19" />
+                </span> */}
               </Link>
             </div>
 
@@ -319,7 +298,7 @@ const Header = props => {
 
             {/* <LanguageDropdown /> */}
 
-            <Dropdown
+            {/* <Dropdown
               className="d-none d-lg-inline-block ms-1"
               isOpen={socialDrp}
               toggle={() => {
@@ -377,7 +356,7 @@ const Header = props => {
                   </Row>
                 </div>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
 
             <div className="dropdown d-none d-lg-inline-block ms-1">
               <button
@@ -388,7 +367,7 @@ const Header = props => {
                 }}
                 data-toggle="fullscreen"
               >
-                <i className="bx bx-fullscreen" />
+                <i style={{ color: "white" }} className="bx bx-fullscreen" />
               </button>
             </div>
 
@@ -396,7 +375,7 @@ const Header = props => {
 
             <ProfileMenu />
 
-            <div className="dropdown d-inline-block">
+            {/* <div className="dropdown d-inline-block">
               <button
                 onClick={() => {
                   props.showRightSidebarAction(!props.showRightSidebar)
@@ -406,7 +385,7 @@ const Header = props => {
               >
                 <i className="bx bx-cog bx-spin" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

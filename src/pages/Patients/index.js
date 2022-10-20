@@ -48,7 +48,7 @@ const Allpatients = () => {
       {console.log(conversations)}
       <div className="page-content">
         {/* <Container fluid> */}
-        <h4>All Patients</h4>
+        <h4>Patients</h4>
         {patients?.length === 0 && <Spinner className="ms-2" color="primary" />}
         {patients?.length > 0 && conversations && (
           <Patientstable data={patients} conversations={conversations} />

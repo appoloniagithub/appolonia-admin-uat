@@ -99,26 +99,10 @@ const Navbar = props => {
                   >
                     <i className="bx bx-home-circle me-2"></i>
                     {props.t("Dashboard")} {props.menuOpen}
-                    <div className="arrow-down"></div>
+                    {/* <div className="arrow-down"></div> */}
                   </Link>
-                  <div
-                    className={classname("dropdown-menu", { show: dashboard })}
-                  >
-                    <Link to="/#" className="dropdown-item">
-                      {props.t("Default")}
-                    </Link>
-                  </div>
                 </li>
-                {/* <Link
-                  onClick={e => {
-                    // e.preventDefault()
-                    setPatient(!patient)
-                  }}
-                  className="nav-link"
-                  to="/patients"
-                >
-                  Patients
-                </Link> */}
+
                 <li className="nav-item ">
                   <Link
                     className="nav-link"
@@ -128,18 +112,66 @@ const Navbar = props => {
                     }}
                     to="/patients"
                   >
-                    <i className="bx bx-home-circle me-2"></i>
-                    {props.t("Patient")}
+                    {/* <i className="bx bx-home-circle me-2"></i> */}
+                    {props.t("Patients")}
                     {/* <div className="arrow-down"></div> */}
                   </Link>
-                  {/* <div
-                    className={classname("dropdown-menu", { show: dashboard })}
+                </li>
+                <li className="nav-item ">
+                  <Link
+                    className="nav-link"
+                    onClick={e => {
+                      // e.preventDefault()
+                      setPatient(!patient)
+                    }}
+                    to="/patients"
                   >
-                    <Link to="/#" className="dropdown-item">
-                      {props.t("Default")}
-                    </Link>
-                 
-                  </div> */}
+                    {/* <i className="bx bx-home-circle me-2"></i> */}
+                    {props.t("Doctors")}
+                    {/* <div className="arrow-down"></div> */}
+                  </Link>
+                </li>
+                <li className="nav-item ">
+                  <Link
+                    className="nav-link"
+                    onClick={e => {
+                      // e.preventDefault()
+                      setPatient(!patient)
+                    }}
+                    to="/patients"
+                  >
+                    {/* <i className="bx bx-home-circle me-2"></i> */}
+                    {props.t("Settings")}
+                    {/* <div className="arrow-down"></div> */}
+                  </Link>
+                </li>
+                <li className="nav-item ">
+                  <Link
+                    className="nav-link"
+                    onClick={e => {
+                      // e.preventDefault()
+                      setPatient(!patient)
+                    }}
+                    to="/patients"
+                  >
+                    {/* <i className="bx bx-home-circle me-2"></i> */}
+                    {props.t("Library")}
+                    {/* <div className="arrow-down"></div> */}
+                  </Link>
+                </li>
+                <li className="nav-item ">
+                  <Link
+                    className="nav-link"
+                    onClick={e => {
+                      // e.preventDefault()
+                      setPatient(!patient)
+                    }}
+                    to="/patients"
+                  >
+                    {/* <i className="bx bx-home-circle me-2"></i> */}
+                    {props.t("Support")}
+                    {/* <div className="arrow-down"></div> */}
+                  </Link>
                 </li>
 
                 {/* <li className="nav-item dropdown">

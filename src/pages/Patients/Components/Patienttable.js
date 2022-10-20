@@ -44,7 +44,7 @@ const Patienttable = ({ data, conversations }) => {
     <div>
       <Card>
         <CardBody>
-          <CardTitle>Patients Table</CardTitle>
+          {/* <CardTitle>Patients Table</CardTitle> */}
           {/* <CardSubtitle className="mb-3">
             For basic styling—light padding and only horizontal dividers—add the
             base className <code>.table</code> to any

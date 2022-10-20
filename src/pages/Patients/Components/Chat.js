@@ -161,14 +161,17 @@ const Chat = ({ patientMessages, patientInfo }) => {
     }
   }
   return (
-    <div className="w-100 user-chat">
+    <div className="w-100 user-chat border border-secondary rounded ">
       <Card>
-        <div className="p-4 border-bottom ">
+        <div
+          style={{ backgroundColor: "#20507B", color: "white" }}
+          className="p-3 "
+        >
           <Row>
             <Col md="4" xs="9">
-              <h5 className="font-size-15 mb-1">{`${patientInfo?.firstName} ${patientInfo?.lastName}`}</h5>
+              <h5 className="font-size-15 mb-1 text-light">{`Chat`}</h5>
 
-              <p className="text-muted mb-0">
+              {/* <p className="text-muted mb-0">
                 <i
                   className={
                     Chat_Box_User_Status === "online"
@@ -179,7 +182,7 @@ const Chat = ({ patientMessages, patientInfo }) => {
                   }
                 />
                 {Chat_Box_User_Status}
-              </p>
+              </p> */}
             </Col>
             {/* <Col md="8" xs="3">
               <ul className="list-inline user-chat-nav text-end mb-0">
@@ -306,52 +309,26 @@ const Chat = ({ patientMessages, patientInfo }) => {
                     className="form-control chat-input"
                     placeholder="Enter Message..."
                   />
-                  {/* <div className="chat-input-links">
-                    <ul className="list-inline mb-0">
-                      <li className="list-inline-item">
-                        <Link to="#">
-                          <i
-                            className="mdi mdi-emoticon-happy-outline"
-                            id="Emojitooltip"
-                          />
-                          <UncontrolledTooltip
-                            placement="top"
-                            target="Emojitooltip"
-                          >
-                            Emojis
-                          </UncontrolledTooltip>
-                        </Link>
-                      </li>
-                      <li className="list-inline-item">
-                        <Link to="#">
-                          <i
-                            className="mdi mdi-file-image-outline"
-                            id="Imagetooltip"
-                          />
-                          <UncontrolledTooltip
-                            placement="top"
-                            target="Imagetooltip"
-                          >
-                            Images
-                          </UncontrolledTooltip>
-                        </Link>
-                      </li>
-                      <li className="list-inline-item">
-                        <Link to="#">
-                          <i
-                            className="mdi mdi-file-document-outline"
-                            id="Filetooltip"
-                          />
-                          <UncontrolledTooltip
-                            placement="top"
-                            target="Filetooltip"
-                          >
-                            Add Files
-                          </UncontrolledTooltip>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div> */}
+                  {curMessage?.length === 0 && (
+                    <div className="chat-input-links">
+                      <ul className="list-inline mb-0">
+                        <li className="list-inline-item">
+                          <Link to="#">
+                            <i
+                              className="mdi mdi-file-image-outline"
+                              id="Imagetooltip"
+                            />
+                            <UncontrolledTooltip
+                              placement="top"
+                              target="Imagetooltip"
+                            >
+                              Images
+                            </UncontrolledTooltip>
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </Col>
               <Col className="col-auto">

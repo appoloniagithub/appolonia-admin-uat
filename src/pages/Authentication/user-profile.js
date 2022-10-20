@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   Container,
   Row,
@@ -11,77 +11,75 @@ import {
   Input,
   FormFeedback,
   Form,
-} from "reactstrap";
+} from "reactstrap"
 
 // Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumb from "../../components/Common/Breadcrumb";
+import Breadcrumb from "../../components/Common/Breadcrumb"
 
-import avatar from "../../assets/images/users/avatar-1.jpg";
+import avatar from "../../assets/images/users/avatar-1.jpg"
 // actions
-import { editProfile, resetProfileFlag } from "../../store/actions";
+import { editProfile, resetProfileFlag } from "../../store/actions"
 
 const UserProfile = () => {
+  //meta title
+  document.title = "Profile | Appolonia Dental Care"
 
-   //meta title
-   document.title="Profile | Skote - React Admin & Dashboard Template";
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
-
-  const [email, setemail] = useState("");
-  const [name, setname] = useState("");
-  const [idx, setidx] = useState(1);
+  const [email, setemail] = useState("")
+  const [name, setname] = useState("")
+  const [idx, setidx] = useState(1)
 
   const { error, success } = useSelector(state => ({
     error: state.Profile.error,
     success: state.Profile.success,
-  }));
+  }))
 
   useEffect(() => {
     if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"));
+      const obj = JSON.parse(localStorage.getItem("authUser"))
       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName);
-        setemail(obj.email);
-        setidx(obj.uid);
+        setname(obj.displayName)
+        setemail(obj.email)
+        setidx(obj.uid)
       } else if (
         process.env.REACT_APP_DEFAULTAUTH === "fake" ||
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
-        setname(obj.username);
-        setemail(obj.email);
-        setidx(obj.uid);
+        setname(obj.username)
+        setemail(obj.email)
+        setidx(obj.uid)
       }
       setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
+        dispatch(resetProfileFlag())
+      }, 3000)
     }
-  }, [dispatch, success]);
+  }, [dispatch, success])
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      username: name || '',
-      idx : idx || '',
+      username: name || "",
+      idx: idx || "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Please Enter Your UserName"),
     }),
-    onSubmit: (values) => {
-      dispatch(editProfile(values));
-    }
-  });
-
+    onSubmit: values => {
+      dispatch(editProfile(values))
+    },
+  })
 
   return (
     <React.Fragment>
@@ -124,10 +122,10 @@ const UserProfile = () => {
             <CardBody>
               <Form
                 className="form-horizontal"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  validation.handleSubmit();
-                  return false;
+                onSubmit={e => {
+                  e.preventDefault()
+                  validation.handleSubmit()
+                  return false
                 }}
               >
                 <div className="form-group">
@@ -142,11 +140,15 @@ const UserProfile = () => {
                     onBlur={validation.handleBlur}
                     value={validation.values.username || ""}
                     invalid={
-                      validation.touched.username && validation.errors.username ? true : false
+                      validation.touched.username && validation.errors.username
+                        ? true
+                        : false
                     }
                   />
                   {validation.touched.username && validation.errors.username ? (
-                    <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                    <FormFeedback type="invalid">
+                      {validation.errors.username}
+                    </FormFeedback>
                   ) : null}
                   <Input name="idx" value={idx} type="hidden" />
                 </div>
@@ -161,7 +163,7 @@ const UserProfile = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(UserProfile);
+export default withRouter(UserProfile)

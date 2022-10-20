@@ -5,29 +5,34 @@ const Patientnotes = ({ view, handleView }) => {
   return (
     <div
       style={{
-        minHeight: "100px",
+        // minHeight: "100px",
         height: "auto",
         position: "relative",
       }}
-      className="border border-secondary rounded bg-warning p-2 text-white"
+      className="border border-secondary rounded text-dark  text-white"
     >
-      <div className="d-flex justify-content-between">
-        <h5 className="text-white">Patient Notes</h5>
-        <button className="btn" onClick={() => handleView("notes")}>
+      <div
+        style={{ backgroundColor: "#20507B", color: "white" }}
+        className="d-flex justify-content-between p-1"
+      >
+        <h5 className="text-white mt-2">Patient Notes</h5>
+        <button className="btn text-light" onClick={() => handleView("notes")}>
           +
         </button>
       </div>
-      <br></br>
-      {view === false && (
-        <div>
-          <p>1. I am point 1</p>
-          <p>2. I am point 2</p>
-          <p>2. I am point 2</p>
-          <p>2. I am point 2</p>
-          <p>2. I am point 2</p>
-          <p>2. I am point 2</p>
 
-          <div style={{ position: "absolute", bottom: 0 }}>
+      {view === false && (
+        <div className="text-dark p-1">
+          <div>
+            <p>1. I am point 1</p>
+            <p>2. I am point 2</p>
+            <p>2. I am point 2</p>
+            <p>2. I am point 2</p>
+            <p>2. I am point 2</p>
+            <p>2. I am point 2</p>
+          </div>
+
+          <div>
             <FormGroup className="d-flex ">
               <div className="">
                 <Input
@@ -39,7 +44,7 @@ const Patientnotes = ({ view, handleView }) => {
               </div>
 
               <div>
-                <button className="btn btn-primary">Add Note</button>
+                <button className="btn btn-primary">Save</button>
               </div>
             </FormGroup>
           </div>

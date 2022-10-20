@@ -1,20 +1,18 @@
 import React from "react"
-import {
-  Container,
-} from "reactstrap"
+import { Container } from "reactstrap"
 
 const Dashboard = () => {
   //meta title
-  document.title="Forget Password | Skote - React Admin & Dashboard Template";
+  document.title = "Forget Password | Appolonia Dental Care"
   return (
     <React.Fragment>
-    <div className="page-content">
-      <Container fluid>
-        <h4>Dashboard</h4>
-      </Container>
-    </div>
-  </React.Fragment>
-  );
+      <div className="page-content">
+        <Container fluid>
+          <h4>Dashboard</h4>
+        </Container>
+      </div>
+    </React.Fragment>
+  )
 }
 
-export default Dashboard;
+export default Dashboard

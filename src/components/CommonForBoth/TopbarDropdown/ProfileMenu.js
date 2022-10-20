@@ -1,41 +1,41 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react"
+import PropTypes from "prop-types"
 import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from "reactstrap";
+} from "reactstrap"
 
 //i18n
-import { withTranslation } from "react-i18next";
+import { withTranslation } from "react-i18next"
 // Redux
-import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux"
+import { withRouter, Link } from "react-router-dom"
 
 // users
-import user1 from "../../../assets/images/users/avatar-1.jpg";
+import user1 from "../../../assets/images/users/avatar-1.jpg"
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
-  const [menu, setMenu] = useState(false);
+  const [menu, setMenu] = useState(false)
 
-  const [username, setusername] = useState("Admin");
+  const [username, setusername] = useState("Admin")
 
   useEffect(() => {
     if (localStorage.getItem("authUser")) {
       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("authUser"));
-        setusername(obj.displayName);
+        const obj = JSON.parse(localStorage.getItem("authUser"))
+        setusername(obj.displayName)
       } else if (
         process.env.REACT_APP_DEFAULTAUTH === "fake" ||
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
-        const obj = JSON.parse(localStorage.getItem("authUser"));
-        setusername(obj.username);
+        const obj = JSON.parse(localStorage.getItem("authUser"))
+        setusername(obj.username)
       }
     }
-  }, [props.success]);
+  }, [props.success])
 
   return (
     <React.Fragment>
@@ -54,8 +54,16 @@ const ProfileMenu = props => {
             src={user1}
             alt="Header Avatar"
           />
-          <span className="d-none d-xl-inline-block ms-2 me-1">{username}</span>
-          <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
+          <span
+            style={{ color: "white" }}
+            className="d-none d-xl-inline-block ms-2 me-1"
+          >
+            {username}
+          </span>
+          <i
+            style={{ color: "white" }}
+            className="mdi mdi-chevron-down d-none d-xl-inline-block"
+          />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem tag="a" href="/profile">
@@ -84,19 +92,19 @@ const ProfileMenu = props => {
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
-  );
-};
+  )
+}
 
 ProfileMenu.propTypes = {
   success: PropTypes.any,
-  t: PropTypes.any
-};
+  t: PropTypes.any,
+}
 
 const mapStatetoProps = state => {
-  const { error, success } = state.Profile;
-  return { error, success };
-};
+  const { error, success } = state.Profile
+  return { error, success }
+}
 
 export default withRouter(
   connect(mapStatetoProps, {})(withTranslation()(ProfileMenu))
-);
+)

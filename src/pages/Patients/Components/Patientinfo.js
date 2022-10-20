@@ -1,59 +1,88 @@
 import React from "react"
 import moment from "moment"
+import { Button } from "reactstrap"
+import user1 from "../../../assets/images/users/avatar-1.jpg"
 
-const Patientinfo = ({ data, view, handleView }) => {
+const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   console.log(data)
   return (
-    <div className="border border-secondary rounded bg-white p-2 ">
-      <div className="d-flex justify-content-between">
-        <h5>Patient Information</h5>
-        <button className="btn" onClick={() => handleView("info")}>
+    <div className="border border-secondary rounded  ">
+      <div
+        style={{ backgroundColor: "#20507B", color: "white" }}
+        className="d-flex justify-content-between "
+      >
+        <div>
+          <button onClick={handleOpen} className="btn text-light">
+            <i className="fas fa-arrow-left" />
+          </button>
+        </div>
+
+        <h5 className="mt-2 text-light">Patient Information</h5>
+        <button className="btn text-light" onClick={() => handleView("info")}>
           +
         </button>
       </div>
 
-      <br />
+      {/* <br /> */}
       {view === true && (
-        <div>
+        <div className="p-2">
           <div>
-            <p>
-              <strong>File Number</strong>:{" "}
-              {data.fileNumber ? data?.fileNumber : "12345"}
-            </p>
-            <p>
-              <strong>Registered On</strong>:
-              {moment(data?.createdAt).format("DD-MM-YY hh:mm")}
-            </p>
-            <p>
-              <strong>Last Scan Done</strong>:{" "}
-              {moment(data?.lastScan).format("DD-MM-YY hh:mm")}
-            </p>
+            <div className="d-flex">
+              <img
+                className="rounded-circle header-profile-user"
+                src={user1}
+                alt="Header Avatar"
+              />
+              <div className="m-2">
+                <h5>
+                  {data?.firstName} {data?.lastName}
+                </h5>
+              </div>
+            </div>
+            <ul className="p-0" style={{ listStyle: "none" }}>
+              <li>
+                <strong>File Number</strong>:{" "}
+                {data.fileNumber ? data?.fileNumber : "12345"}
+              </li>
+              <li>
+                <strong>Registered On</strong>:
+                {moment(data?.createdAt).format("DD-MM-YY hh:mm")}
+              </li>
+              <li>
+                <strong>Last Scan Done</strong>:{" "}
+                {moment(data?.lastScan).format("DD-MM-YY hh:mm")}
+              </li>
+            </ul>
           </div>
-          <br />
+          {/* <br /> */}
           <div>
             <h5>Personal Information</h5>
-            <p>
-              <strong>Date of Birth</strong>: {data?.dob}
-            </p>
-            <p>
-              <strong>Gender</strong>: {data?.gender}
-            </p>
-            <p>
-              <strong>City</strong>: {data?.city}
-            </p>
-            <p>
-              <strong>Email Id</strong>: {data?.email}
-            </p>
+            <ul className="p-0" style={{ listStyle: "none" }}>
+              <li>
+                <strong>Date of Birth</strong>: {data?.dob}
+              </li>
+              <li>
+                <strong>Gender</strong>: {data?.gender}
+              </li>
+              <li>
+                <strong>City</strong>: {data?.city}
+              </li>
+              <li>
+                <strong>Email Id</strong>: {data?.email}
+              </li>
+            </ul>
           </div>
-          <br />
+          {/* <br /> */}
           <div>
             <h5>Insurance Information</h5>
-            <p>
-              <strong>Emirates Id</strong>: {data.emiratesId}
-            </p>
-            <p>
-              <strong>Expiry</strong>: 29 oct
-            </p>
+            <ul className="p-0" style={{ listStyle: "none" }}>
+              <li>
+                <strong>Emirates Id</strong>: {data.emiratesId}
+              </li>
+              <li>
+                <strong>Expiry</strong>: 29 oct
+              </li>
+            </ul>
           </div>
         </div>
       )}

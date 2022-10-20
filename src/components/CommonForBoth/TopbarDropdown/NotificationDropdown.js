@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
-import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap";
-import SimpleBar from "simplebar-react";
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { Link } from "react-router-dom"
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap"
+import SimpleBar from "simplebar-react"
 
 //Import images
-import avatar3 from "../../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../../assets/images/users/avatar-4.jpg";
+import avatar3 from "../../../assets/images/users/avatar-3.jpg"
+import avatar4 from "../../../assets/images/users/avatar-4.jpg"
 
 //i18n
-import { withTranslation } from "react-i18next";
+import { withTranslation } from "react-i18next"
 
 const NotificationDropdown = props => {
   // Declare a new state variable, which we'll call "menu"
-  const [menu, setMenu] = useState(false);
+  const [menu, setMenu] = useState(false)
 
   return (
     <React.Fragment>
@@ -22,13 +22,14 @@ const NotificationDropdown = props => {
         toggle={() => setMenu(!menu)}
         className="dropdown d-inline-block"
         tag="li"
+        style={{ color: "white" }}
       >
         <DropdownToggle
           className="btn header-item noti-icon"
           tag="button"
           id="page-header-notifications-dropdown"
         >
-          <i className="bx bx-bell bx-tada" />
+          <i style={{ color: "white" }} className="bx bx-bell bx-tada" />
           <span className="badge bg-danger rounded-pill">3</span>
         </DropdownToggle>
 
@@ -48,7 +49,7 @@ const NotificationDropdown = props => {
           </div>
 
           <SimpleBar style={{ height: "230px" }}>
-            <Link to="" className="text-reset notification-item">
+            {/* <Link to="" className="text-reset notification-item">
               <div className="d-flex">
                 <div className="avatar-xs me-3">
                   <span className="avatar-title bg-primary rounded-circle font-size-16">
@@ -143,21 +144,25 @@ const NotificationDropdown = props => {
                   </div>
                 </div>
               </div>
-            </Link>
+            </Link> */}
           </SimpleBar>
-          <div className="p-2 border-top d-grid">
-            <Link className="btn btn-sm btn-link font-size-14 text-center" to="#">
-              <i className="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">{props.t("View More..")}</span>
+          {/* <div className="p-2 border-top d-grid">
+            <Link
+              className="btn btn-sm btn-link font-size-14 text-center"
+              to="#"
+            >
+              <i className="mdi mdi-arrow-right-circle me-1"></i>{" "}
+              <span key="t-view-more">{props.t("View More..")}</span>
             </Link>
-          </div>
+          </div> */}
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withTranslation()(NotificationDropdown);
+export default withTranslation()(NotificationDropdown)
 
 NotificationDropdown.propTypes = {
-  t: PropTypes.any
-};
+  t: PropTypes.any,
+}

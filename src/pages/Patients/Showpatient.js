@@ -369,7 +369,7 @@ export default function Showpatient({
         onClose={handleOpen}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: "relative" }}>
+        {/* <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -383,9 +383,9 @@ export default function Showpatient({
               Patient Details
             </Typography>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
         <React.Fragment>
-          <div className="mt-3">
+          <div className="m-2">
             {/* <Container fluid> */}
             {/* <h4>Patient Details</h4>
             <br /> */}
@@ -397,6 +397,7 @@ export default function Showpatient({
                       view={patientInfoView === true ? true : false}
                       data={patientInfo}
                       handleView={handlePatientInfoView}
+                      handleOpen={handleOpen}
                     />
                   </Col>
                 </Row>
@@ -474,7 +475,7 @@ export default function Showpatient({
                                     ></div>
                                     <div
                                       style={{
-                                        width: "90px",
+                                        width: "45px",
                                         height: "5px",
                                         // backgroundColor: "black",
                                         // borderRadius: "50%",
@@ -486,7 +487,7 @@ export default function Showpatient({
                                   <p>
                                     {dateFormat(
                                       singleScan?.created,
-                                      "mmmm dS, yyyy"
+                                      "mmm dS, yy"
                                     )}
                                   </p>
                                 </div>
@@ -497,7 +498,7 @@ export default function Showpatient({
                       </Col>
                       <Col sm="12">
                         <div className="border border-secondary bg-white rounded p-2">
-                          <br />
+                          {/* <br /> */}
                           <div className="">
                             <div>
                               <button
