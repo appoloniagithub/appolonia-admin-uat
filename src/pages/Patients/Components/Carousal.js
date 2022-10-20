@@ -181,7 +181,7 @@ const items = [
 
 const Scancarousal = ({ scanImages }) => {
   return (
-    <Carousel>
+    <Carousel interval={null}>
       {scanImages?.map((image, i) => {
         console.log(scanImages.length, "i am scvan images")
         return (

@@ -473,16 +473,18 @@ export default function Showpatient({
                                         )
                                       }
                                     ></div>
-                                    <div
-                                      style={{
-                                        width: "45px",
-                                        height: "5px",
-                                        // backgroundColor: "black",
-                                        // borderRadius: "50%",
-                                        marginTop: "10px",
-                                      }}
-                                      className="bg-primary mx-2"
-                                    ></div>
+                                    {i !== patientScans?.length - 1 && (
+                                      <div
+                                        style={{
+                                          width: "50px",
+                                          height: "5px",
+                                          // backgroundColor: "black",
+                                          // borderRadius: "50%",
+                                          marginTop: "10px",
+                                        }}
+                                        className="bg-primary mx-2"
+                                      ></div>
+                                    )}
                                   </div>
                                   <p>
                                     {dateFormat(
@@ -569,6 +571,7 @@ export default function Showpatient({
                           <div>
                             <Horizental
                               content={patientScans?.map((singleScan, i) => {
+                                console.log(i, "i am index")
                                 return (
                                   <div key={i} className="">
                                     <div className="d-flex">
@@ -587,16 +590,18 @@ export default function Showpatient({
                                           )
                                         }
                                       ></div>
-                                      <div
-                                        style={{
-                                          width: "90px",
-                                          height: "5px",
-                                          // backgroundColor: "black",
-                                          // borderRadius: "50%",
-                                          marginTop: "10px",
-                                        }}
-                                        className="bg-primary mx-2"
-                                      ></div>
+                                      {i !== patientScans?.length - 1 && (
+                                        <div
+                                          style={{
+                                            width: "50px",
+                                            height: "5px",
+                                            // backgroundColor: "black",
+                                            // borderRadius: "50%",
+                                            marginTop: "10px",
+                                          }}
+                                          className="bg-primary mx-2"
+                                        ></div>
+                                      )}
                                     </div>
                                     <p>
                                       {dateFormat(

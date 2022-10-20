@@ -27,7 +27,7 @@ const Allpatients = () => {
   }
   let handleGetConversations = async () => {
     try {
-      let res = await getConversations({ userId: "632c2f19f114bb4be6e1d226" })
+      let res = await getConversations({ userId: "6351452835155fec28aa67b1" })
       console.log(res)
       if (res.data.data.success === 1) {
         console.log(res.data.data.conversations)
