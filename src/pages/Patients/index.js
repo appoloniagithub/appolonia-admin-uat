@@ -50,7 +50,7 @@ const Allpatients = () => {
         {/* <Container fluid> */}
         <h4>Patients</h4>
         {patients?.length === 0 && <Spinner className="ms-2" color="primary" />}
-        {patients?.length > 0 && conversations && (
+        {patients?.length > 0 && (
           <Patientstable data={patients} conversations={conversations} />
         )}
         {/* </Container> */}
