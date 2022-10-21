@@ -3,7 +3,7 @@ import { Container } from "reactstrap"
 
 const Dashboard = () => {
   //meta title
-  document.title = "Forget Password | Appolonia Dental Care"
+  document.title = "Dashboard | Appolonia Dental Care"
   return (
     <React.Fragment>
       <div className="page-content">

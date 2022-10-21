@@ -245,6 +245,11 @@ export default function Showpatient({
     if (customIconActiveTab !== tab) {
       setcustomIconActiveTab(tab)
     }
+    if (tab === "4") {
+      setChecked(true)
+    } else {
+      setChecked(false)
+    }
   }
   const handlePatientInfoView = doer => {
     if (doer === "info") {
@@ -260,6 +265,10 @@ export default function Showpatient({
       console.log(res)
       if (res?.data?.data?.success === 1) {
         setPatientScans(res.data.data.scans)
+        handleScan1(
+          res.data.data.scans[res.data.data.scans?.length - 1].faceScanImages,
+          res.data.data.scans[res.data.data.scans?.length - 1].teethScanImages
+        )
       } else {
         setPatientScans(res.data.data.scans)
         toast.error(res.data.message, {
@@ -280,9 +289,7 @@ export default function Showpatient({
       teethScan,
     })
     setSelectedScanImages1(faceScan)
-    // if (checked === false && faceView === true) {
     setFaceView(true)
-    // }
   }
 
   const handleSelectedScanImages1 = type => {
@@ -357,9 +364,6 @@ export default function Showpatient({
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleOpen}>
-        Open full-screen dialog
-      </Button> */}
       <Button onClick={handleOpen} color="primary" className="btn btn-primary ">
         View
       </Button>
@@ -369,21 +373,6 @@ export default function Showpatient({
         onClose={handleOpen}
         TransitionComponent={Transition}
       >
-        {/* <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleOpen}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Patient Details
-            </Typography>
-          </Toolbar>
-        </AppBar> */}
         <React.Fragment>
           <div className="m-2">
             {/* <Container fluid> */}
@@ -407,6 +396,7 @@ export default function Showpatient({
                     <Patientnotes
                       view={patientInfoView === true ? true : false}
                       handleView={handlePatientInfoView}
+                      data={patientInfo}
                     />
                   </Col>
                 </Row>
@@ -417,247 +407,500 @@ export default function Showpatient({
                   customIconActiveTab={customIconActiveTab}
                 />
                 <br />
-                <div className="d-flex justify-content-between">
-                  <h5>Compare scans of 2 different timelines </h5>
-                  <Form>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                      label="Check this switch"
-                      onChange={handleChange}
-                      // checked={checked}
-                      value={checked}
-                    />
-                  </Form>
-                </div>
+                {customIconActiveTab === "1" && (
+                  <div>
+                    {/* <div className="d-flex justify-content-between">
+                    <h5>Compare scans of 2 different timelines </h5>
+                    <Form>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Check this switch"
+                        onChange={handleChange}
+                        // checked={checked}
+                        value={checked}
+                      />
+                    </Form>
+                  </div> */}
 
-                <br />
+                    <br />
 
-                {/* <Row>
-                  <Col sm="12" md="6">
-                    <Chart
-                      options={chartOptions1.options}
-                      series={chartOptions1.series}
-                      type="line"
-                      height="100%"
-                      className="dashboard__first__right__card__area__content__graphic"
-                    />
-                  </Col>
-                </Row> */}
-                <Row>
-                  <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
                     <Row>
-                      <Col
-                        sm="12"
-                        // md="6"
-                        // className="d-flex justify-content-center"
-                      >
-                        <div>
-                          <Horizental
-                            content={patientScans?.map((singleScan, i) => {
-                              return (
-                                <div key={i}>
-                                  <div className="d-flex">
-                                    <div
-                                      style={{
-                                        width: "25px",
-                                        height: "25px",
-                                        // backgroundColor: "black",
-                                        borderRadius: "50%",
-                                      }}
-                                      className="bg-primary"
-                                      onClick={() =>
-                                        handleScan1(
-                                          singleScan?.faceScanImages,
-                                          singleScan?.teethScanImages
-                                        )
-                                      }
-                                    ></div>
-                                    {i !== patientScans?.length - 1 && (
-                                      <div
-                                        style={{
-                                          width: "50px",
-                                          height: "5px",
-                                          // backgroundColor: "black",
-                                          // borderRadius: "50%",
-                                          marginTop: "10px",
-                                        }}
-                                        className="bg-primary mx-2"
-                                      ></div>
-                                    )}
-                                  </div>
-                                  <p>
-                                    {dateFormat(
-                                      singleScan?.created,
-                                      "mmm dS, yy"
-                                    )}
-                                  </p>
-                                </div>
-                              )
-                            })}
-                          />
-                        </div>
-                      </Col>
-                      <Col sm="12">
-                        <div className="border border-secondary bg-white rounded p-2">
-                          {/* <br /> */}
-                          <div className="">
+                      <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
+                        <Row>
+                          <Col
+                            sm="12"
+                            // md="6"
+                            // className="d-flex justify-content-center"
+                          >
                             <div>
-                              <button
-                                onClick={() =>
-                                  handleSelectedScanImages1("face")
-                                }
-                                className="btn btn-primary btn-sm"
-                              >
-                                Face Scan
-                              </button>
-
-                              <button
-                                onClick={() =>
-                                  handleSelectedScanImages1("teeth")
-                                }
-                                className="btn btn-primary btn-sm mx-1"
-                              >
-                                Teeth Scan
-                              </button>
-                            </div>
-                            <br />
-                            {faceView === false && checked === false && (
-                              <div>
-                                {selectedScanImages1?.length > 0 && (
-                                  <Carousal scanImages={selectedScanImages1} />
-                                )}
-                              </div>
-                            )}
-                            {checked === true && (
-                              <div>
-                                {selectedScanImages1?.length > 0 && (
-                                  <Carousal scanImages={selectedScanImages1} />
-                                )}
-                              </div>
-                            )}
-
-                            {faceView === true && checked === false && (
-                              <div className="text-center">
-                                {selectedScanImages1?.map((image, i) => {
+                              <Horizental
+                                content={patientScans?.map((singleScan, i) => {
                                   return (
-                                    <img
-                                      key={i}
-                                      style={{
-                                        transform: `rotate(${0}deg)`,
-                                        // minHeight: "200px",
-                                        // height: "auto",
-                                        width: "32%",
-                                        height: "32%",
-                                      }}
-                                      className="mx-1 rounded"
-                                      src={`data:image/jpeg;base64,${image}`}
-
-                                      // alt={item.altText}
-                                    />
-                                  )
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-                  {checked === true && (
-                    <Col sm="12" md="6">
-                      <Row>
-                        <Col sm="12">
-                          <div>
-                            <Horizental
-                              content={patientScans?.map((singleScan, i) => {
-                                console.log(i, "i am index")
-                                return (
-                                  <div key={i} className="">
-                                    <div className="d-flex">
-                                      <div
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          // backgroundColor: "black",
-                                          borderRadius: "50%",
-                                        }}
-                                        className="bg-primary"
-                                        onClick={() =>
-                                          handleScan2(
-                                            singleScan?.faceScanImages,
-                                            singleScan?.teethScanImages
-                                          )
-                                        }
-                                      ></div>
-                                      {i !== patientScans?.length - 1 && (
+                                    <div key={i}>
+                                      <div className="d-flex">
                                         <div
                                           style={{
-                                            width: "50px",
-                                            height: "5px",
+                                            width: "25px",
+                                            height: "25px",
                                             // backgroundColor: "black",
-                                            // borderRadius: "50%",
-                                            marginTop: "10px",
+                                            borderRadius: "50%",
                                           }}
-                                          className="bg-primary mx-2"
+                                          className="bg-primary"
+                                          onClick={() =>
+                                            handleScan1(
+                                              singleScan?.faceScanImages,
+                                              singleScan?.teethScanImages
+                                            )
+                                          }
                                         ></div>
-                                      )}
+                                        {i !== patientScans?.length - 1 && (
+                                          <div
+                                            style={{
+                                              width: "50px",
+                                              height: "5px",
+                                              // backgroundColor: "black",
+                                              // borderRadius: "50%",
+                                              marginTop: "10px",
+                                            }}
+                                            className="bg-primary mx-2"
+                                          ></div>
+                                        )}
+                                      </div>
+                                      <p>
+                                        {dateFormat(
+                                          singleScan?.created,
+                                          "mmm dS, yy"
+                                        )}
+                                      </p>
                                     </div>
-                                    <p>
-                                      {dateFormat(
-                                        singleScan?.created,
-                                        "mmmm dS, yyyy"
-                                      )}
-                                    </p>
-                                  </div>
-                                )
-                              })}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col
-                          // className={`${checked === true ? "" : "d-none"}`}
-                          sm="12"
-                          // md="6"
-                        >
-                          <div className="border border-secondary bg-white rounded p-2">
-                            <br />
-                            <div className="">
-                              <div>
-                                <button
-                                  onClick={() =>
-                                    handleSelectedScanImages2("face")
-                                  }
-                                  className="btn btn-primary btn-sm"
-                                >
-                                  Face Scan
-                                </button>
-
-                                <button
-                                  onClick={() =>
-                                    handleSelectedScanImages2("teeth")
-                                  }
-                                  className="btn btn-primary btn-sm mx-1"
-                                >
-                                  Teeth Scan
-                                </button>
-                              </div>
-                              <br />
-                              {selectedScanImages2?.length > 0 && (
-                                <Carousal scanImages={selectedScanImages2} />
-                              )}
+                                  )
+                                })}
+                              />
                             </div>
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  )}
-                </Row>
+                          </Col>
+                          <Col sm="12">
+                            <div className="border border-secondary bg-white rounded p-2">
+                              {/* <br /> */}
+                              <div className="">
+                                <div>
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("face")
+                                    }
+                                    className="btn btn-primary btn-sm"
+                                  >
+                                    Face Scan
+                                  </button>
 
-                <br />
-                {!patientScans && <Spinner className="ms-2" color="primary" />}
-                {patientScans?.length === 0 && <p>No Scans Found</p>}
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("teeth")
+                                    }
+                                    className="btn btn-primary btn-sm mx-1"
+                                  >
+                                    Teeth Scan
+                                  </button>
+                                </div>
+                                <br />
+                                {faceView === false && checked === false && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+                                {checked === true && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+
+                                {faceView === true && checked === false && (
+                                  <div className="text-center">
+                                    {selectedScanImages1?.map((image, i) => {
+                                      return (
+                                        <img
+                                          key={i}
+                                          style={{
+                                            transform: `rotate(${0}deg)`,
+                                            // minHeight: "200px",
+                                            // height: "auto",
+                                            width: "32%",
+                                            height: "32%",
+                                          }}
+                                          className="mx-1 rounded"
+                                          src={`data:image/jpeg;base64,${image}`}
+
+                                          // alt={item.altText}
+                                        />
+                                      )
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                      {checked === true && (
+                        <Col sm="12" md="6">
+                          <Row>
+                            <Col sm="12">
+                              <div>
+                                <Horizental
+                                  content={patientScans?.map(
+                                    (singleScan, i) => {
+                                      console.log(i, "i am index")
+                                      return (
+                                        <div key={i} className="">
+                                          <div className="d-flex">
+                                            <div
+                                              style={{
+                                                width: "25px",
+                                                height: "25px",
+                                                // backgroundColor: "black",
+                                                borderRadius: "50%",
+                                              }}
+                                              className="bg-primary"
+                                              onClick={() =>
+                                                handleScan2(
+                                                  singleScan?.faceScanImages,
+                                                  singleScan?.teethScanImages
+                                                )
+                                              }
+                                            ></div>
+                                            {i !== patientScans?.length - 1 && (
+                                              <div
+                                                style={{
+                                                  width: "50px",
+                                                  height: "5px",
+                                                  // backgroundColor: "black",
+                                                  // borderRadius: "50%",
+                                                  marginTop: "10px",
+                                                }}
+                                                className="bg-primary mx-2"
+                                              ></div>
+                                            )}
+                                          </div>
+                                          <p>
+                                            {dateFormat(
+                                              singleScan?.created,
+                                              "mmm dS, yy"
+                                            )}
+                                          </p>
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                />
+                              </div>
+                            </Col>
+
+                            <Col
+                              // className={`${checked === true ? "" : "d-none"}`}
+                              sm="12"
+                              // md="6"
+                            >
+                              <div className="border border-secondary bg-white rounded p-2">
+                                <br />
+                                <div className="">
+                                  <div>
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("face")
+                                      }
+                                      className="btn btn-primary btn-sm"
+                                    >
+                                      Face Scan
+                                    </button>
+
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("teeth")
+                                      }
+                                      className="btn btn-primary btn-sm mx-1"
+                                    >
+                                      Teeth Scan
+                                    </button>
+                                  </div>
+                                  <br />
+                                  {selectedScanImages2?.length > 0 && (
+                                    <Carousal
+                                      scanImages={selectedScanImages2}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )}
+                    </Row>
+                    <br />
+                    {!patientScans && (
+                      <Spinner className="ms-2" color="primary" />
+                    )}
+                    {patientScans?.length === 0 && <p>No Scans Found</p>}
+                  </div>
+                )}
+                {customIconActiveTab === "4" && (
+                  <div>
+                    <div className="d-flex justify-content-between">
+                      <h5>Compare scans of 2 different timelines </h5>
+                      {/* <Form>
+                        <Form.Check
+                          type="switch"
+                          id="custom-switch"
+                          label="Check this switch"
+                          onChange={handleChange}
+                          // checked={checked}
+                          value={checked}
+                        />
+                      </Form> */}
+                    </div>
+
+                    <br />
+
+                    <Row>
+                      <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
+                        <Row>
+                          <Col
+                            sm="12"
+                            // md="6"
+                            // className="d-flex justify-content-center"
+                          >
+                            <div>
+                              <Horizental
+                                content={patientScans?.map((singleScan, i) => {
+                                  return (
+                                    <div key={i}>
+                                      <div className="d-flex">
+                                        <div
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            // backgroundColor: "black",
+                                            borderRadius: "50%",
+                                          }}
+                                          className="bg-primary"
+                                          onClick={() =>
+                                            handleScan1(
+                                              singleScan?.faceScanImages,
+                                              singleScan?.teethScanImages
+                                            )
+                                          }
+                                        ></div>
+                                        {i !== patientScans?.length - 1 && (
+                                          <div
+                                            style={{
+                                              width: "50px",
+                                              height: "5px",
+                                              // backgroundColor: "black",
+                                              // borderRadius: "50%",
+                                              marginTop: "10px",
+                                            }}
+                                            className="bg-primary mx-2"
+                                          ></div>
+                                        )}
+                                      </div>
+                                      <p>
+                                        {dateFormat(
+                                          singleScan?.created,
+                                          "mmm dS, yy"
+                                        )}
+                                      </p>
+                                    </div>
+                                  )
+                                })}
+                              />
+                            </div>
+                          </Col>
+                          <Col sm="12">
+                            <div className="border border-secondary bg-white rounded p-2">
+                              {/* <br /> */}
+                              <div className="">
+                                <div>
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("face")
+                                    }
+                                    className="btn btn-primary btn-sm"
+                                  >
+                                    Face Scan
+                                  </button>
+
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("teeth")
+                                    }
+                                    className="btn btn-primary btn-sm mx-1"
+                                  >
+                                    Teeth Scan
+                                  </button>
+                                </div>
+                                <br />
+                                {faceView === false && checked === false && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+                                {checked === true && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+
+                                {faceView === true && checked === false && (
+                                  <div className="text-center">
+                                    {selectedScanImages1?.map((image, i) => {
+                                      return (
+                                        <img
+                                          key={i}
+                                          style={{
+                                            transform: `rotate(${0}deg)`,
+                                            // minHeight: "200px",
+                                            // height: "auto",
+                                            width: "32%",
+                                            height: "32%",
+                                          }}
+                                          className="mx-1 rounded"
+                                          src={`data:image/jpeg;base64,${image}`}
+
+                                          // alt={item.altText}
+                                        />
+                                      )
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                      {checked === true && (
+                        <Col sm="12" md="6">
+                          <Row>
+                            <Col sm="12">
+                              <div>
+                                <Horizental
+                                  content={patientScans?.map(
+                                    (singleScan, i) => {
+                                      console.log(i, "i am index")
+                                      return (
+                                        <div key={i} className="">
+                                          <div className="d-flex">
+                                            <div
+                                              style={{
+                                                width: "25px",
+                                                height: "25px",
+                                                // backgroundColor: "black",
+                                                borderRadius: "50%",
+                                              }}
+                                              className="bg-primary"
+                                              onClick={() =>
+                                                handleScan2(
+                                                  singleScan?.faceScanImages,
+                                                  singleScan?.teethScanImages
+                                                )
+                                              }
+                                            ></div>
+                                            {i !== patientScans?.length - 1 && (
+                                              <div
+                                                style={{
+                                                  width: "50px",
+                                                  height: "5px",
+                                                  // backgroundColor: "black",
+                                                  // borderRadius: "50%",
+                                                  marginTop: "10px",
+                                                }}
+                                                className="bg-primary mx-2"
+                                              ></div>
+                                            )}
+                                          </div>
+                                          <p>
+                                            {dateFormat(
+                                              singleScan?.created,
+                                              "mmm dS, yy"
+                                            )}
+                                          </p>
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                />
+                              </div>
+                            </Col>
+
+                            <Col
+                              // className={`${checked === true ? "" : "d-none"}`}
+                              sm="12"
+                              // md="6"
+                            >
+                              <div
+                                style={{ maxHeight: "760px", height: "auto" }}
+                                className="border border-secondary bg-white rounded p-2"
+                              >
+                                {/* <br /> */}
+                                <div className="">
+                                  <div>
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("face")
+                                      }
+                                      className="btn btn-primary btn-sm"
+                                    >
+                                      Face Scan
+                                    </button>
+
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("teeth")
+                                      }
+                                      className="btn btn-primary btn-sm mx-1"
+                                    >
+                                      Teeth Scan
+                                    </button>
+                                  </div>
+                                  <br />
+                                  {selectedScanImages2?.length > 0 && (
+                                    <Carousal
+                                      scanImages={selectedScanImages2}
+                                    />
+                                  )}
+                                  {selectedScanImages2?.length === 0 && (
+                                    <p className="text-center text-muted mt-5">
+                                      Select Date To View Scan
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )}
+                    </Row>
+                    <br />
+                    {!patientScans && (
+                      <Spinner className="ms-2" color="primary" />
+                    )}
+                    {patientScans?.length === 0 && <p>No Scans Found</p>}
+                  </div>
+                )}
               </Col>
               <Col sm="12" md="3">
                 <div>

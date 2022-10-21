@@ -1,7 +1,49 @@
 import React from "react"
 import { Container, Row, Col, Form, FormGroup, Label, Input } from "reactstrap"
+import { addNewNote, getNotes } from "../../../Connection/Patients"
 
-const Patientnotes = ({ view, handleView }) => {
+const Patientnotes = ({ view, handleView, data }) => {
+  const [notes, setNotes] = React.useState([])
+  const [newNote, setNewNote] = React.useState("")
+
+  const handleChange = evt => {
+    setNewNote(evt.target.value)
+  }
+
+  const handleNewNote = async () => {
+    console.log(newNote, "i am nbew note")
+    let res = await addNewNote({
+      doctorId: "635144fb35155fec28aa679b",
+      userId: data?.patientId,
+      point: newNote,
+    })
+    console.log(res)
+    if (res.data.data.success === 1) {
+      handleGetNotes()
+      setNewNote("")
+    } else {
+      toast.error(res.data.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      })
+    }
+  }
+
+  const handleGetNotes = async () => {
+    let res = await getNotes({
+      doctorId: "635144fb35155fec28aa679b",
+      userId: data?.patientId,
+    })
+    console.log(res)
+    if (res.data.data.success === 1) {
+      setNotes(res.data.data.notes.points)
+    }
+  }
+
+  React.useEffect(() => {
+    if (data) {
+      handleGetNotes()
+    }
+  }, [data])
   return (
     <div
       style={{
@@ -23,28 +65,40 @@ const Patientnotes = ({ view, handleView }) => {
 
       {view === false && (
         <div className="text-dark p-1">
-          <div>
-            <p>1. I am point 1</p>
-            <p>2. I am point 2</p>
-            <p>2. I am point 2</p>
-            <p>2. I am point 2</p>
-            <p>2. I am point 2</p>
-            <p>2. I am point 2</p>
-          </div>
+          {notes.length === 0 && (
+            <div>
+              <p>Notes not found</p>
+            </div>
+          )}
+          {notes.length > 0 && (
+            <div>
+              {notes?.map((note, i) => {
+                return (
+                  <p key={i}>
+                    {i} {note}
+                  </p>
+                )
+              })}
+            </div>
+          )}
 
           <div>
             <FormGroup className="d-flex ">
               <div className="">
                 <Input
                   id="exampleEmail"
-                  name="email"
+                  name="newNote"
                   placeholder="Add a Note"
                   type="text"
+                  value={newNote}
+                  onChange={handleChange}
                 />
               </div>
 
               <div>
-                <button className="btn btn-primary">Save</button>
+                <button onClick={handleNewNote} className="btn btn-primary">
+                  Save
+                </button>
               </div>
             </FormGroup>
           </div>

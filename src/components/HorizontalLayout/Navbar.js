@@ -77,7 +77,7 @@ const Navbar = props => {
   return (
     <React.Fragment>
       <div className="topnav">
-        <div className="container-fluid">
+        <div className="px-2">
           <nav
             className="navbar navbar-light navbar-expand-lg topnav-menu"
             id="navigation"

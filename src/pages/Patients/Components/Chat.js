@@ -44,10 +44,11 @@ import {
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
+import { add } from "lodash"
 
 const Chat = ({ patientMessages, patientInfo }) => {
   //meta title
-  document.title = "Chat | Skote - React Admin & Dashboard Template"
+  document.title = "Patient View | Appolonia Dental Care"
 
   const dispatch = useDispatch()
 
@@ -127,6 +128,10 @@ const Chat = ({ patientMessages, patientInfo }) => {
     }
     setcurMessage("")
     dispatch(onAddMessage(message))
+  }
+
+  const sendMessage=async() => {
+    let res = newMessage({conversationId})
   }
 
   const scrollToBottom = () => {
@@ -265,8 +270,31 @@ const Chat = ({ patientMessages, patientInfo }) => {
                           : ""
                       }
                     >
-                      <div className="conversation-list">
-                        {/* <UncontrolledDropdown>
+                      {message.format === "image" ? (
+                        <div className="ctext-wrap">
+                          <div className="conversation-name">
+                            {message.sender}
+                          </div>
+                          <img
+                            style={{ width: "40px" }}
+                            className=""
+                            src={message.message}
+                            onClick={() =>
+                              window.open(
+                                message.message,
+                                "_blank",
+                                "noopener,noreferrer"
+                              )
+                            }
+                          />
+                          <p className="chat-time mb-0">
+                            <i className="bx bx-time-five align-middle me-1" />
+                            {moment(message.createdAt).format("DD-MM-YY hh:mm")}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="conversation-list">
+                          {/* <UncontrolledDropdown>
                           <DropdownToggle
                             href="#"
                             className="btn nav-btn"
@@ -281,17 +309,20 @@ const Chat = ({ patientMessages, patientInfo }) => {
                             <DropdownItem href="#">Delete</DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown> */}
-                        <div className="ctext-wrap">
-                          <div className="conversation-name">
-                            {message.sender}
+                          <div className="ctext-wrap">
+                            <div className="conversation-name">
+                              {message.sender}
+                            </div>
+                            <p>{message.message}</p>
+                            <p className="chat-time mb-0">
+                              <i className="bx bx-time-five align-middle me-1" />
+                              {moment(message.createdAt).format(
+                                "DD-MM-YY hh:mm"
+                              )}
+                            </p>
                           </div>
-                          <p>{message.message}</p>
-                          <p className="chat-time mb-0">
-                            <i className="bx bx-time-five align-middle me-1" />
-                            {moment(message.createdAt).format("DD-MM-YY hh:mm")}
-                          </p>
                         </div>
-                      </div>
+                      )}
                     </li>
                   ))}
               </PerfectScrollbar>
@@ -335,7 +366,8 @@ const Chat = ({ patientMessages, patientInfo }) => {
                 <Button
                   type="button"
                   color="primary"
-                  onClick={() => addMessage(currentRoomId, currentUser.name)}
+                  // onClick={() => addMessage(currentRoomId, currentUser.name)}
+                  onClick={sendMessage}
                   className="btn btn-primary btn-rounded chat-send w-md "
                 >
                   <span className="d-none d-sm-inline-block me-2">Send</span>{" "}

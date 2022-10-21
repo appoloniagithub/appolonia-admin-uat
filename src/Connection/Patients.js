@@ -28,10 +28,26 @@ const getConversationMessages = async data => {
   console.log(res)
   return res
 }
+const addNewNote = async data => {
+  let res = await axios.post(`${url}/api/patient/addpatientnotes`, data)
+
+  console.log(res)
+  return res
+}
+
+const getNotes = async data => {
+  console.log(data)
+  let res = await axios.post(`${url}/api/patient/getnotes`, data)
+
+  console.log(res)
+  return res
+}
 
 export {
   getAllPatients,
   getPatientScans,
   getConversations,
   getConversationMessages,
+  addNewNote,
+  getNotes,
 }

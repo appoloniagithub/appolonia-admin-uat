@@ -186,18 +186,32 @@ const Scancarousal = ({ scanImages }) => {
         console.log(scanImages.length, "i am scvan images")
         return (
           <Carousel.Item key={i}>
-            <img
-              style={{
-                transform: `rotate(${0}deg)`,
-                // minHeight: "200px",
-                // height: "auto",
-                width: "100%",
-                height: "100%",
-              }}
-              src={`data:image/jpeg;base64,${image}`}
+            <div style={{ position: "relative" }}>
+              <img
+                style={{
+                  transform: `rotate(${0}deg)`,
+                  // minHeight: "200px",
+                  // height: "auto",
+                  width: "100%",
+                  height: "100%",
+                  zIndex: 0,
+                }}
+                src={`data:image/jpeg;base64,${image}`}
+                // onClick={() =>
+                //   window.open(
+                //     `data:image/jpeg;base64,${image}`,
+                //     "_blank",
+                //     "noopener,noreferrer"
+                //   )
+                // }
 
-              // alt={item.altText}
-            />
+                // alt={item.altText}
+              />
+              {/* <i
+                style={{ position: "absolute", top: 10, zIndex: 5 }}
+                className="fas fa-search-plus"
+              ></i> */}
+            </div>
           </Carousel.Item>
         )
       })}

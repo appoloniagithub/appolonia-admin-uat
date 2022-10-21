@@ -46,6 +46,22 @@ const Tabs = ({ toggleIconCustom, customIconActiveTab }) => {
         <NavLink
           style={{ cursor: "pointer" }}
           className={classnames({
+            active: customIconActiveTab === "4",
+          })}
+          onClick={() => {
+            toggleIconCustom("4")
+          }}
+        >
+          <span className="d-none d-sm-block">
+            {/* <i className="fas fa-home"></i>  */}
+            Compare Scans
+          </span>
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          style={{ cursor: "pointer" }}
+          className={classnames({
             active: customIconActiveTab === "2",
           })}
           onClick={() => {

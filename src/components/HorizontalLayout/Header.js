@@ -68,9 +68,10 @@ const Header = props => {
       <header
         style={{ backgroundColor: "#20507b", color: "white" }}
         id="page-topbar"
+        className=""
       >
-        <div className="navbar-header">
-          <div className="d-flex">
+        <div className="d-flex justify-content-between ">
+          <div className="d-flex ">
             <div className="navbar-brand-box">
               <Link to="/" className="logo logo-dark">
                 <span className="logo-lg">
@@ -258,8 +259,8 @@ const Header = props => {
             </Dropdown> */}
           </div>
 
-          <div className="d-flex">
-            <div className="dropdown d-inline-block d-lg-none ms-2">
+          <div className="d-flex ">
+            {/* <div className="dropdown d-inline-block d-lg-none ms-2">
               <button
                 type="button"
                 className="btn header-item noti-icon "
@@ -294,7 +295,7 @@ const Header = props => {
                   </div>
                 </form>
               </div>
-            </div>
+            </div> */}
 
             {/* <LanguageDropdown /> */}
 
@@ -358,7 +359,7 @@ const Header = props => {
               </DropdownMenu>
             </Dropdown> */}
 
-            <div className="dropdown d-none d-lg-inline-block ms-1">
+            <div className="dropdown d-none d-lg-inline-block ms-1 ">
               <button
                 type="button"
                 className="btn header-item noti-icon "
@@ -374,18 +375,6 @@ const Header = props => {
             <NotificationDropdown />
 
             <ProfileMenu />
-
-            {/* <div className="dropdown d-inline-block">
-              <button
-                onClick={() => {
-                  props.showRightSidebarAction(!props.showRightSidebar)
-                }}
-                type="button"
-                className="btn header-item noti-icon right-bar-toggle "
-              >
-                <i className="bx bx-cog bx-spin" />
-              </button>
-            </div> */}
           </div>
         </div>
       </header>

@@ -157,7 +157,7 @@ const Login = props => {
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
+                          value={""}
                           invalid={
                             validation.touched.email && validation.errors.email
                               ? true
@@ -175,7 +175,7 @@ const Login = props => {
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
-                          value={validation.values.password || ""}
+                          value={""}
                           type="password"
                           placeholder="Enter Password"
                           onChange={validation.handleChange}
