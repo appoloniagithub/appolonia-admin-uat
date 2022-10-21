@@ -1,8 +1,8 @@
 import axios from "axios"
 // import url from "./API/api"
 
-// let url = "https://appolonia-api.herokuapp.com"
-let url = "http://localhost:3001"
+let url = "https://appolonia-api.herokuapp.com"
+// let url = "http://localhost:3001"
 
 const instance = axios.create({
   baseURL: url,
