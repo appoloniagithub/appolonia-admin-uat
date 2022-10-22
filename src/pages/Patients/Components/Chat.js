@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 import { isEmpty, map } from "lodash"
@@ -41,12 +41,19 @@ import {
   getGroups as onGetGroups,
   getMessages as onGetMessages,
 } from "store/actions"
+import { newMessage } from "../../../Connection/Patients"
+import { io } from "socket.io-client"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
 import { add } from "lodash"
 
-const Chat = ({ patientMessages, patientInfo }) => {
+const Chat = ({
+  patientMessages,
+  patientInfo,
+  patientConversation,
+  handleGetPatientConversation,
+}) => {
   //meta title
   document.title = "Patient View | Appolonia Dental Care"
 
@@ -77,16 +84,43 @@ const Chat = ({ patientMessages, patientInfo }) => {
   const [Chat_Box_User_Status, setChat_Box_User_Status] = useState("online")
   const [curMessage, setcurMessage] = useState("")
 
-  useEffect(() => {
-    dispatch(onGetChats())
-    dispatch(onGetGroups())
-    dispatch(onGetContacts())
-    dispatch(onGetMessages(currentRoomId))
-  }, [onGetChats, onGetGroups, onGetContacts, onGetMessages, currentRoomId])
+  const [chatMessages, setChatMessages] = useState([])
+  const [arrivalMessage, setArrivalMessage] = useState(null)
+  const socket = useRef()
 
   useEffect(() => {
-    if (!isEmpty(messages)) scrollToBottom()
-  }, [messages])
+    setChatMessages(patientMessages)
+  }, [patientMessages])
+
+  useEffect(() => {
+    socket.current = io("http://localhost:3010")
+    socket.current.on("getMessage", data => {
+      console.log(data)
+      setArrivalMessage(data.message)
+    })
+  }, [])
+
+  useEffect(() => {
+    setChatMessages(prev => [...prev, arrivalMessage])
+  }, [arrivalMessage])
+
+  useEffect(() => {
+    socket.current?.emit("addUser", "6351452835155fec28aa67b1")
+    socket.current?.on("getUsers", users => {
+      console.log(users, "connected users")
+    })
+  }, [])
+
+  // useEffect(() => {
+  //   dispatch(onGetChats())
+  //   dispatch(onGetGroups())
+  //   dispatch(onGetContacts())
+  //   dispatch(onGetMessages(currentRoomId))
+  // }, [onGetChats, onGetGroups, onGetContacts, onGetMessages, currentRoomId])
+
+  // useEffect(() => {
+  //   if (!isEmpty(messages)) scrollToBottom()
+  // }, [messages])
 
   // const toggleNotification = () => {
   //   setnotification_Menu(!notification_Menu)
@@ -130,8 +164,31 @@ const Chat = ({ patientMessages, patientInfo }) => {
     dispatch(onAddMessage(message))
   }
 
-  const sendMessage=async() => {
-    let res = newMessage({conversationId})
+  const sendMessage = async () => {
+    setcurMessage("")
+    setChatMessages(prev => [...prev, curMessage])
+
+    socket.current.emit("sendMessage", {
+      senderId: "6351452835155fec28aa67b1",
+      receiverId: patientInfo?.patientId,
+      message: curMessage,
+    })
+    let res = await newMessage({
+      conversationId: patientConversation?.conversationId,
+      senderId: "6351452835155fec28aa67b1",
+      message: curMessage,
+      format: "text",
+      scanId: "",
+    })
+
+    console.log(res)
+    if (res.data.data.success === 1) {
+      handleGetPatientConversation()
+    } else {
+      toast.error(res.data.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      })
+    }
   }
 
   const scrollToBottom = () => {
@@ -261,7 +318,7 @@ const Chat = ({ patientMessages, patientInfo }) => {
                 </li>
                 {patientMessages?.length === 0 && <p>No Messages found</p>}
                 {patientMessages &&
-                  map(patientMessages, message => (
+                  patientMessages.map(message => (
                     <li
                       key={"test_k" + message.id}
                       className={

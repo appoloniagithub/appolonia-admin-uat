@@ -28,6 +28,14 @@ const getConversationMessages = async data => {
   console.log(res)
   return res
 }
+
+const newMessage = async data => {
+  let res = await axios.post(`${url}/api/chat/newmessage`, data)
+
+  console.log(res)
+  return res
+}
+
 const addNewNote = async data => {
   let res = await axios.post(`${url}/api/patient/addpatientnotes`, data)
 
@@ -50,4 +58,5 @@ export {
   getConversationMessages,
   addNewNote,
   getNotes,
+  newMessage,
 }

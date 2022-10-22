@@ -904,7 +904,12 @@ export default function Showpatient({
               </Col>
               <Col sm="12" md="3">
                 <div>
-                  <Chat patientMessages={messages} patientInfo={patientInfo} />
+                  <Chat
+                    patientConversation={patientConversation}
+                    patientMessages={messages}
+                    patientInfo={patientInfo}
+                    handleGetPatientConversation={handleGetPatientConversation}
+                  />
                 </div>
               </Col>
             </Row>
