@@ -118,10 +118,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "engines": {
-    "node": "16.17.0",
-    "npm": "8.1.2"
-  },
+ 
   "eslintConfig": {
     "extends": [
       "eslint:recommended",
