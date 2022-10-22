@@ -42,7 +42,7 @@ import {
   getMessages as onGetMessages,
 } from "store/actions"
 import { newMessage } from "../../../Connection/Patients"
-// import { io } from "socket.io-client"
+import { io } from "socket.io-client"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -92,24 +92,24 @@ const Chat = ({
     setChatMessages(patientMessages)
   }, [patientMessages])
 
-  // useEffect(() => {
-  //   socket.current = io("http://localhost:3010")
-  //   socket.current.on("getMessage", data => {
-  //     console.log(data)
-  //     setArrivalMessage(data.message)
-  //   })
-  // }, [])
+  useEffect(() => {
+    socket.current = io("http://localhost:3010")
+    socket.current.on("getMessage", data => {
+      console.log(data)
+      setArrivalMessage(data.message)
+    })
+  }, [])
 
-  // useEffect(() => {
-  //   setChatMessages(prev => [...prev, arrivalMessage])
-  // }, [arrivalMessage])
+  useEffect(() => {
+    setChatMessages(prev => [...prev, arrivalMessage])
+  }, [arrivalMessage])
 
-  // useEffect(() => {
-  //   socket.current?.emit("addUser", "6351452835155fec28aa67b1")
-  //   socket.current?.on("getUsers", users => {
-  //     console.log(users, "connected users")
-  //   })
-  // }, [])
+  useEffect(() => {
+    socket.current?.emit("addUser", "6351452835155fec28aa67b1")
+    socket.current?.on("getUsers", users => {
+      console.log(users, "connected users")
+    })
+  }, [])
 
   // useEffect(() => {
   //   dispatch(onGetChats())
@@ -168,11 +168,11 @@ const Chat = ({
     setcurMessage("")
     setChatMessages(prev => [...prev, curMessage])
 
-    // socket.current.emit("sendMessage", {
-    //   senderId: "6351452835155fec28aa67b1",
-    //   receiverId: patientInfo?.patientId,
-    //   message: curMessage,
-    // })
+    socket.current.emit("sendMessage", {
+      senderId: "6351452835155fec28aa67b1",
+      receiverId: patientInfo?.patientId,
+      message: curMessage,
+    })
     let res = await newMessage({
       conversationId: patientConversation?.conversationId,
       senderId: "6351452835155fec28aa67b1",
