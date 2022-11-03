@@ -157,12 +157,12 @@ const Login = props => {
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={""}
-                          invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
-                          }
+                          value={validation.initialValues.email}
+                          // invalid={
+                          //   validation.touched.email && validation.errors.email
+                          //     ? true
+                          //     : false
+                          // }
                         />
                         {validation.touched.email && validation.errors.email ? (
                           <FormFeedback type="invalid">
@@ -175,24 +175,25 @@ const Login = props => {
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
-                          value={""}
+                          value={validation.initialValues.password}
                           type="password"
                           placeholder="Enter Password"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.password &&
-                            validation.errors.password
-                              ? true
-                              : false
-                          }
+                     
+                          // invalid={
+                          //   validation.touched.password &&
+                          //   validation.errors.password
+                          //     ? true
+                          //     : false
+                          // }
                         />
-                        {validation.touched.password &&
+                        {/* {validation.touched.password &&
                         validation.errors.password ? (
                           <FormFeedback type="invalid">
                             {validation.errors.password}
                           </FormFeedback>
-                        ) : null}
+                        ) : null} */}
                       </div>
 
                       <div className="form-check">
