@@ -1,5 +1,9 @@
 import PropTypes from "prop-types"
-import React from "react"
+import React, { Component } from "react"
+import { withRouter, Link } from "react-router-dom"
+import profile from "assets/images/profile-img.png"
+import applogo from "../../assets/images/applogo.png"
+import { Redirect } from "react-router-dom"
 
 import {
   Row,
@@ -14,283 +18,146 @@ import {
   Label,
 } from "reactstrap"
 
-//redux
-import { useSelector, useDispatch } from "react-redux"
+export default class Login extends Component {
+  constructor(props) {
+    super(props)
+    let loggedIn = false
+    this.state = {
+      email: "",
+      password: "",
+      loggedIn,
+    }
 
-import { withRouter, Link } from "react-router-dom"
+    this.onChange = this.onChange.bind(this)
+    this.submitForm = this.submitForm.bind(this)
+  }
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
+  submitForm(e) {
+    e.preventDefault()
+    const { email, password } = this.state
 
-// Formik validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
-
-//Social Media Imports
-import { GoogleLogin } from "react-google-login"
-// import TwitterLogin from "react-twitter-auth"
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
-
-// actions
-import { loginUser, socialLogin } from "../../store/actions"
-
-// import images
-import profile from "assets/images/profile-img.png"
-import logo from "assets/images/logo.svg"
-
-//Import config
-import { facebook, google } from "../../config"
-import applogo from "../../assets/images/applogo.png"
-
-const Login = props => {
-  //meta title
-  document.title = "Login | Appolonia Dental Care"
-
-  const dispatch = useDispatch()
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      email: "admin@appolonia.ae" || "",
-      password: "123456" || "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      password: Yup.string().required("Please Enter Your Password"),
-    }),
-    onSubmit: values => {
-      dispatch(loginUser(values, props.history))
-    },
-  })
-
-  const { error } = useSelector(state => ({
-    error: state.Login.error,
-  }))
-
-  const signIn = (res, type) => {
-    if (type === "google" && res) {
-      const postData = {
-        name: res.profileObj.name,
-        email: res.profileObj.email,
-        token: res.tokenObj.access_token,
-        idToken: res.tokenId,
-      }
-      dispatch(socialLogin(postData, props.history, type))
-    } else if (type === "facebook" && res) {
-      const postData = {
-        name: res.name,
-        email: res.email,
-        token: res.accessToken,
-        idToken: res.tokenId,
-      }
-      dispatch(socialLogin(postData, props.history, type))
+    if (email === "admin@appolonia.ae" && password === "123456") {
+      this.setState({
+        loggedIn: true,
+      })
     }
   }
 
-  //handleGoogleLoginResponse
-  const googleResponse = response => {
-    signIn(response, "google")
-  }
+  render() {
+    if (this.state.loggedIn) {
+      return <Redirect to="/dashboard" />
+    }
+    return (
+      <React.Fragment>
+        <div className="home-btn d-none d-sm-block">
+          <Link to="/" className="text-dark">
+            <i className="fas fa-home h2" />
+          </Link>
+        </div>
+        <div className="account-pages my-5 pt-sm-5">
+          <Container>
+            <Row className="justify-content-center">
+              <Col md={8} lg={6} xl={5}>
+                <Card className="overflow-hidden">
+                  <div className="bg-primary bg-soft">
+                    <Row>
+                      <Col xs={7}>
+                        <div className="text-primary p-4">
+                          <h5 className="text-primary">
+                            Appolonia Dental Care
+                          </h5>
+                          <p>Sign in to Doctor Portal.</p>
+                        </div>
+                      </Col>
+                      <Col className="col-5 align-self-end">
+                        <img src={profile} alt="" className="img-fluid" />
+                      </Col>
+                    </Row>
+                  </div>
+                  <CardBody className="pt-0">
+                    <div>
+                      <Link to="/" className="auth-logo-light">
+                        <div className="avatar-md profile-user-wid mb-4">
+                          <span
+                            style={{ backgroundColor: "#20507B" }}
+                            className="avatar-title rounded-circle "
+                          >
+                            <img
+                              src={applogo}
+                              alt=""
+                              className=""
+                              height="34"
+                            />
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="p-2">
+                      <Form
+                        onSubmit={this.submitForm}
+                        className="form-horizontal"
+                      >
+                        <div className="mb-3">
+                          <Label className="form-label">Email</Label>
+                          <Input
+                            name="email"
+                            className="form-control"
+                            placeholder="Enter email"
+                            type="email"
+                            value={this.state.email}
+                            onChange={this.onChange}
+                          />
+                        </div>
 
-  //handleTwitterLoginResponse
-  // const twitterResponse = e => {}
+                        <div className="mb-3">
+                          <Label className="form-label">Password</Label>
+                          <Input
+                            name="password"
+                            type="password"
+                            placeholder="Enter Password"
+                            value={this.state.password}
+                            onChange={this.onChange}
+                          />
+                        </div>
 
-  //handleFacebookLoginResponse
-  const facebookResponse = response => {
-    signIn(response, "facebook")
-  }
+                        <div className="form-check">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id="customControlInline"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="customControlInline"
+                          >
+                            Remember me
+                          </label>
+                        </div>
 
-  return (
-    <React.Fragment>
-      <div className="home-btn d-none d-sm-block">
-        <Link to="/" className="text-dark">
-          <i className="fas fa-home h2" />
-        </Link>
-      </div>
-      <div className="account-pages my-5 pt-sm-5">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md={8} lg={6} xl={5}>
-              <Card className="overflow-hidden">
-                <div className="bg-primary bg-soft">
-                  <Row>
-                    <Col xs={7}>
-                      <div className="text-primary p-4">
-                        <h5 className="text-primary">Appolonia Dental Care</h5>
-                        <p>Sign in to Doctor Portal.</p>
-                      </div>
-                    </Col>
-                    <Col className="col-5 align-self-end">
-                      <img src={profile} alt="" className="img-fluid" />
-                    </Col>
-                  </Row>
+                        <div className="mt-3 d-grid">
+                          <button
+                            className="btn btn-primary btn-block"
+                            type="submit"
+                          >
+                            Log In
+                          </button>
+                        </div>
+                      </Form>
+                    </div>
+                  </CardBody>
+                </Card>
+                <div className="mt-5 text-center">
+                  <p>© {new Date().getFullYear()} Appolonia Dental Care </p>
                 </div>
-                <CardBody className="pt-0">
-                  <div>
-                    <Link to="/" className="auth-logo-light">
-                      <div className="avatar-md profile-user-wid mb-4">
-                        <span
-                          style={{ backgroundColor: "#20507B" }}
-                          className="avatar-title rounded-circle "
-                        >
-                          <img src={applogo} alt="" className="" height="34" />
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="p-2">
-                    <Form
-                      className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
-                      }}
-                    >
-                      {error ? <Alert color="danger">{error}</Alert> : null}
-
-                      <div className="mb-3">
-                        <Label className="form-label">Email</Label>
-                        <Input
-                          name="email"
-                          className="form-control"
-                          placeholder="Enter email"
-                          type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.initialValues.email}
-                          // invalid={
-                          //   validation.touched.email && validation.errors.email
-                          //     ? true
-                          //     : false
-                          // }
-                        />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-
-                      <div className="mb-3">
-                        <Label className="form-label">Password</Label>
-                        <Input
-                          name="password"
-                          value={validation.initialValues.password}
-                          type="password"
-                          placeholder="Enter Password"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                     
-                          // invalid={
-                          //   validation.touched.password &&
-                          //   validation.errors.password
-                          //     ? true
-                          //     : false
-                          // }
-                        />
-                        {/* {validation.touched.password &&
-                        validation.errors.password ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.password}
-                          </FormFeedback>
-                        ) : null} */}
-                      </div>
-
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="customControlInline"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-
-                      <div className="mt-3 d-grid">
-                        <button
-                          className="btn btn-primary btn-block"
-                          type="submit"
-                        >
-                          Log In
-                        </button>
-                      </div>
-                      {/* 
-                      <div className="mt-4 text-center">
-                        <h5 className="font-size-14 mb-3">Sign in with</h5>
-
-                        <ul className="list-inline">
-                          <li className="list-inline-item">
-                            <FacebookLogin
-                              appId={facebook.APP_ID}
-                              autoLoad={false}
-                              callback={facebookResponse}
-                              render={renderProps => (
-                                <Link
-                                  to="#"
-                                  className="social-list-item bg-primary text-white border-primary"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-facebook" />
-                                </Link>
-                              )}
-                            />
-                          </li>
-                          <li className="list-inline-item">
-                            <GoogleLogin
-                              clientId={google.CLIENT_ID}
-                              render={renderProps => (
-                                <Link
-                                  to="#"
-                                  className="social-list-item bg-danger text-white border-danger"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-google" />
-                                </Link>
-                              )}
-                              onSuccess={googleResponse}
-                              onFailure={() => {}}
-                            />
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="mt-4 text-center">
-                        <Link to="/forgot-password" className="text-muted">
-                          <i className="mdi mdi-lock me-1" />
-                          Forgot your password?
-                        </Link>
-                      </div> */}
-                    </Form>
-                  </div>
-                </CardBody>
-              </Card>
-              <div className="mt-5 text-center">
-                {/* <p>
-                  Don&#39;t have an account ?{" "}
-                  <Link to="/register" className="fw-medium text-primary">
-                    {" "}
-                    Signup now{" "}
-                  </Link>{" "}
-                </p> */}
-                <p>
-                  © {new Date().getFullYear()} Appolonia Dental Care{" "}
-                  {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}
-                </p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
-  )
-}
-
-export default withRouter(Login)
-
-Login.propTypes = {
-  history: PropTypes.object,
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </React.Fragment>
+    )
+  }
 }
