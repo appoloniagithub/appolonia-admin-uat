@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import axios from "axios"
+import url from "../../Connection/Api/api"
 import {
   Container,
   Row,
@@ -265,6 +267,10 @@ export default function Showpatient({
       console.log(res)
       if (res?.data?.data?.success === 1) {
         setPatientScans(res.data.data.scans)
+        console.log(res.data.data.scans)
+        console.log(
+          res.data.data.scans[res.data.data.scans?.length - 1].faceScanImages
+        )
         handleScan1(
           res.data.data.scans[res.data.data.scans?.length - 1].faceScanImages,
           res.data.data.scans[res.data.data.scans?.length - 1].teethScanImages
@@ -536,7 +542,7 @@ export default function Showpatient({
                                             height: "32%",
                                           }}
                                           className="mx-1 rounded"
-                                          src={`data:image/jpeg;base64,${image}`}
+                                          src={`${url}/api/${image}`}
 
                                           // alt={item.altText}
                                         />
@@ -779,7 +785,7 @@ export default function Showpatient({
                                             height: "32%",
                                           }}
                                           className="mx-1 rounded"
-                                          src={`data:image/jpeg;base64,${image}`}
+                                          src={`${url}/api/${image}`}
 
                                           // alt={item.altText}
                                         />
