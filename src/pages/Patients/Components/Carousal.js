@@ -196,7 +196,7 @@ const Scancarousal = ({ scanImages }) => {
                   height: "100%",
                   zIndex: 0,
                 }}
-                src={`data:image/jpeg;base64,${image}`}
+                src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
                 // onClick={() =>
                 //   window.open(
                 //     `data:image/jpeg;base64,${image}`,
