@@ -93,7 +93,7 @@ const Chat = ({
   }, [patientMessages])
 
   useEffect(() => {
-    socket.current = io("http://localhost:3010")
+    socket.current = io("https://socketserver-uat.herokuapp.com/")
     socket.current.on("getMessage", data => {
       console.log(data)
       setArrivalMessage(data.message)
