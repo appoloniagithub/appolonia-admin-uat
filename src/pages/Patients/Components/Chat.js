@@ -91,9 +91,9 @@ const Chat = ({
   useEffect(() => {
     setChatMessages(patientMessages)
   }, [patientMessages])
-
+  console.log(socket)
   useEffect(() => {
-    socket.current = io("https://socketserver-uat.herokuapp.com/")
+    socket.current = io("ws://localhost:8900")
     socket.current.on("getMessage", data => {
       console.log(data)
       setArrivalMessage(data.message)
@@ -164,7 +164,8 @@ const Chat = ({
     dispatch(onAddMessage(message))
   }
 
-  const sendMessage = async () => {
+  const sendMessage = async e => {
+    //e.preventDefault()
     setcurMessage("")
     setChatMessages(prev => [...prev, curMessage])
 
@@ -182,6 +183,7 @@ const Chat = ({
     })
 
     console.log(res)
+
     if (res.data.data.success === 1) {
       handleGetPatientConversation()
     } else {
@@ -401,7 +403,7 @@ const Chat = ({
                     <div className="chat-input-links">
                       <ul className="list-inline mb-0">
                         <li className="list-inline-item">
-                          <Link to="#">
+                          {/* <Link to="#">
                             <i
                               className="mdi mdi-file-image-outline"
                               id="Imagetooltip"
@@ -412,7 +414,12 @@ const Chat = ({
                             >
                               Images
                             </UncontrolledTooltip>
-                          </Link>
+                          </Link> */}
+                          <i
+                            type="file"
+                            className="mdi mdi-file-image-outline"
+                            id="Imagetooltip"
+                          />
                         </li>
                       </ul>
                     </div>
