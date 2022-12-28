@@ -1,52 +1,12 @@
 import React, { useEffect, useState, useRef } from "react"
-import PropTypes from "prop-types"
-import { Link } from "react-router-dom"
-import { isEmpty, map } from "lodash"
 import moment from "moment"
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Form,
-  FormGroup,
-  Input,
-  InputGroup,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-  UncontrolledDropdown,
-  UncontrolledTooltip,
-} from "reactstrap"
-import classnames from "classnames"
-
+import { Button, Card, Col, Row, UncontrolledTooltip } from "reactstrap"
+import { Link } from "react-router-dom"
 //Import Scrollbar
 import PerfectScrollbar from "react-perfect-scrollbar"
 import "react-perfect-scrollbar/dist/css/styles.css"
-
-//Import Breadcrumb
-import Breadcrumbs from "components/Common/Breadcrumb"
-import images from "assets/images"
-import {
-  addMessage as onAddMessage,
-  getChats as onGetChats,
-  getContacts as onGetContacts,
-  getGroups as onGetGroups,
-  getMessages as onGetMessages,
-} from "store/actions"
 import { newMessage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
-
-//redux
-import { useSelector, useDispatch } from "react-redux"
-import { add } from "lodash"
 
 const Chat = ({
   patientMessages,
@@ -57,141 +17,142 @@ const Chat = ({
   //meta title
   document.title = "Patient View | Appolonia Dental Care"
 
-  const dispatch = useDispatch()
-
-  const { chats, groups, contacts, messages } = useSelector(state => ({
-    chats: state.chat.chats,
-    groups: state.chat.groups,
-    contacts: state.chat.contacts,
-    messages: state.chat.messages,
-  }))
-
   const [messageBox, setMessageBox] = useState(null)
-  // const Chat_Box_Username2 = "Henry Wells"
-  const [currentRoomId, setCurrentRoomId] = useState(1)
-  // eslint-disable-next-line no-unused-vars
-  const [currentUser, setCurrentUser] = useState({
-    name: "Henry Wells",
-    isActive: true,
-  })
-  const [menu1, setMenu1] = useState(false)
-  const [search_Menu, setsearch_Menu] = useState(false)
-  const [settings_Menu, setsettings_Menu] = useState(false)
-  const [other_Menu, setother_Menu] = useState(false)
-  const [activeTab, setactiveTab] = useState("1")
-  const [Chat_Box_Username, setChat_Box_Username] = useState("Steven Franklin")
-  // eslint-disable-next-line no-unused-vars
-  const [Chat_Box_User_Status, setChat_Box_User_Status] = useState("online")
-  const [curMessage, setcurMessage] = useState("")
-
+  const [curMessage, setCurMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([])
-  const [arrivalMessage, setArrivalMessage] = useState(null)
+  const [sendMessage, setSendMessage] = useState(null)
+  const [receivedMessage, setReceivedMessage] = useState(null)
   const socket = useRef()
+  const scroll = useRef()
 
   useEffect(() => {
     setChatMessages(patientMessages)
   }, [patientMessages])
-  console.log(socket)
-  useEffect(() => {
-    socket.current = io("ws://localhost:8900")
-    socket.current.on("getMessage", data => {
-      console.log(data)
-      setArrivalMessage(data.message)
-    })
-  }, [])
 
+  //connect to Socket.io
   useEffect(() => {
-    setChatMessages(prev => [...prev, arrivalMessage])
-  }, [arrivalMessage])
-
-  useEffect(() => {
-    socket.current?.emit("addUser", "6351452835155fec28aa67b1")
-    socket.current?.on("getUsers", users => {
+    socket.current = io("http://localhost:8900")
+    socket.current.emit("new-user-add", "6351452835155fec28aa67b1")
+    socket.current.on("get-users", users => {
       console.log(users, "connected users")
     })
   }, [])
 
-  // useEffect(() => {
-  //   dispatch(onGetChats())
-  //   dispatch(onGetGroups())
-  //   dispatch(onGetContacts())
-  //   dispatch(onGetMessages(currentRoomId))
-  // }, [onGetChats, onGetGroups, onGetContacts, onGetMessages, currentRoomId])
-
-  // useEffect(() => {
-  //   if (!isEmpty(messages)) scrollToBottom()
-  // }, [messages])
-
-  // const toggleNotification = () => {
-  //   setnotification_Menu(!notification_Menu)
-  // }
-
-  //Toggle Chat Box Menus
-  const toggleSearch = () => {
-    setsearch_Menu(!search_Menu)
-  }
-
-  const toggleSettings = () => {
-    setsettings_Menu(!settings_Menu)
-  }
-
-  const toggleOther = () => {
-    setother_Menu(!other_Menu)
-  }
-
-  const toggleTab = tab => {
-    if (activeTab !== tab) {
-      setactiveTab(tab)
-    }
-  }
-
-  //Use For Chat Box
-  const userChatOpen = (id, name, status, roomId) => {
-    setChat_Box_Username(name)
-    setCurrentRoomId(roomId)
-    dispatch(onGetMessages(roomId))
-  }
-
-  const addMessage = (roomId, sender) => {
+  // Send Message
+  const handleSend = async e => {
+    e.preventDefault()
     const message = {
-      id: Math.floor(Math.random() * 100),
-      roomId,
-      sender,
-      message: curMessage,
-      createdAt: new Date(),
-    }
-    setcurMessage("")
-    dispatch(onAddMessage(message))
-  }
-
-  const sendMessage = async e => {
-    //e.preventDefault()
-    setcurMessage("")
-    setChatMessages(prev => [...prev, curMessage])
-
-    socket.current.emit("sendMessage", {
       senderId: "6351452835155fec28aa67b1",
       receiverId: patientInfo?.patientId,
       message: curMessage,
-    })
-    let res = await newMessage({
-      conversationId: patientConversation?.conversationId,
-      senderId: "6351452835155fec28aa67b1",
-      message: curMessage,
-      format: "text",
-      scanId: "",
-    })
-
-    console.log(res)
-
-    if (res.data.data.success === 1) {
-      handleGetPatientConversation()
-    } else {
-      toast.error(res.data.data.message, {
-        position: toast.POSITION.TOP_RIGHT,
+    }
+    console.log(patientInfo?.patientId)
+    // send message to socket server
+    setSendMessage({ ...message })
+    // send message to database
+    try {
+      let res = await newMessage({
+        conversationId: patientConversation?.conversationId,
+        senderId: "6351452835155fec28aa67b1",
+        message: curMessage,
+        format: "text",
+        scanId: "",
       })
+
+      setChatMessages([...chatMessages, res.data])
+      setCurMessage("")
+      if (res.data.data.success === 1) {
+        handleGetPatientConversation()
+      } else {
+        toast.error(res.data.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      }
+    } catch (err) {
+      console.log("error")
     }
   }
+  //Send message to socket server
+  useEffect(() => {
+    console.log(sendMessage, "send message in useeffect")
+    if (sendMessage !== null) {
+      socket.current.emit("send-message", sendMessage)
+    }
+  }, [sendMessage])
+
+  // Get the message from socket server
+  useEffect(() => {
+    socket.current.on("receive-message", data => {
+      console.log(data.message)
+      setReceivedMessage(data.message)
+    })
+  }, [])
+
+  // Receive Message from parent component
+  useEffect(() => {
+    console.log("Message Arrived: ", receivedMessage)
+    if (
+      receivedMessage !== null &&
+      receivedMessage.conversationId === patientConversation?.conversationId
+    ) {
+      setChatMessages([...chatMessages, receivedMessage])
+    }
+  }, [receivedMessage])
+
+  // Always scroll to last Message
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" })
+  }, [chatMessages])
+
+  // useEffect(() => {
+  //   socket.current = io("ws://localhost:8900")
+
+  //   socket.current.on("getMessage", data => {
+  //     console.log("get message", data)
+  //     setArrivalMessage(data.message)
+  //   })
+  // }, [])
+
+  // useEffect(() => {
+  //   setChatMessages(prev => [...prev, arrivalMessage])
+  // }, [arrivalMessage])
+
+  // useEffect(() => {
+  //   socket.current.emit("addUser", "6351452835155fec28aa67b1")
+  //   socket.current.on("getUsers", users => {
+  //     console.log(users, "connected users")
+  //   })
+  // }, [])
+
+  // const sendMessage = async e => {
+  //   e.preventDefault()
+  //   setcurMessage("")
+  //   setChatMessages(prev => [...prev, curMessage])
+
+  //   socket.current.emit("sendMessage", {
+  //     senderId: "6351452835155fec28aa67b1",
+  //     receiverId: patientInfo?.patientId,
+  //     message: curMessage,
+  //   })
+
+  //   let res = await newMessage({
+  //     conversationId: patientConversation?.conversationId,
+  //     senderId: "6351452835155fec28aa67b1",
+  //     message: curMessage,
+  //     format: "text",
+  //     scanId: "",
+  //   })
+  //   setChatMessages([...chatMessages, res.data])
+  //   setcurMessage("")
+  //   console.log(res)
+  //   if (res.data.data.success === 1) {
+  //     handleGetPatientConversation()
+  //   } else {
+  //     toast.error(res.data.data.message, {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //     })
+  //   }
+  // }
 
   const scrollToBottom = () => {
     if (messageBox) {
@@ -199,31 +160,6 @@ const Chat = ({
     }
   }
 
-  const onKeyPress = e => {
-    const { key, value } = e
-    if (key === "Enter") {
-      setcurMessage(value)
-      addMessage(currentRoomId, currentUser.name)
-    }
-  }
-
-  //serach recent user
-  const searchUsers = () => {
-    var input, filter, ul, li, a, i, txtValue
-    input = document.getElementById("search-user")
-    filter = input.value.toUpperCase()
-    ul = document.getElementById("recent-list")
-    li = ul.getElementsByTagName("li")
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0]
-      txtValue = a.textContent || a.innerText
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = ""
-      } else {
-        li[i].style.display = "none"
-      }
-    }
-  }
   return (
     <div className="w-100 user-chat border border-secondary rounded ">
       <Card>
@@ -234,75 +170,7 @@ const Chat = ({
           <Row>
             <Col md="4" xs="9">
               <h5 className="font-size-15 mb-1 text-light">{`Chat`}</h5>
-
-              {/* <p className="text-muted mb-0">
-                <i
-                  className={
-                    Chat_Box_User_Status === "online"
-                      ? "mdi mdi-circle text-success align-middle me-1"
-                      : Chat_Box_User_Status === "intermediate"
-                      ? "mdi mdi-circle text-warning align-middle me-1"
-                      : "mdi mdi-circle align-middle me-1"
-                  }
-                />
-                {Chat_Box_User_Status}
-              </p> */}
             </Col>
-            {/* <Col md="8" xs="3">
-              <ul className="list-inline user-chat-nav text-end mb-0">
-                <li className="list-inline-item d-none d-sm-inline-block">
-                  <Dropdown isOpen={search_Menu} toggle={toggleSearch}>
-                    <DropdownToggle className="btn nav-btn" tag="i">
-                      <i className="bx bx-search-alt-2" />
-                    </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-md">
-                      <Form className="p-3">
-                        <FormGroup className="m-0">
-                          <InputGroup>
-                            <Input
-                              type="text"
-                              className="form-control"
-                              placeholder="Search ..."
-                              aria-label="Recipient's username"
-                            />
-                           
-                            <Button color="primary" type="submit">
-                              <i className="mdi mdi-magnify" />
-                            </Button>
-                       
-                          </InputGroup>
-                        </FormGroup>
-                      </Form>
-                    </DropdownMenu>
-                  </Dropdown>
-                </li>
-                <li className="list-inline-item  d-none d-sm-inline-block">
-                  <Dropdown isOpen={settings_Menu} toggle={toggleSettings}>
-                    <DropdownToggle className="btn nav-btn" tag="i">
-                      <i className="bx bx-cog" />
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <DropdownItem href="#">View Profile</DropdownItem>
-                      <DropdownItem href="#">Clear chat</DropdownItem>
-                      <DropdownItem href="#">Muted</DropdownItem>
-                      <DropdownItem href="#">Delete</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </li>
-                <li className="list-inline-item">
-                  <Dropdown isOpen={other_Menu} toggle={toggleOther}>
-                    <DropdownToggle className="btn nav-btn" tag="i">
-                      <i className="bx bx-dots-horizontal-rounded" />
-                    </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-end">
-                      <DropdownItem href="#">Action</DropdownItem>
-                      <DropdownItem href="#">Another Action</DropdownItem>
-                      <DropdownItem href="#">Something else</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </li>
-              </ul>
-            </Col> */}
           </Row>
         </div>
 
@@ -320,9 +188,9 @@ const Chat = ({
                 </li>
                 {patientMessages?.length === 0 && <p>No Messages found</p>}
                 {patientMessages &&
-                  patientMessages.map(message => (
+                  patientMessages.map((message, i) => (
                     <li
-                      key={"test_k" + message.id}
+                      key={"test_k" + i}
                       className={
                         message.senderId !== patientInfo?.patientId
                           ? "right"
@@ -353,21 +221,6 @@ const Chat = ({
                         </div>
                       ) : (
                         <div className="conversation-list">
-                          {/* <UncontrolledDropdown>
-                          <DropdownToggle
-                            href="#"
-                            className="btn nav-btn"
-                            tag="i"
-                          >
-                            <i className="bx bx-dots-vertical-rounded" />
-                          </DropdownToggle>
-                          <DropdownMenu>
-                            <DropdownItem href="#">Copy</DropdownItem>
-                            <DropdownItem href="#">Save</DropdownItem>
-                            <DropdownItem href="#">Forward</DropdownItem>
-                            <DropdownItem href="#">Delete</DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown> */}
                           <div className="ctext-wrap">
                             <div className="conversation-name">
                               {message.sender}
@@ -394,8 +247,7 @@ const Chat = ({
                   <input
                     type="text"
                     value={curMessage}
-                    onKeyPress={onKeyPress}
-                    onChange={e => setcurMessage(e.target.value)}
+                    onChange={e => setCurMessage(e.target.value)}
                     className="form-control chat-input"
                     placeholder="Enter Message..."
                   />
@@ -403,7 +255,7 @@ const Chat = ({
                     <div className="chat-input-links">
                       <ul className="list-inline mb-0">
                         <li className="list-inline-item">
-                          {/* <Link to="#">
+                          <Link to="#">
                             <i
                               className="mdi mdi-file-image-outline"
                               id="Imagetooltip"
@@ -414,12 +266,7 @@ const Chat = ({
                             >
                               Images
                             </UncontrolledTooltip>
-                          </Link> */}
-                          <i
-                            type="file"
-                            className="mdi mdi-file-image-outline"
-                            id="Imagetooltip"
-                          />
+                          </Link>
                         </li>
                       </ul>
                     </div>
@@ -430,8 +277,7 @@ const Chat = ({
                 <Button
                   type="button"
                   color="primary"
-                  // onClick={() => addMessage(currentRoomId, currentUser.name)}
-                  onClick={sendMessage}
+                  onClick={handleSend}
                   className="btn btn-primary btn-rounded chat-send w-md "
                 >
                   <span className="d-none d-sm-inline-block me-2">Send</span>{" "}
