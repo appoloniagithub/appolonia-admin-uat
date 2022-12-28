@@ -31,7 +31,7 @@ const Chat = ({
 
   //connect to Socket.io
   useEffect(() => {
-    socket.current = io("http://localhost:8900")
+    socket.current = io("https://socketserver-uat.herokuapp.com/")
     socket.current.emit("new-user-add", "6351452835155fec28aa67b1")
     socket.current.on("get-users", users => {
       console.log(users, "connected users")
