@@ -48,6 +48,8 @@ const Chat = ({
       receiverId: patientInfo?.patientId,
       message: curMessage,
       conversationId: patientConversation?.conversationId,
+      format: "text",
+      scanId: "",
     }
     console.log(patientInfo?.patientId)
     // send message to socket server
