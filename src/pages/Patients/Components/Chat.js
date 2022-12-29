@@ -31,7 +31,9 @@ const Chat = ({
 
   //connect to Socket.io
   useEffect(() => {
-    socket.current = io("https://socket-uat.herokuapp.com/",{ transports : ['websocket'] })
+    socket.current = io("https://socket-uat.herokuapp.com/", {
+      transports: ["websocket"],
+    })
     socket.current.emit("new-user-add", "6351452835155fec28aa67b1")
     socket.current.on("get-users", users => {
       console.log(users, "connected users")
@@ -76,14 +78,18 @@ const Chat = ({
   useEffect(() => {
     console.log(sendMessage, "send message in useeffect")
     if (sendMessage !== null) {
-      socket.current.emit("send-message", sendMessage)
+      socket.current.emit(
+        "send-message",
+        sendMessage,
+        patientConversation?.conversationId
+      )
     }
   }, [sendMessage])
 
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("receive-message", data => {
-      console.log(data.message)
+      console.log(data,"in receive-f)
       setReceivedMessage(data.message)
     })
   }, [])
