@@ -89,7 +89,7 @@ const Chat = ({
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("receive-message", data => {
-      console.log(data,"in receive-f)
+      console.log(data,"in receive-f")
       setReceivedMessage(data.message)
     })
   }, [])
