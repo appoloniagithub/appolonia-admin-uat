@@ -53,7 +53,8 @@ const Chat = ({
     }
     console.log(patientInfo?.patientId)
     // send message to socket server
-    setSendMessage({ ...message })
+    //setSendMessage({ ...message })
+    setSendMessage(Object.assign(message))
     // send message to database
     try {
       let res = await newMessage({
