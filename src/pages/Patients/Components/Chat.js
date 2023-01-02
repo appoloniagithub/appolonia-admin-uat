@@ -23,7 +23,6 @@ const Chat = ({
   const [sendMessage, setSendMessage] = useState(null)
   const [receivedMessage, setReceivedMessage] = useState(null)
   const socket = useRef()
-  const scroll = useRef()
 
   useEffect(() => {
     setChatMessages(patientMessages)
@@ -34,6 +33,7 @@ const Chat = ({
     socket.current = io("https://socket-uat.herokuapp.com/", {
       transports: ["websocket"],
     })
+    //socket.current = io("http://localhost:8900")
     socket.current.emit("new-user-add", "6351452835155fec28aa67b1")
     socket.current.on("get-users", users => {
       console.log(users, "connected users")
@@ -52,10 +52,9 @@ const Chat = ({
       scanId: "",
       createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
-    console.log(patientInfo?.patientId)
+
     // send message to socket server
     setSendMessage({ ...message })
-    //setSendMessage(Object.assign(message))
     // send message to database
     try {
       let res = await newMessage({
@@ -65,7 +64,8 @@ const Chat = ({
         format: "text",
         scanId: "",
       })
-
+      console.log(res.data)
+      //let updatedChatMessages = []
       setChatMessages([...chatMessages, res.data])
       setCurMessage("")
       if (res.data.data.success === 1) {
@@ -83,19 +83,22 @@ const Chat = ({
   useEffect(() => {
     console.log(sendMessage, "send message in useeffect")
     if (sendMessage !== null) {
-      socket.current.emit(
-        "send-message",
-        sendMessage,
-        patientConversation?.conversationId
-      )
+      socket.current.emit("send-message", sendMessage)
     }
   }, [sendMessage])
 
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("receive-message", data => {
-      console.log(data,"in receive-f")
-      setReceivedMessage(data.message)
+      console.log(data)
+      if (
+        data !== null &&
+        data.conversationId === patientConversation?.conversationId
+      ) {
+        console.log(data, "in if")
+        setChatMessages([...chatMessages, data])
+      }
+      setReceivedMessage({ ...data })
     })
   }, [])
 
@@ -106,71 +109,22 @@ const Chat = ({
       receivedMessage !== null &&
       receivedMessage.conversationId === patientConversation?.conversationId
     ) {
+      console.log(receivedMessage, "in if")
       setChatMessages([...chatMessages, receivedMessage])
     }
   }, [receivedMessage])
-
-  // Always scroll to last Message
-  useEffect(() => {
-    scroll.current?.scrollIntoView({ behavior: "smooth" })
-  }, [chatMessages])
-
-  // useEffect(() => {
-  //   socket.current = io("ws://localhost:8900")
-
-  //   socket.current.on("getMessage", data => {
-  //     console.log("get message", data)
-  //     setArrivalMessage(data.message)
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   setChatMessages(prev => [...prev, arrivalMessage])
-  // }, [arrivalMessage])
-
-  // useEffect(() => {
-  //   socket.current.emit("addUser", "6351452835155fec28aa67b1")
-  //   socket.current.on("getUsers", users => {
-  //     console.log(users, "connected users")
-  //   })
-  // }, [])
-
-  // const sendMessage = async e => {
-  //   e.preventDefault()
-  //   setcurMessage("")
-  //   setChatMessages(prev => [...prev, curMessage])
-
-  //   socket.current.emit("sendMessage", {
-  //     senderId: "6351452835155fec28aa67b1",
-  //     receiverId: patientInfo?.patientId,
-  //     message: curMessage,
-  //   })
-
-  //   let res = await newMessage({
-  //     conversationId: patientConversation?.conversationId,
-  //     senderId: "6351452835155fec28aa67b1",
-  //     message: curMessage,
-  //     format: "text",
-  //     scanId: "",
-  //   })
-  //   setChatMessages([...chatMessages, res.data])
-  //   setcurMessage("")
-  //   console.log(res)
-  //   if (res.data.data.success === 1) {
-  //     handleGetPatientConversation()
-  //   } else {
-  //     toast.error(res.data.data.message, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     })
-  //   }
-  // }
 
   const scrollToBottom = () => {
     if (messageBox) {
       messageBox.scrollTop = messageBox.scrollHeight + 1000
     }
   }
-
+  console.log(chatMessages)
+  // Always scroll to last Message
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" })
+  }, [chatMessages])
+  const scroll = useRef()
   return (
     <div className="w-100 user-chat border border-secondary rounded ">
       <Card>
@@ -197,9 +151,9 @@ const Chat = ({
                     <span className="title">Today</span>
                   </div>
                 </li>
-                {patientMessages?.length === 0 && <p>No Messages found</p>}
-                {patientMessages &&
-                  patientMessages.map((message, i) => (
+                {chatMessages?.length === 0 && <p>No Messages found</p>}
+                {chatMessages &&
+                  chatMessages.map((message, i) => (
                     <li
                       key={"test_k" + i}
                       className={
@@ -227,7 +181,7 @@ const Chat = ({
                           />
                           <p className="chat-time mb-0">
                             <i className="bx bx-time-five align-middle me-1" />
-                            {moment(message.createdAt).format("DD-MM-YY hh:mm")}
+                            {message.createdAt}
                           </p>
                         </div>
                       ) : (
@@ -237,11 +191,10 @@ const Chat = ({
                               {message.sender}
                             </div>
                             <p>{message.message}</p>
+
                             <p className="chat-time mb-0">
                               <i className="bx bx-time-five align-middle me-1" />
-                              {moment(message.createdAt).format(
-                                "DD-MM-YY hh:mm"
-                              )}
+                              {message.createdAt}
                             </p>
                           </div>
                         </div>
