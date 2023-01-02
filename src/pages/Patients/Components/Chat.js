@@ -50,11 +50,12 @@ const Chat = ({
       conversationId: patientConversation?.conversationId,
       format: "text",
       scanId: "",
+      createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
     console.log(patientInfo?.patientId)
     // send message to socket server
-    //setSendMessage({ ...message })
-    setSendMessage(Object.assign(message))
+    setSendMessage({ ...message })
+    //setSendMessage(Object.assign(message))
     // send message to database
     try {
       let res = await newMessage({
