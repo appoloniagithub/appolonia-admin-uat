@@ -12,9 +12,9 @@ const Allpatients = () => {
   let [patients, setPatients] = useState([])
   let [conversations, setConversations] = useState()
   let handleGetAllPatients = async () => {
+    let res = await getAllPatients()
+    console.log(res)
     try {
-      let res = await getAllPatients()
-      console.log(res)
       if (res.data.data.success === 1) {
         console.log(res.data.data.allPatients)
         setPatients(res.data.data.allPatients)
@@ -26,9 +26,9 @@ const Allpatients = () => {
     }
   }
   let handleGetConversations = async () => {
+    let res = await getConversations({ userId: "6351452835155fec28aa67b1" })
+    console.log(res)
     try {
-      let res = await getConversations({ userId: "6351452835155fec28aa67b1" })
-      console.log(res)
       if (res.data.data.success === 1) {
         console.log(res.data.data.conversations)
         setConversations(res.data.data.conversations)
@@ -43,9 +43,9 @@ const Allpatients = () => {
     handleGetAllPatients()
     handleGetConversations()
   }, [])
+  console.log(conversations)
   return (
     <React.Fragment>
-      {console.log(conversations)}
       <div className="page-content">
         {/* <Container fluid> */}
         <h4>Patients</h4>

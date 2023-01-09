@@ -7,6 +7,12 @@ const getAllPatients = async () => {
   console.log(res)
   return res
 }
+const getPatientById = async data => {
+  let res = await axios.post(`${url}/api/patient/getpatient`, data)
+
+  console.log(res)
+  return res
+}
 
 const getPatientScans = async data => {
   let res = await axios.post(`${url}/api/scans/getmyscans`, data)
@@ -51,12 +57,22 @@ const getNotes = async data => {
   return res
 }
 
+const getAllDoctors = async data => {
+  console.log(data)
+  let res = await axios.post(`${url}/api/user/getalldoctors`, data)
+
+  console.log(res)
+  return res
+}
+
 export {
   getAllPatients,
+  getPatientById,
   getPatientScans,
   getConversations,
   getConversationMessages,
   addNewNote,
   getNotes,
   newMessage,
+  getAllDoctors,
 }

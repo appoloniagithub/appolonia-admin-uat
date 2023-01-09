@@ -44,6 +44,7 @@ const Patientnotes = ({ view, handleView, data }) => {
       handleGetNotes()
     }
   }, [data])
+  console.log(view)
   return (
     <div
       style={{
@@ -58,12 +59,24 @@ const Patientnotes = ({ view, handleView, data }) => {
         className="d-flex justify-content-between p-1"
       >
         <h5 className="text-white mt-2">Patient Notes</h5>
-        <button className="btn text-light" onClick={() => handleView("notes")}>
+        {/* <button className="btn text-light" onClick={() => handleView("notes")}>
           +
-        </button>
+        </button> */}
+        {view === true ? (
+          <button className="btn text-light" onClick={() => handleView(false)}>
+            -
+          </button>
+        ) : (
+          <button
+            className="btn text-light"
+            onClick={() => handleView("notes")}
+          >
+            +
+          </button>
+        )}
       </div>
 
-      {view === false && (
+      {view === true && (
         <div className="text-dark p-1">
           {notes.length === 0 && (
             <div>

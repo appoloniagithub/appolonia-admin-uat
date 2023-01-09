@@ -1,6 +1,7 @@
 import React from "react"
 import { Container } from "reactstrap"
 import Showpatient from "../Showpatient"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -76,13 +77,15 @@ const Patienttable = ({ data, conversations }) => {
                       <td>{patient.uniqueId2}</td>
 
                       <td>
-                        <Button
-                          color="primary"
-                          className="btn btn-primary "
-                          onClick={() => handleSelectPatient(patient)}
-                        >
-                          View
-                        </Button>
+                        <Link to={`/patients/showpatient/${patient?._id}`}>
+                          <Button
+                            color="primary"
+                            className="btn btn-primary "
+                            onClick={() => handleSelectPatient(patient)}
+                          >
+                            View
+                          </Button>
+                        </Link>
                       </td>
                     </tr>
                   )

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import moment from "moment"
 import { Button } from "reactstrap"
 import user1 from "../../../assets/images/users/avatar-1.jpg"
@@ -18,9 +18,18 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
         </div>
 
         <h5 className="mt-2 text-light">Patient Information</h5>
-        <button className="btn text-light" onClick={() => handleView("info")}>
+        {/* <button className="btn text-light" onClick={() => handleView("info")}>
           +
-        </button>
+        </button> */}
+        {view === true ? (
+          <button className="btn text-light" onClick={() => handleView(false)}>
+            -
+          </button>
+        ) : (
+          <button className="btn text-light" onClick={() => handleView("info")}>
+            +
+          </button>
+        )}
       </div>
 
       {/* <br /> */}

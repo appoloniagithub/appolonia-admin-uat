@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 import url from "../../Connection/Api/api"
 import {
@@ -78,9 +78,11 @@ export default function Showpatient({
   open,
   handleOpen,
   handleGetConversation,
+  isConversations,
 }) {
   console.log(data, "i am selected")
   // const [open, setOpen] = React.useState(false)
+  const [active, setActive] = useState("")
   const [customActiveTab, setcustomActiveTab] = useState("1")
   const [customIconActiveTab, setcustomIconActiveTab] = useState("1")
   const [patientInfo, setPatientInfo] = useState({
@@ -100,7 +102,8 @@ export default function Showpatient({
   const [scan2Images, setScan2Images] = React.useState({})
   const [selectedScanImages1, setSelectedScanImages1] = React.useState([])
   const [selectedScanImages2, setSelectedScanImages2] = React.useState([])
-  const [patientInfoView, setPatientInfoView] = React.useState(true)
+  const [patientInfoView, setPatientInfoView] = React.useState(false)
+  const [patientNoteView, setPatientNoteView] = React.useState(true)
   const [checked, setChecked] = React.useState(false)
   const [faceView, setFaceView] = React.useState(true)
   const [patientConversation, setPatientConversation] = React.useState()
@@ -260,6 +263,13 @@ export default function Showpatient({
       setPatientInfoView(false)
     }
   }
+  const handlePatientNoteView = doer => {
+    if (doer === "notes") {
+      setPatientNoteView(true)
+    } else {
+      setPatientNoteView(false)
+    }
+  }
 
   const handleGetMyScans = async () => {
     try {
@@ -288,12 +298,13 @@ export default function Showpatient({
     }
   }
 
-  const handleScan1 = (faceScan, teethScan) => {
+  const handleScan1 = (faceScan, teethScan, id) => {
     console.log("i am clicked")
     setScan1Images({
       faceScan,
       teethScan,
     })
+    setActive(id)
     setSelectedScanImages1(faceScan)
     setFaceView(true)
   }
@@ -329,8 +340,13 @@ export default function Showpatient({
     setChecked(event.target.checked)
   }
 
+  // const handleClick = event => {
+  //   handleScan1(singleScan?.faceScanImages, singleScan?.teethScanImages)
+  //   setActive(event.target.id)
+  // }
+
   const handleGetPatientConversation = async () => {
-    let foundConversation = handleGetConversation(data?._id)
+    let foundConversation = await handleGetConversation(data?._id)
     console.log(foundConversation)
     if (foundConversation) {
       setPatientConversation(foundConversation)
@@ -364,10 +380,15 @@ export default function Showpatient({
       firstName: data?.firstName,
       lastName: data?.lastName,
     })
-    handleGetMyScans()
-    handleGetPatientConversation()
   }, [open === true])
-
+  useEffect(() => {
+    console.log(isConversations)
+    if (isConversations == "yes") {
+      handleGetMyScans()
+      handleGetPatientConversation()
+    }
+  }, [isConversations])
+  console.log(patientScans)
   return (
     <div>
       <Button onClick={handleOpen} color="primary" className="btn btn-primary ">
@@ -400,8 +421,8 @@ export default function Showpatient({
                 <Row>
                   <Col sm="12">
                     <Patientnotes
-                      view={patientInfoView === true ? true : false}
-                      handleView={handlePatientInfoView}
+                      view={patientNoteView === true ? true : false}
+                      handleView={handlePatientNoteView}
                       data={patientInfo}
                     />
                   </Col>
@@ -681,55 +702,62 @@ export default function Showpatient({
                             sm="12"
                             // md="6"
                             // className="d-flex justify-content-center"
-                          >
-                            <div>
-                              <Horizental
-                                content={patientScans?.map((singleScan, i) => {
-                                  return (
-                                    <div key={i}>
-                                      <div className="d-flex">
-                                        <div
-                                          style={{
-                                            width: "25px",
-                                            height: "25px",
-                                            // backgroundColor: "black",
-                                            borderRadius: "50%",
-                                          }}
-                                          className="bg-primary"
-                                          onClick={() =>
-                                            handleScan1(
-                                              singleScan?.faceScanImages,
-                                              singleScan?.teethScanImages
-                                            )
-                                          }
-                                        ></div>
-                                        {i !== patientScans?.length - 1 && (
-                                          <div
-                                            style={{
-                                              width: "50px",
-                                              height: "5px",
-                                              // backgroundColor: "black",
-                                              // borderRadius: "50%",
-                                              marginTop: "10px",
-                                            }}
-                                            className="bg-primary mx-2"
-                                          ></div>
-                                        )}
-                                      </div>
-                                      <p>
-                                        {dateFormat(
-                                          singleScan?.created,
-                                          "mmm dS, yy"
-                                        )}
-                                      </p>
-                                    </div>
-                                  )
-                                })}
-                              />
-                            </div>
-                          </Col>
+                          ></Col>
                           <Col sm="12">
                             <div className="border border-secondary bg-white rounded p-2">
+                              <br />
+                              <div>
+                                <Horizental
+                                  content={patientScans?.map(
+                                    (singleScan, i) => {
+                                      return (
+                                        <div key={i}>
+                                          <div className="d-flex">
+                                            <div
+                                              style={{
+                                                width: "25px",
+                                                height: "25px",
+                                                // backgroundColor: "black",
+                                                borderRadius: "50%",
+                                              }}
+                                              className={
+                                                active === singleScan._id
+                                                  ? "bg-secondary mx-2"
+                                                  : "bg-primary mx-2"
+                                              }
+                                              onClick={() =>
+                                                handleScan1(
+                                                  singleScan?.faceScanImages,
+                                                  singleScan?.teethScanImages,
+                                                  singleScan?._id
+                                                )
+                                              }
+                                            ></div>
+                                            {i !== patientScans?.length - 1 && (
+                                              <div
+                                                style={{
+                                                  width: "50px",
+                                                  height: "5px",
+                                                  // backgroundColor: "black",
+                                                  // borderRadius: "50%",
+                                                  marginTop: "10px",
+                                                }}
+                                                className="bg-primary mx-2"
+                                              ></div>
+                                            )}
+                                          </div>
+                                          <p>
+                                            {dateFormat(
+                                              singleScan?.created,
+                                              "mmm dS, yy"
+                                            )}
+                                          </p>
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                />
+                              </div>
                               {/* <br /> */}
                               <div className="">
                                 <div>
@@ -801,56 +829,7 @@ export default function Showpatient({
                       {checked === true && (
                         <Col sm="12" md="6">
                           <Row>
-                            <Col sm="12">
-                              <div>
-                                <Horizental
-                                  content={patientScans?.map(
-                                    (singleScan, i) => {
-                                      console.log(i, "i am index")
-                                      return (
-                                        <div key={i} className="">
-                                          <div className="d-flex">
-                                            <div
-                                              style={{
-                                                width: "25px",
-                                                height: "25px",
-                                                // backgroundColor: "black",
-                                                borderRadius: "50%",
-                                              }}
-                                              className="bg-primary"
-                                              onClick={() =>
-                                                handleScan2(
-                                                  singleScan?.faceScanImages,
-                                                  singleScan?.teethScanImages
-                                                )
-                                              }
-                                            ></div>
-                                            {i !== patientScans?.length - 1 && (
-                                              <div
-                                                style={{
-                                                  width: "50px",
-                                                  height: "5px",
-                                                  // backgroundColor: "black",
-                                                  // borderRadius: "50%",
-                                                  marginTop: "10px",
-                                                }}
-                                                className="bg-primary mx-2"
-                                              ></div>
-                                            )}
-                                          </div>
-                                          <p>
-                                            {dateFormat(
-                                              singleScan?.created,
-                                              "mmm dS, yy"
-                                            )}
-                                          </p>
-                                        </div>
-                                      )
-                                    }
-                                  )}
-                                />
-                              </div>
-                            </Col>
+                            <Col sm="12"></Col>
 
                             <Col
                               // className={`${checked === true ? "" : "d-none"}`}
@@ -861,7 +840,56 @@ export default function Showpatient({
                                 style={{ maxHeight: "760px", height: "auto" }}
                                 className="border border-secondary bg-white rounded p-2"
                               >
-                                {/* <br /> */}
+                                <br />
+                                <div>
+                                  <Horizental
+                                    content={patientScans?.map(
+                                      (singleScan, i) => {
+                                        console.log(i, "i am index")
+                                        return (
+                                          <div key={i} className="">
+                                            <div className="d-flex">
+                                              <div
+                                                style={{
+                                                  width: "25px",
+                                                  height: "25px",
+                                                  // backgroundColor: "black",
+                                                  borderRadius: "50%",
+                                                }}
+                                                className="bg-primary"
+                                                onClick={() =>
+                                                  handleScan2(
+                                                    singleScan?.faceScanImages,
+                                                    singleScan?.teethScanImages
+                                                  )
+                                                }
+                                              ></div>
+                                              {i !==
+                                                patientScans?.length - 1 && (
+                                                <div
+                                                  style={{
+                                                    width: "50px",
+                                                    height: "5px",
+                                                    // backgroundColor: "black",
+                                                    // borderRadius: "50%",
+                                                    marginTop: "10px",
+                                                  }}
+                                                  className="bg-primary mx-2"
+                                                ></div>
+                                              )}
+                                            </div>
+                                            <p>
+                                              {dateFormat(
+                                                singleScan?.created,
+                                                "mmm dS, yy"
+                                              )}
+                                            </p>
+                                          </div>
+                                        )
+                                      }
+                                    )}
+                                  />
+                                </div>
                                 <div className="">
                                   <div>
                                     <button

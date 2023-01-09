@@ -92,7 +92,7 @@ const Navbar = props => {
                   <Link
                     className="nav-link dropdown-toggle arrow-none"
                     onClick={e => {
-                      e.preventDefault()
+                      //e.preventDefault()
                       setdashboard(!dashboard)
                     }}
                     to="/dashboard"
@@ -124,7 +124,7 @@ const Navbar = props => {
                       // e.preventDefault()
                       setPatient(!patient)
                     }}
-                    to="/patients"
+                    to="/doctors"
                   >
                     {/* <i className="bx bx-home-circle me-2"></i> */}
                     {props.t("Doctors")}
@@ -135,10 +135,10 @@ const Navbar = props => {
                   <Link
                     className="nav-link"
                     onClick={e => {
-                      // e.preventDefault()
+                      e.preventDefault()
                       setPatient(!patient)
                     }}
-                    to="/patients"
+                    to="/settings"
                   >
                     {/* <i className="bx bx-home-circle me-2"></i> */}
                     {props.t("Settings")}
@@ -149,7 +149,7 @@ const Navbar = props => {
                   <Link
                     className="nav-link"
                     onClick={e => {
-                      // e.preventDefault()
+                      e.preventDefault()
                       setPatient(!patient)
                     }}
                     to="/patients"
@@ -163,7 +163,7 @@ const Navbar = props => {
                   <Link
                     className="nav-link"
                     onClick={e => {
-                      // e.preventDefault()
+                      e.preventDefault()
                       setPatient(!patient)
                     }}
                     to="/patients"

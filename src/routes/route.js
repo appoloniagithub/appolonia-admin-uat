@@ -6,6 +6,7 @@ const Authmiddleware = ({
   component: Component,
   layout: Layout,
   isAuthProtected,
+  path,
   ...rest
 }) => (
   <Route
@@ -18,7 +19,19 @@ const Authmiddleware = ({
           />
         )
       }
-
+      console.log({ ...rest }, "IN ROUTES", path)
+      if (path === "/patients/showpatient/:id") {
+        return <Component {...props} />
+      }
+      if (path === "/doctors/create-doctor") {
+        return <Component {...props} />
+      }
+      if (path === "/doctors/edit-doctor/:id") {
+        return <Component {...props} />
+      }
+      if (path === "/doctors/delete-doctor/:id") {
+        return <Component {...props} />
+      }
       return (
         <Layout>
           <Component {...props} />
@@ -32,7 +45,7 @@ Authmiddleware.propTypes = {
   isAuthProtected: PropTypes.bool,
   component: PropTypes.any,
   location: PropTypes.object,
-  layout: PropTypes.any, 
+  layout: PropTypes.any,
 }
 
-export default Authmiddleware;
+export default Authmiddleware
