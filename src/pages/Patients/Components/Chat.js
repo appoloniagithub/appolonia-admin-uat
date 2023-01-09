@@ -65,7 +65,6 @@ const Chat = ({
         scanId: "",
       })
       console.log(res.data)
-      //let updatedChatMessages = []
       setChatMessages([...chatMessages, res.data])
       setCurMessage("")
       if (res.data.data.success === 1) {
@@ -181,6 +180,7 @@ const Chat = ({
                           />
                           <p className="chat-time mb-0">
                             <i className="bx bx-time-five align-middle me-1" />
+                            {/* {moment(message.createdAt).format("DD-MM-YY hh:mm")} */}
                             {message.createdAt}
                           </p>
                         </div>
@@ -194,6 +194,9 @@ const Chat = ({
 
                             <p className="chat-time mb-0">
                               <i className="bx bx-time-five align-middle me-1" />
+                              {/* {moment(message.createdAt).format(
+                                "DD-MM-YY hh:mm"
+                              )} */}
                               {message.createdAt}
                             </p>
                           </div>
