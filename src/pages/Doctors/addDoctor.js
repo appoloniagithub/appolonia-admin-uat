@@ -13,6 +13,7 @@ import countries from "i18n-iso-countries"
 import enLocale from "i18n-iso-countries/langs/en.json"
 import itLocale from "i18n-iso-countries/langs/it.json"
 import { ToastContainer, toast } from "react-toastify"
+import url from "../../Connection/Api/api"
 
 import { addDoctor } from "Connection/Doctors"
 
@@ -228,7 +229,7 @@ const CreateDoctor = props => {
     console.log(role, "above if")
     if (role) {
       axios
-        .post("http://localhost:3001/api/doctors/createdoctor", {
+        .post(`${url}/api/doctors/createdoctor`, {
           firstName,
           lastName,
           email,
