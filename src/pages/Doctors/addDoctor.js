@@ -244,6 +244,12 @@ const CreateDoctor = props => {
   const handleClose = () => {
     history.push("/doctors")
   }
+  // useEffect(() => {
+  //   function clickHandler(event) {
+  //     const phoneNumber = event.target.getAttribute("phoneNumber")
+  //     console.log(phoneNumber)
+  //   }
+  // }, [])
   const postData = () => {
     console.log(role, "above if")
     if (role && speciality && phoneNumber && password) {
@@ -285,7 +291,7 @@ const CreateDoctor = props => {
             history.push("/doctors")
             toast.success("Doctor successfully created")
           }
-          if (res.status === 400) {
+          if (res.data.data.status === 400) {
             toast.error("Please enter all the mandatory fields")
           }
           if (res.data.data.status === 409) {
@@ -468,19 +474,17 @@ const CreateDoctor = props => {
                         <PhoneInput
                           country={"ae"}
                           placeholder="Enter phone number"
+                          //onClick={clickHandler}
                           value={phoneNumber}
-                          onChange={e => {
-                            setPhoneNumber(e.target.value)
-                            setIsPhoneNumber(false)
-                          }}
+                          //onChange={setIsPhoneNumber(false)}
                         />
                       </Form.Group>
-                      {isPhoneNumber && (
+                      {/* {isPhoneNumber && (
                         <p className="text-danger">
                           {" "}
                           Please Enter phone number
                         </p>
-                      )}
+                      )} */}
                     </Col>
                   </Row>
 
