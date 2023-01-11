@@ -14,6 +14,10 @@ import enLocale from "i18n-iso-countries/langs/en.json"
 import itLocale from "i18n-iso-countries/langs/it.json"
 import { ToastContainer, toast } from "react-toastify"
 import url from "../../Connection/Api/api"
+// import "react-phone-number-input/style.css"
+// import PhoneInput from "react-phone-number-input"
+import PhoneInput from "react-phone-input-2"
+import "react-phone-input-2/lib/style.css"
 
 import { addDoctor } from "Connection/Doctors"
 
@@ -155,15 +159,15 @@ const CreateDoctor = props => {
   // }
   let history = useHistory()
   const roleOptions = ["Select", "Admin", "Doctor"]
-  const options = ["Select", "Orthodontist", "Pediatric Dentist"]
+  const options = ["Select", "Orthodontist", "Pediatric Dentist", "Admin"]
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
-  const [speciality, setSpeciality] = useState(options[0])
+  const [speciality, setSpeciality] = useState("")
   const [image, setImage] = useState("")
-  const [role, setRole] = useState("")
-  const [gender, setGender] = useState("")
+  const [role, setRole] = useState(roleOptions[2])
+  const [gender, setGender] = useState("male")
   const [nationality, setNationality] = useState("")
   const [totalExperience, setTotalExperience] = useState("")
   const [certifications, setCertifications] = useState("")
@@ -171,6 +175,10 @@ const CreateDoctor = props => {
   const [profile, setProfile] = useState("")
   const [password, setPassword] = useState("")
   const [isRole, setIsRole] = useState(false)
+  const [isSpeciality, setIsSpeciality] = useState(false)
+  const [isPhoneNumber, setIsPhoneNumber] = useState(false)
+  const [isPassword, setIsPassword] = useState(false)
+  const [response, setResponse] = useState("")
 
   const {
     register,
@@ -192,9 +200,18 @@ const CreateDoctor = props => {
       value: key,
     }
   })
-  const handleRole = () => {
+  const handleValidation = () => {
     if (!role) {
       setIsRole(true)
+    }
+    if (!speciality) {
+      setIsSpeciality(true)
+    }
+    if (!phoneNumber) {
+      setIsPhoneNumber(true)
+    }
+    if (!password) {
+      setIsPassword(true)
     }
   }
   const hiddenFileInput = React.useRef(null)
@@ -224,10 +241,12 @@ const CreateDoctor = props => {
     hiddenFileInput.current.click()
     //uploadFile(image)
   }
-
+  const handleClose = () => {
+    history.push("/doctors")
+  }
   const postData = () => {
     console.log(role, "above if")
-    if (role) {
+    if (role && speciality && phoneNumber && password) {
       axios
         .post(`${url}/api/doctors/createdoctor`, {
           firstName,
@@ -260,15 +279,29 @@ const CreateDoctor = props => {
             setProfile(""),
             setCertifications(""),
             setEducation(""),
-            console.log(res.data)
-          history.push("/doctors")
-          toast.success("Doctor successfully created")
+            console.log(res.data.data.image)
+          //setResponse(res.data.data.image[0])
+          if (res.data.data.success === 1) {
+            history.push("/doctors")
+            toast.success("Doctor successfully created")
+          }
+          if (res.status === 400) {
+            toast.error("Please enter all the mandatory fields")
+          }
+          if (res.data.data.status === 409) {
+            toast.error(
+              "Doctor with this email ID (or) phone number already exists"
+            )
+          }
         })
         .catch(err => {
-          toast.error("Error while creating a doctor")
+          toast.error("Error creating doctor")
         })
     } else {
       setIsRole(true)
+      setIsSpeciality(true)
+      setIsPhoneNumber(true)
+      setIsPassword(true)
       console.log("else in false data", isRole)
     }
   }
@@ -342,7 +375,7 @@ const CreateDoctor = props => {
           <Col sm="8">
             <div className="border border-secondary rounded mt-4 mr-4 p-2">
               <div className="justify-content-between p-2">
-                <h5>New Doctor Information</h5>
+                <h5>Personal Information</h5>
                 <Divider />
                 <div className="form-wrapper">
                   <Row>
@@ -404,7 +437,7 @@ const CreateDoctor = props => {
                   <Row>
                     <Col sm="6">
                       <Form.Group controlId="Email">
-                        <Form.Label>
+                        <Form.Label className="mt-2">
                           Email<sup className="text-danger">*</sup>
                         </Form.Label>
                         <Form.Control
@@ -428,26 +461,120 @@ const CreateDoctor = props => {
                     </Col>
                     <Col sm="6">
                       <Form.Group controlId="Phone Number">
-                        <Form.Label>
+                        <Form.Label className="mt-2">
                           Phone Number<sup className="text-danger">*</sup>
                         </Form.Label>
-                        <Form.Control
-                          type="number"
-                          {...register("phoneNumber", {
-                            required: true,
-                            minLength: 10,
-                          })}
+
+                        <PhoneInput
+                          country={"ae"}
+                          placeholder="Enter phone number"
                           value={phoneNumber}
-                          onChange={e => setPhoneNumber(e.target.value)}
+                          onChange={e => {
+                            setPhoneNumber(e.target.value)
+                            setIsPhoneNumber(false)
+                          }}
                         />
                       </Form.Group>
-                      {errors.phoneNumber && (
+                      {isPhoneNumber && (
                         <p className="text-danger">
-                          Please check your phone number
+                          {" "}
+                          Please Enter phone number
                         </p>
                       )}
                     </Col>
                   </Row>
+
+                  <Row>
+                    <Col sm="6">
+                      <Form.Group controlId="Gender">
+                        <Form.Label>Gender</Form.Label>
+                        &nbsp;&nbsp;&nbsp;
+                        <div className="form-check form-check-inline">
+                          <br />
+                          <input
+                            type="radio"
+                            value="male"
+                            checked={gender === "male"}
+                            id="male"
+                            onClick={e => setGender(e.target.value)}
+                            name={gender}
+                          />{" "}
+                          <label htmlFor="male">Male</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                          <input
+                            type="radio"
+                            value="female"
+                            checked={gender === "female"}
+                            id="female"
+                            onClick={e => setGender(e.target.value)}
+                            name={gender}
+                          />{" "}
+                          <label htmlFor="female">Female</label>
+                        </div>
+                      </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                      <Form.Group controlId="Nationality">
+                        <Form.Label className="mt-2">Nationality</Form.Label>
+                        <div>
+                          <Select
+                            style={{ width: "150px" }}
+                            value={nationality}
+                            onChange={e => selectCountryHandler(e.target.value)}
+                          >
+                            {!!countryArr?.length &&
+                              countryArr.map(({ label, value }) => (
+                                <MenuItem key={value} value={value}>
+                                  {label}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col sm="6">
+                      <Form.Group controlId="Password">
+                        <Form.Label className="mt-2">
+                          Password<sup className="text-danger">*</sup>
+                        </Form.Label>
+                        <Form.Control
+                          type="password"
+                          {...register("password", {
+                            required: true,
+                            pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/,
+                          })}
+                          value={password}
+                          onChange={e => setPassword(e.target.value)}
+                        />
+                      </Form.Group>
+                      {errors.password &&
+                        errors.password.type === "required" && (
+                          <p className="text-danger">Please Enter password</p>
+                        )}
+                      {errors.password &&
+                        errors.password.type === "pattern" && (
+                          <p className="text-danger">Invalid password</p>
+                        )}
+                    </Col>
+                    <Col sm="6">
+                      <Form.Group controlId="Repeat Password">
+                        <Form.Label className="mt-2">
+                          Repeat Password<sup className="text-danger">*</sup>
+                        </Form.Label>
+                        <Form.Control
+                          type="password"
+                          value={password}
+                          onChange={e => setPassword(e.target.value)}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <br />
+                  <h5>Professional Information</h5>
+                  <br />
                   <Form.Group controlId="Speciality">
                     <Form.Label>
                       Speciality<sup className="text-danger">*</sup>
@@ -456,7 +583,10 @@ const CreateDoctor = props => {
                       className="form-select"
                       aria-label="Default select example"
                       value={speciality}
-                      onChange={e => setSpeciality(e.target.value)}
+                      onChange={e => {
+                        setSpeciality(e.target.value)
+                        setIsSpeciality(false)
+                      }}
                     >
                       {options.map(value => (
                         <option value={value} key={value}>
@@ -465,56 +595,15 @@ const CreateDoctor = props => {
                       ))}
                     </select>
                   </Form.Group>
-
-                  <Form.Group controlId="Gender">
-                    <Form.Label>Gender</Form.Label>
-                    &nbsp;&nbsp;&nbsp;
-                    <div className="form-check form-check-inline">
-                      <br />
-                      <input
-                        type="radio"
-                        value="male"
-                        checked={gender === "male"}
-                        id="male"
-                        onClick={e => setGender(e.target.value)}
-                        name={gender}
-                      />{" "}
-                      <label htmlFor="male">Male</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                      <input
-                        type="radio"
-                        value="female"
-                        checked={gender === "female"}
-                        id="female"
-                        onClick={e => setGender(e.target.value)}
-                        name={gender}
-                      />{" "}
-                      <label htmlFor="female">Female</label>
-                    </div>
-                  </Form.Group>
-
-                  <Form.Group controlId="Nationality">
-                    <Form.Label>Nationality</Form.Label>
-                    <div>
-                      <Select
-                        style={{ width: "150px" }}
-                        value={nationality}
-                        onChange={e => selectCountryHandler(e.target.value)}
-                      >
-                        {!!countryArr?.length &&
-                          countryArr.map(({ label, value }) => (
-                            <MenuItem key={value} value={value}>
-                              {label}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </div>
-                  </Form.Group>
+                  {isSpeciality && (
+                    <p className="text-danger"> Please select speciality</p>
+                  )}
                   <Row>
                     <Col sm="6">
                       <Form.Group controlId="Total Experience">
-                        <Form.Label>Total Experience</Form.Label>
+                        <Form.Label className="mt-2">
+                          Total Experience
+                        </Form.Label>
                         <div className="form-floating">
                           <textarea
                             className="form-control"
@@ -527,7 +616,7 @@ const CreateDoctor = props => {
                     </Col>
                     <Col sm="6">
                       <Form.Group controlId="Profile">
-                        <Form.Label>Profile</Form.Label>
+                        <Form.Label className="mt-2">Profile</Form.Label>
                         <div className="form-floating">
                           <textarea
                             className="form-control"
@@ -542,7 +631,7 @@ const CreateDoctor = props => {
                   <Row>
                     <Col sm="6">
                       <Form.Group controlId="Certifications">
-                        <Form.Label>Certifications</Form.Label>
+                        <Form.Label className="mt-2">Certifications</Form.Label>
 
                         <div className="form-floating">
                           <textarea
@@ -556,7 +645,7 @@ const CreateDoctor = props => {
                     </Col>
                     <Col sm="6">
                       <Form.Group controlId="Education">
-                        <Form.Label>Education</Form.Label>
+                        <Form.Label className="mt-2">Education</Form.Label>
                         <div className="form-floating">
                           <textarea
                             className="form-control"
@@ -568,36 +657,7 @@ const CreateDoctor = props => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col sm="6">
-                      <Form.Group controlId="Password">
-                        <Form.Label>
-                          Password<sup className="text-danger">*</sup>
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          // {...register("password", {
-                          //   required: true,
-                          //   pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/,
-                          // })}
-                          value={password}
-                          onChange={e => setPassword(e.target.value)}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col sm="6">
-                      <Form.Group controlId="Repeat Password">
-                        <Form.Label>
-                          Repeat Password<sup className="text-danger">*</sup>
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          value={password}
-                          onChange={e => setPassword(e.target.value)}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
+
                   <br />
                   <Button
                     onClick={handleSubmit(postData)}
@@ -605,7 +665,14 @@ const CreateDoctor = props => {
                     color="primary"
                     className="btn btn-primary m-2 "
                   >
-                    <span onClick={handleRole}>Add New Doctor</span>
+                    <span onClick={handleValidation}>Add New Doctor</span>
+                  </Button>
+                  <Button
+                    onClick={handleClose}
+                    color="primary"
+                    className="btn btn-primary m-2 "
+                  >
+                    Cancel
                   </Button>
                 </div>
               </div>

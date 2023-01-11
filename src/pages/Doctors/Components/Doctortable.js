@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useHistory, useLocation } from "react-router-dom"
 import axios from "axios"
@@ -21,7 +21,9 @@ import {
 } from "reactstrap"
 
 const Doctortable = ({ data }) => {
+  const history = useHistory()
   console.log(data, "table")
+  const [id, setId] = useState("")
 
   const [open, setOpen] = React.useState(false)
 
@@ -32,10 +34,17 @@ const Doctortable = ({ data }) => {
   const handleClose = () => {
     setOpen(false)
   }
-
+  useEffect(() => {
+    let obj = Object.values(data).map(doctor => {
+      console.log(doctor?._id)
+      setId(doctor?._id)
+    })
+  })
   const deleteData = async () => {
-    await deleteDoctor({ doctorId: data?._id }).then(res => {
+    await deleteDoctor({ doctorId: id }).then(res => {
       console.log(res)
+      history.push("/doctors")
+      window.location.reload()
     })
   }
   return (
@@ -71,13 +80,13 @@ const Doctortable = ({ data }) => {
                         </Link>
                       </td>
                       <td>
-                        <Link to={`/doctors/delete-doctor/${doctor?._id}`}>
-                          <i
-                            onClick={handleClickOpen}
-                            className="mdi mdi-delete-outline"
-                            style={{ fontSize: "18px" }}
-                          ></i>
-                        </Link>
+                        {/* <Link to={`/doctors/delete-doctor/${doctor?._id}`}> */}
+                        <i
+                          onClick={handleClickOpen}
+                          className="mdi mdi-delete-outline"
+                          style={{ fontSize: "18px" }}
+                        ></i>
+                        {/* </Link> */}
                         <Dialog
                           open={open}
                           onClose={handleClose}
