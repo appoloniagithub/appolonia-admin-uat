@@ -273,8 +273,9 @@ const CreateDoctor = props => {
             setCertifications(""),
             setEducation(""),
             console.log(res)
+          console.log(res.data.success)
 
-          if (res.data.data.success === 1) {
+          if (res.data.success === 1) {
             history.push("/doctors")
             toast.success("Doctor successfully created")
           }
@@ -297,7 +298,7 @@ const CreateDoctor = props => {
       console.log("else in false data", isRole)
     }
   }
-  console.log(image.name)
+  console.log(image)
   console.log(gender)
 
   return (
