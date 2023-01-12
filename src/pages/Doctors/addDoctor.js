@@ -14,11 +14,9 @@ import enLocale from "i18n-iso-countries/langs/en.json"
 import itLocale from "i18n-iso-countries/langs/it.json"
 import { ToastContainer, toast } from "react-toastify"
 import url from "../../Connection/Api/api"
-// import "react-phone-number-input/style.css"
-// import PhoneInput from "react-phone-number-input"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
-
+import S3 from "react-s3"
 import { addDoctor } from "Connection/Doctors"
 
 //window.Buffer = window.Buffer || require("buffer").Buffer
@@ -201,17 +199,11 @@ const CreateDoctor = props => {
     }
   })
   const handleValidation = () => {
-    if (!role) {
-      setIsRole(true)
-    }
+    // if (!role) {
+    //   setIsRole(true)
+    // }
     if (!speciality) {
       setIsSpeciality(true)
-    }
-    if (!phoneNumber) {
-      setIsPhoneNumber(true)
-    }
-    if (!password) {
-      setIsPassword(true)
     }
   }
   const hiddenFileInput = React.useRef(null)
@@ -244,15 +236,10 @@ const CreateDoctor = props => {
   const handleClose = () => {
     history.push("/doctors")
   }
-  // useEffect(() => {
-  //   function clickHandler(event) {
-  //     const phoneNumber = event.target.getAttribute("phoneNumber")
-  //     console.log(phoneNumber)
-  //   }
-  // }, [])
+
   const postData = () => {
     console.log(role, "above if")
-    if (role && speciality && phoneNumber && password) {
+    if (speciality) {
       axios
         .post(`${url}/api/doctors/createdoctor`, {
           firstName,
@@ -285,15 +272,15 @@ const CreateDoctor = props => {
             setProfile(""),
             setCertifications(""),
             setEducation(""),
-            console.log(res.data.data.image)
-          //setResponse(res.data.data.image[0])
+            console.log(res)
+
           if (res.data.data.success === 1) {
             history.push("/doctors")
             toast.success("Doctor successfully created")
           }
-          if (res.data.data.status === 400) {
-            toast.error("Please enter all the mandatory fields")
-          }
+          // if (res.data.data.status === 400) {
+          //   toast.error("Please enter all the mandatory fields")
+          // }
           if (res.data.data.status === 409) {
             toast.error(
               "Doctor with this email ID (or) phone number already exists"
@@ -301,13 +288,12 @@ const CreateDoctor = props => {
           }
         })
         .catch(err => {
-          toast.error("Error creating doctor")
+          toast.error("Error while creating Doctor")
         })
     } else {
-      setIsRole(true)
+      //setIsRole(true)
       setIsSpeciality(true)
-      setIsPhoneNumber(true)
-      setIsPassword(true)
+
       console.log("else in false data", isRole)
     }
   }
@@ -361,7 +347,7 @@ const CreateDoctor = props => {
                           value={role}
                           onChange={e => {
                             setRole(e.target.value)
-                            setIsRole(false)
+                            //setIsRole(false)
                           }}
                         >
                           {roleOptions.map(value => (
@@ -374,7 +360,7 @@ const CreateDoctor = props => {
                     </Form.Group>
                   </Form>
                 </div>
-                {isRole && <p className="text-danger"> please select role</p>}
+                {/* {isRole && <p className="text-danger"> please select role</p>} */}
               </div>
             </div>
           </Col>
@@ -474,10 +460,15 @@ const CreateDoctor = props => {
                         <PhoneInput
                           country={"ae"}
                           placeholder="Enter phone number"
-                          //onClick={clickHandler}
+                          name="phoneNumber"
                           value={phoneNumber}
-                          //onChange={setIsPhoneNumber(false)}
+                          onChange={setPhoneNumber}
                         />
+                        {/* <Form.Control
+                          type="number"
+                          value={phoneNumber}
+                          onChange={e => setPhoneNumber(e.target.value)}
+                        /> */}
                       </Form.Group>
                       {/* {isPhoneNumber && (
                         <p className="text-danger">
