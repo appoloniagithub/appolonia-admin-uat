@@ -23,7 +23,7 @@ import {
 const Doctortable = ({ data }) => {
   const history = useHistory()
   console.log(data, "table")
-  const [id, setId] = useState("")
+  //const [id, setId] = useState("")
 
   const [open, setOpen] = React.useState(false)
 
@@ -34,13 +34,8 @@ const Doctortable = ({ data }) => {
   const handleClose = () => {
     setOpen(false)
   }
-  useEffect(() => {
-    let obj = Object.values(data).map(doctor => {
-      console.log(doctor?._id)
-      setId(doctor?._id)
-    })
-  })
-  const deleteData = async () => {
+
+  const deleteData = async id => {
     await deleteDoctor({ doctorId: id }).then(res => {
       console.log(res)
       history.push("/doctors")
@@ -109,7 +104,7 @@ const Doctortable = ({ data }) => {
                             <Button
                               className="btn btn-primary m-2 "
                               color="primary"
-                              onClick={deleteData}
+                              onClick={() => deleteData(doctor?._id)}
                               autoFocus
                             >
                               DELETE

@@ -37,18 +37,6 @@ const EditDoctor = () => {
   const [password, setPassword] = useState("")
   const [id, setId] = useState("")
 
-  // const [APIData, setAPIData] = useState([])
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3001/api/doctors/getalldoctors")
-  //     .then(response => {
-  //       setAPIData(response.data)
-  //     })
-  // }, [])
-  // const setData = data => {
-  //   console.log(data)
-  // }
   const {
     register,
     handleSubmit,
@@ -73,14 +61,11 @@ const EditDoctor = () => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
-    const fileUploaded = event.target.files[0]
-
-    setImage(fileUploaded)
+    setImage(event.target.files[0])
   }
 
   const handleClick = event => {
     hiddenFileInput.current.click()
-    uploadFile(image)
   }
 
   useEffect(() => {
@@ -99,7 +84,7 @@ const EditDoctor = () => {
           setEmail(res.data.data.foundDoctor.email)
           setPhoneNumber(res.data.data.foundDoctor.phoneNumber)
           setSpeciality(res.data.data.foundDoctor.speciality)
-          setImage(res.data.data.foundDoctor.image)
+          setImage(res.data.data.foundDoctor.image[0])
           setPassword(res.data.data.foundDoctor.password)
           setGender(res.data.data.foundDoctor.gender)
           setNationality(res.data.data.foundDoctor.nationality)
@@ -117,24 +102,45 @@ const EditDoctor = () => {
   }, [])
 
   const updateData = async () => {
-    await updateDoctor({
-      _id: id,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      speciality,
-      image,
-      password,
-      role,
-      gender,
-      nationality,
-      totalExperience,
-      profile,
-      certifications,
-      education,
-    })
-      .then(() => {
+    var formdata = new FormData()
+    formdata.append("_id", id)
+    formdata.append("firstName", firstName)
+    formdata.append("lastName", lastName)
+    formdata.append("role", role)
+    formdata.append("email", email)
+    formdata.append("speciality", speciality)
+    formdata.append("password", password)
+    formdata.append("phoneNumber", phoneNumber)
+    formdata.append("image", image)
+    formdata.append("gender", gender)
+    formdata.append("nationality", nationality)
+    formdata.append("totalExperience", totalExperience)
+    formdata.append("profile", profile)
+    formdata.append("certifications", certifications)
+    formdata.append("education", education)
+    console.log(formdata)
+    await updateDoctor(
+      //{
+      // _id: id,
+      // firstName,
+      // lastName,
+      // email,
+      // phoneNumber,
+      // speciality,
+      // image,
+      // password,
+      // role,
+      // gender,
+      // nationality,
+      // totalExperience,
+      // profile,
+      // certifications,
+      // education,
+      //}
+      formdata
+    )
+      .then(res => {
+        console.log(res)
         history.push("/doctors")
         toast.success("Doctor successfully updated")
       })
@@ -155,7 +161,7 @@ const EditDoctor = () => {
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={profilePic}
+                  src={image ? image : profilePic}
                   width="100"
                   height="100"
                 />

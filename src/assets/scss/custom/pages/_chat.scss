@@ -191,7 +191,14 @@
     }
 
   }
+  .right .fl-right{
 
+    // float: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: flex-end;
+  }
   .last-chat{
     .conversation-list{
       &:before{

@@ -9,13 +9,13 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
     <div className="border border-secondary rounded  ">
       <div
         style={{ backgroundColor: "#20507B", color: "white" }}
-        className="d-flex justify-content-between "
+        className="d-flex justify-content-between p-1"
       >
-        <div>
+        {/* <div>
           <button onClick={handleOpen} className="btn text-light">
             <i className="fas fa-arrow-left" />
           </button>
-        </div>
+        </div> */}
 
         <h5 className="mt-2 text-light">Patient Information</h5>
         {/* <button className="btn text-light" onClick={() => handleView("info")}>

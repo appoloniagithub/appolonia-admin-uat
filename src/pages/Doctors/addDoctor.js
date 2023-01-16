@@ -12,11 +12,11 @@ import countries from "i18n-iso-countries"
 // Import the languages you want to use
 import enLocale from "i18n-iso-countries/langs/en.json"
 import itLocale from "i18n-iso-countries/langs/it.json"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import url from "../../Connection/Api/api"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
-import S3 from "react-s3"
+
 import { addDoctor } from "Connection/Doctors"
 
 //window.Buffer = window.Buffer || require("buffer").Buffer
@@ -211,27 +211,9 @@ const CreateDoctor = props => {
   const handleChange = event => {
     setImage(event.target.files[0])
   }
-  // const uploadFile = async file => {
-  //   console.log(file)
-  //   const config = {
-  //     bucketName: process.env.REACT_APP_BUCKET_NAME,
-  //     dirName: "doctor-images",
-  //     region: process.env.REACT_APP_REGION,
-  //     accessKeyId: process.env.REACT_APP_ACCESS,
-  //     secretAccessKey: process.env.REACT_APP_SECRET,
-  //   }
-  //   // const ReactS3Client = new S3(config)
-  //   // the name of the file uploaded is used to upload it to S3
-  //   if (file && file.name) {
-  //     console.log(config, file)
-  //     S3.uploadFile(file, config)
-  //       .then(data => console.log(data.location))
-  //       .catch(err => console.error(err, "error"))
-  //   }
-  // }
+
   const handleClick = event => {
     hiddenFileInput.current.click()
-    //uploadFile(image)
   }
   const handleClose = () => {
     history.push("/doctors")
@@ -240,23 +222,24 @@ const CreateDoctor = props => {
   const postData = () => {
     console.log(role, "above if")
     if (speciality) {
+      var formdata = new FormData()
+      formdata.append("firstName", firstName)
+      formdata.append("lastName", lastName)
+      formdata.append("role", role)
+      formdata.append("email", email)
+      formdata.append("speciality", speciality)
+      formdata.append("password", password)
+      formdata.append("phoneNumber", phoneNumber)
+      formdata.append("image", image, image.name)
+      formdata.append("gender", gender)
+      formdata.append("nationality", nationality)
+      formdata.append("totalExperience", totalExperience)
+      formdata.append("profile", profile)
+      formdata.append("certifications", certifications)
+      formdata.append("education", education)
+
       axios
-        .post(`${url}/api/doctors/createdoctor`, {
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
-          speciality,
-          image,
-          password,
-          role,
-          gender,
-          nationality,
-          totalExperience,
-          profile,
-          certifications,
-          education,
-        })
+        .post(`${url}/api/doctors/createdoctor`, formdata)
         .then(res => {
           setFirstName(""),
             setLastName(""),
@@ -304,6 +287,26 @@ const CreateDoctor = props => {
   return (
     <>
       <div className="form-wrapper">
+        <Row>
+          <div className="border border-secondary rounded  ">
+            <div
+              style={{
+                backgroundColor: "#20507B",
+                color: "white",
+                height: "60px",
+              }}
+              className="d-flex justify-content-start align-items-center "
+            >
+              <div>
+                <button onClick={handleClose} className="btn text-light">
+                  <i className="fas fa-arrow-left" />
+                </button>
+              </div>
+
+              <h5 className="mt-2 text-light">Doctor Details</h5>
+            </div>
+          </div>
+        </Row>
         <Row>
           <Col sm="4">
             <div className="border border-secondary rounded mt-4 ml-4 p-2">

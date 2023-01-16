@@ -36,6 +36,7 @@
     "chart.js": "^3.7.1",
     "chartist": "^0.11.4",
     "classnames": "^2.3.1",
+    "cloudinary": "^1.33.0",
     "dateformat": "^5.0.3",
     "draft-js": "^0.11.7",
     "echarts": "^4.9.0",

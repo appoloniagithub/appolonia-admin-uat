@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import "react-perfect-scrollbar/dist/css/styles.css"
 import { newMessage } from "../../../Connection/Patients"
+import { newMessageImage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
 
 const Chat = ({
@@ -22,8 +23,43 @@ const Chat = ({
   const [chatMessages, setChatMessages] = useState([])
   const [sendMessage, setSendMessage] = useState(null)
   const [receivedMessage, setReceivedMessage] = useState(null)
+  const [file, setFile] = useState("")
   const socket = useRef()
 
+  const hiddenFileInput = React.useRef(null)
+
+  const handleChange = async event => {
+    setFile(event.target.files[0])
+    let file = event.target.files[0]
+    var formdata = new FormData()
+    formdata.append("conversationId", patientConversation?.conversationId)
+    formdata.append("senderId", "6351452835155fec28aa67b1")
+    formdata.append("message", file, file.name)
+    formdata.append("format", "image")
+    formdata.append("scanId", "")
+    formdata.append("receiverId", patientInfo?.patientId)
+    formdata.append("createdAt", moment(Date.now()).format("DD-MM-YY hh:mm"))
+    console.log(formdata, "formdata in handle send")
+    try {
+      let res = await newMessageImage(formdata)
+      console.log(res.data.data.data.message, "res in upload file")
+      if (res.data.data.success === 1) {
+        setSendMessage({ ...res.data.data.data })
+        setChatMessages([...chatMessages, res.data.data.data])
+        handleGetPatientConversation()
+      } else {
+        toast.error(res.data.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleClick = event => {
+    hiddenFileInput.current.click()
+  }
   useEffect(() => {
     setChatMessages(patientMessages)
   }, [patientMessages])
@@ -43,6 +79,7 @@ const Chat = ({
   // Send Message
   const handleSend = async e => {
     e.preventDefault()
+
     const message = {
       senderId: "6351452835155fec28aa67b1",
       receiverId: patientInfo?.patientId,
@@ -50,24 +87,27 @@ const Chat = ({
       conversationId: patientConversation?.conversationId,
       format: "text",
       scanId: "",
-      createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
+      //createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
 
     // send message to socket server
-    setSendMessage({ ...message })
+
     // send message to database
     try {
       let res = await newMessage({
         conversationId: patientConversation?.conversationId,
+        receiverId: patientInfo?.patientId,
         senderId: "6351452835155fec28aa67b1",
         message: curMessage,
         format: "text",
         scanId: "",
       })
       console.log(res.data)
-      setChatMessages([...chatMessages, res.data])
+
       setCurMessage("")
       if (res.data.data.success === 1) {
+        setSendMessage({ ...res.data.data.data })
+        setChatMessages([...chatMessages, res.data.data.data])
         handleGetPatientConversation()
       } else {
         toast.error(res.data.data.message, {
@@ -89,12 +129,13 @@ const Chat = ({
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("receive-message", data => {
-      console.log(data)
+      console.log(data, "socket receive")
+
       if (
         data !== null &&
         data.conversationId === patientConversation?.conversationId
       ) {
-        console.log(data, "in if")
+        console.log(data, "in if-data")
         setChatMessages([...chatMessages, data])
       }
       setReceivedMessage({ ...data })
@@ -108,7 +149,7 @@ const Chat = ({
       receivedMessage !== null &&
       receivedMessage.conversationId === patientConversation?.conversationId
     ) {
-      console.log(receivedMessage, "in if")
+      console.log(receivedMessage, "in if-receivedmessage")
       setChatMessages([...chatMessages, receivedMessage])
     }
   }, [receivedMessage])
@@ -124,6 +165,7 @@ const Chat = ({
     scroll.current?.scrollIntoView({ behavior: "smooth" })
   }, [chatMessages])
   const scroll = useRef()
+  console.log(patientInfo, "patient")
   return (
     <div className="w-100 user-chat border border-secondary rounded ">
       <Card>
@@ -162,27 +204,36 @@ const Chat = ({
                       }
                     >
                       {message.format === "image" ? (
-                        <div className="ctext-wrap">
-                          <div className="conversation-name">
+                        <div
+                          className={`ctext-wrap ${
+                            message.senderId !== patientInfo?.patientId &&
+                            "fl-right"
+                          }`}
+                        >
+                          {/* <div className="conversation-name">
                             {message.sender}
+                          </div> */}
+                          <div>
+                            <img
+                              style={{ width: "40px", float: "right" }}
+                              className=""
+                              src={message.message}
+                              onClick={() =>
+                                window.open(
+                                  message.message,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                )
+                              }
+                            />
                           </div>
-                          <img
-                            style={{ width: "40px" }}
-                            className=""
-                            src={message.message}
-                            onClick={() =>
-                              window.open(
-                                message.message,
-                                "_blank",
-                                "noopener,noreferrer"
-                              )
-                            }
-                          />
-                          <p className="chat-time mb-0">
-                            <i className="bx bx-time-five align-middle me-1" />
-                            {/* {moment(message.createdAt).format("DD-MM-YY hh:mm")} */}
-                            {message.createdAt}
-                          </p>
+                          <div>
+                            <p className="chat-time mb-0">
+                              <i className="bx bx-time-five align-middle me-1" />
+                              {/* {moment(message.createdAt).format("DD-MM-YY hh:mm")} */}
+                              {message.createdAt}
+                            </p>
+                          </div>
                         </div>
                       ) : (
                         <div className="conversation-list">
@@ -222,24 +273,32 @@ const Chat = ({
                     <div className="chat-input-links">
                       <ul className="list-inline mb-0">
                         <li className="list-inline-item">
-                          <Link to="#">
-                            <i
-                              className="mdi mdi-file-image-outline"
-                              id="Imagetooltip"
-                            />
-                            <UncontrolledTooltip
+                          {/* <Link to="#"> */}
+                          <i
+                            onClick={handleClick}
+                            className="mdi mdi-file-image-outline"
+                            id="Imagetooltip"
+                          />
+                          <input
+                            type="file"
+                            ref={hiddenFileInput}
+                            onChange={handleChange}
+                            style={{ display: "none" }}
+                          />
+                          {/* <UncontrolledTooltip
                               placement="top"
                               target="Imagetooltip"
                             >
                               Images
-                            </UncontrolledTooltip>
-                          </Link>
+                            </UncontrolledTooltip> */}
+                          {/* </Link> */}
                         </li>
                       </ul>
                     </div>
                   )}
                 </div>
               </Col>
+
               <Col className="col-auto">
                 <Button
                   type="button"
