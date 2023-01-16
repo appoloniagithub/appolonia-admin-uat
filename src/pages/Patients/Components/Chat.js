@@ -204,16 +204,17 @@ const Chat = ({
                       {message.format === "image" ? (
                         <div
                           className={`ctext-wrap ${
-                            message.senderId !== patientInfo?.patientId &&
-                            "fl-right"
+                            message.senderId !== patientInfo?.patientId
+                              ? "fl-right"
+                              : ""
                           }`}
                         >
-                          {/* <div className="conversation-name">
+                          <div className="conversation-name">
                             {message.sender}
-                          </div> */}
+                          </div>
                           <div>
                             <img
-                              style={{ width: "40px", float: "right" }}
+                              style={{ width: "40px" }}
                               className=""
                               src={message.message}
                               onClick={() =>
