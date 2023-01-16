@@ -8,6 +8,7 @@ import "react-perfect-scrollbar/dist/css/styles.css"
 import { newMessage } from "../../../Connection/Patients"
 import { newMessageImage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
+import { toast } from "react-toastify"
 
 const Chat = ({
   patientMessages,
@@ -42,10 +43,10 @@ const Chat = ({
     console.log(formdata, "formdata in handle send")
     try {
       let res = await newMessageImage(formdata)
-      console.log(res.data.data.data.message, "res in upload file")
-      if (res.data.data.success === 1) {
-        setSendMessage({ ...res.data.data.data })
-        setChatMessages([...chatMessages, res.data.data.data])
+      console.log(res.data.data.message, "res in upload file")
+      if (res.data.success === 1) {
+        setSendMessage({ ...res.data.data })
+        setChatMessages([...chatMessages, res.data.data])
         handleGetPatientConversation()
       } else {
         toast.error(res.data.data.message, {
