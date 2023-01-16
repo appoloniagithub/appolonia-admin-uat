@@ -79,7 +79,6 @@ const Chat = ({
   // Send Message
   const handleSend = async e => {
     e.preventDefault()
-
     const message = {
       senderId: "6351452835155fec28aa67b1",
       receiverId: patientInfo?.patientId,
@@ -91,23 +90,20 @@ const Chat = ({
     }
 
     // send message to socket server
-
+    setSendMessage({ ...message })
     // send message to database
     try {
       let res = await newMessage({
         conversationId: patientConversation?.conversationId,
-        receiverId: patientInfo?.patientId,
         senderId: "6351452835155fec28aa67b1",
         message: curMessage,
         format: "text",
         scanId: "",
       })
       console.log(res.data)
-
+      setChatMessages([...chatMessages, res.data])
       setCurMessage("")
       if (res.data.data.success === 1) {
-        setSendMessage({ ...res.data.data.data })
-        setChatMessages([...chatMessages, res.data.data.data])
         handleGetPatientConversation()
       } else {
         toast.error(res.data.data.message, {
@@ -118,6 +114,7 @@ const Chat = ({
       console.log("error")
     }
   }
+
   //Send message to socket server
   useEffect(() => {
     console.log(sendMessage, "send message in useeffect")
