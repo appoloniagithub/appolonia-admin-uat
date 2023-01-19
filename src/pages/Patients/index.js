@@ -3,12 +3,13 @@ import { Container, Spinner } from "reactstrap"
 import Patientstable from "./Components/Patienttable"
 import Toastbar from "../../components/Toast"
 import { ToastContainer, toast } from "react-toastify"
+import Navbar from "components/HorizontalLayout/Navbar"
 
 //Import Breadcrumb
 import { getAllPatients, getConversations } from "../../Connection/Patients"
 import { Handler } from "leaflet"
 
-const Allpatients = () => {
+const Allpatients = props => {
   let [patients, setPatients] = useState([])
   let [conversations, setConversations] = useState()
   let handleGetAllPatients = async () => {
@@ -26,7 +27,7 @@ const Allpatients = () => {
     }
   }
   let handleGetConversations = async () => {
-    let res = await getConversations({ userId: "6351452835155fec28aa67b1" })
+    let res = await getConversations({ userId: "63c69a3dde89b01bdc85fb90" })
     console.log(res)
     try {
       if (res.data.data.success === 1) {

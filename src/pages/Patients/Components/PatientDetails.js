@@ -35,7 +35,7 @@ export default function PatientDetails() {
     return foundConversation
   }
   let handleGetConversations = async () => {
-    let res = await getConversations({ userId: "6351452835155fec28aa67b1" })
+    let res = await getConversations({ userId: "63c69a3dde89b01bdc85fb90" })
     console.log(res)
     setIsconversations("yes")
     try {
