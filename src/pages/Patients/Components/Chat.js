@@ -201,7 +201,8 @@ const Chat = ({
                           : ""
                       }
                     >
-                      {message.format === "image" ? (
+                      {message.format === "image" ||
+                      message.format === "scanImage" ? (
                         <div
                           className={`ctext-wrap ${
                             message.senderId !== patientInfo?.patientId
