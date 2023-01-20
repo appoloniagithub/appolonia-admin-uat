@@ -64,7 +64,7 @@ const Doctortable = ({ data }) => {
                     <tr key={doctor?._id}>
                       <td>{doctor.firstName}</td>
                       <td>{doctor.lastName}</td>
-                      <td>{doctor.role}</td>
+                      <td>{doctor.role == "3" ? "Admin" : "Doctor"}</td>
                       <td>{doctor.speciality}</td>
                       <td>
                         <Link to={`/doctors/edit-doctor/${doctor?._id}`}>

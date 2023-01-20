@@ -87,16 +87,14 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
             </div>
             <div className="m-2">
               <strong>Active</strong>{" "}
-              <div className="m-2">
-                <BootstrapSwitchButton
-                  checked={clinic.active}
-                  // onlabel="Yes"
-                  // offlabel="No"
-                  onChange={checked => {
-                    setClinic({ ...clinic, active: checked })
-                  }}
-                />
-              </div>
+              <BootstrapSwitchButton
+                checked={clinic.active}
+                // onlabel="Yes"
+                // offlabel="No"
+                onChange={checked => {
+                  setClinic({ ...clinic, active: checked })
+                }}
+              />
             </div>
             <div className="m-2">
               <strong>Connected</strong>{" "}

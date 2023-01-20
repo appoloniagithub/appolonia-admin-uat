@@ -59,7 +59,7 @@ const Login = props => {
             if (response.data.doctorFound.role == "Doctor") {
               history.push("/patients")
             } else {
-              history.push("/doctors")
+              history.push("/patients")
             }
           }
           setMessage(response.data.message)

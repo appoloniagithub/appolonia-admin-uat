@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useRef } from "react"
 import moment from "moment"
-import { Button, Card, Col, Row, UncontrolledTooltip } from "reactstrap"
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Spinner,
+  UncontrolledTooltip,
+} from "reactstrap"
 import { Link } from "react-router-dom"
 //Import Scrollbar
 import PerfectScrollbar from "react-perfect-scrollbar"
@@ -190,6 +197,7 @@ const Chat = ({
                     <span className="title">Today</span>
                   </div>
                 </li>
+                {!chatMessages && <Spinner className="ms-2" color="primary" />}
                 {chatMessages?.length === 0 && <p>No Messages found</p>}
                 {chatMessages &&
                   chatMessages.map((message, i) => (
