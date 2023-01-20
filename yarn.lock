@@ -4229,6 +4229,13 @@
   "resolved" "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
   "version" "1.0.0"
 
+"bootstrap-switch-button-react@^1.2.0":
+  "integrity" "sha512-p/l+Rp69VtXpK0Y2PR9XYE1TPuypxF+1CpBPmvLUpwXjCisuxtl2S8AF6PqeLDxizFeHuW5nUE6qnqrZY/9ZQA=="
+  "resolved" "https://registry.npmjs.org/bootstrap-switch-button-react/-/bootstrap-switch-button-react-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "react" "^16.11.0"
+
 "bootstrap@^5.2.2":
   "integrity" "sha512-dEtzMTV71n6Fhmbg4fYJzQsw1N29hJKO1js5ackCgIpDcGid2ETMGC6zwSYw09v05Y+oRdQ9loC54zB1La3hHQ=="
   "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.2.2.tgz"
@@ -10203,6 +10210,11 @@
     "flatpickr" "^4.6.2"
     "prop-types" "^15.5.10"
 
+"react-fullscreen-image@^0.0.3":
+  "integrity" "sha512-A4zXvDox4WConU/qUpOKUCoRmV2mGi2DPTXNhG9I1x+W8WWwpKQMmrbWjLAe/UudhtpJRlebkIC3sPU6IHR3Nw=="
+  "resolved" "https://registry.npmjs.org/react-fullscreen-image/-/react-fullscreen-image-0.0.3.tgz"
+  "version" "0.0.3"
+
 "react-google-login@^5.2.2":
   "integrity" "sha512-JUngfvaSMcOuV0lFff7+SzJ2qviuNMQdqlsDJkUM145xkGPVIfqWXq9Ui+2Dr6jdJWH5KYdynz9+4CzKjI5u6g=="
   "resolved" "https://registry.npmjs.org/react-google-login/-/react-google-login-5.2.2.tgz"
@@ -10697,6 +10709,15 @@
     "react-lifecycles-compat" "^3.0.4"
 
 "react@^16.1.0":
+  "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
+  "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
+  "version" "16.14.0"
+  dependencies:
+    "loose-envify" "^1.1.0"
+    "object-assign" "^4.1.1"
+    "prop-types" "^15.6.2"
+
+"react@^16.11.0":
   "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
   "version" "16.14.0"

@@ -20,6 +20,10 @@ const Authmiddleware = ({
         )
       }
       console.log({ ...rest }, "IN ROUTES", path)
+
+      // if (path === "/patients") {
+      //   return <Component {...props} />
+      // }
       if (path === "/patients/showpatient/:id") {
         return <Component {...props} />
       }

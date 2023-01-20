@@ -34,4 +34,18 @@ const deleteDoctor = async data => {
   return res
 }
 
-export { getAllDoctors, addDoctor, updateDoctor, deleteDoctor, getDoctorById }
+const forgotPassword = async data => {
+  let res = await axios.post(`${url}/api/doctors/forgotpwd`, data)
+
+  console.log(res)
+  return res
+}
+
+export {
+  getAllDoctors,
+  addDoctor,
+  updateDoctor,
+  deleteDoctor,
+  getDoctorById,
+  forgotPassword,
+}

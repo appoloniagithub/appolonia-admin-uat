@@ -31,6 +31,7 @@ import slack from "../../assets/images/brands/slack.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
+import Menubar from "./Menubar"
 
 const Header = props => {
   const [menu, setMenu] = useState(false)
@@ -378,6 +379,7 @@ const Header = props => {
           </div>
         </div>
       </header>
+      <Menubar />
     </React.Fragment>
   )
 }

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
+import { useState } from "react"
 import {
   Row,
   Col,
@@ -12,49 +13,58 @@ import {
   Label,
   Form,
 } from "reactstrap"
-
-//redux
-import { useSelector, useDispatch } from "react-redux"
-
+import { toast } from "react-toastify"
 import { withRouter, Link } from "react-router-dom"
-
-// Formik Validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
-
-// action
-import { userForgetPassword } from "../../store/actions"
 
 // import images
 import profile from "../../assets/images/profile-img.png"
 import logo from "../../assets/images/logo.svg"
+import { useHistory } from "react-router-dom"
+import { forgotPassword } from "Connection/Doctors"
 
 const ForgetPasswordPage = props => {
   //meta title
   document.title = "Forget Password | Appolonia Dental Care"
+  let history = useHistory()
+  const [phoneNumber, setPhoneNumber] = useState("")
 
-  const dispatch = useDispatch()
+  const [message, setMessage] = useState("")
+  const handleForgotPassword = () => {
+    if (phoneNumber) {
+      const axios = require("axios")
+      const data = JSON.stringify({
+        phoneNumber: phoneNumber,
+      })
 
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
+      const config = {
+        method: "post",
+        url: `${url}/api/doctors/forgotpwd`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      }
 
-    initialValues: {
-      email: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-    }),
-    onSubmit: values => {
-      dispatch(userForgetPassword(values, props.history))
-    },
-  })
-
-  const { forgetError, forgetSuccessMsg } = useSelector(state => ({
-    forgetError: state.ForgetPassword.forgetError,
-    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-  }))
-
+      axios(config)
+        .then(response => {
+          console.log(response)
+          if (response.data.data && response.data.data.success === 1) {
+            setPhoneNumber("")
+            history.push("/login")
+            toast.success(
+              "Password has been sent to your email Id, Please Login now."
+            )
+          }
+          setMessage(response.data.message)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      setMessage("No field should be empty.")
+    }
+  }
+  console.log(phoneNumber, "in forgotpwd")
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -96,54 +106,36 @@ const ForgetPasswordPage = props => {
                     </Link>
                   </div>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
-                    ) : null}
-                    {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
-                    ) : null}
+                    {/* <Alert color="danger" style={{ marginTop: "13px" }}></Alert>
 
-                    <Form
-                      className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
-                      }}
-                    >
+                    <Alert
+                      color="success"
+                      style={{ marginTop: "13px" }}
+                    ></Alert> */}
+
+                    <Form className="form-horizontal">
                       <div className="mb-3">
-                        <Label className="form-label">Email</Label>
+                        <Label className="form-label">Phone Number</Label>
                         <Input
-                          name="email"
+                          name="phonenumber"
                           className="form-control"
-                          placeholder="Enter email"
-                          type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
-                          invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
-                          }
+                          placeholder="Enter phone number"
+                          type="number"
+                          value={phoneNumber}
+                          onChange={e => setPhoneNumber(e.target.value)}
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
                       </div>
                       <Row className="mb-3">
                         <Col className="text-end">
                           <button
                             className="btn btn-primary w-md "
                             type="submit"
+                            onClick={e => {
+                              e.preventDefault()
+                              handleForgotPassword()
+                            }}
                           >
-                            Reset
+                            Submit
                           </button>
                         </Col>
                       </Row>
@@ -158,10 +150,7 @@ const ForgetPasswordPage = props => {
                     Login
                   </Link>{" "}
                 </p>
-                <p>
-                  © {new Date().getFullYear()} Skote. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger" /> by Themesbrand
-                </p>
+                <p>© {new Date().getFullYear()} Appolonia Dental Care </p>
               </div>
             </Col>
           </Row>

@@ -20,10 +20,19 @@ import Alldoctors from "pages/Doctors/index"
 import CreateDoctor from "../pages/Doctors/addDoctor"
 import EditDoctor from "pages/Doctors/updateDoctor"
 import DelDoctor from "pages/Doctors/deleteDoctor"
+import Menubar from "components/HorizontalLayout/Menubar"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
-  { path: "/patients", component: Allpatients },
+
+  // {
+  //   path: "/menubar",
+  //   component: props => <Menubar {...props} />,
+  // },
+  {
+    path: "/patients",
+    component: props => <Allpatients {...props} />,
+  },
   {
     path: "/patients/showpatient/:id",
     component: props => <PatientDetails {...props} />,

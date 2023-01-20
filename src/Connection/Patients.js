@@ -70,6 +70,12 @@ const getAllDoctors = async data => {
   console.log(res)
   return res
 }
+const clinicVerify = async data => {
+  let res = await axios.post(`${url}/api/file/clinicverify`, data)
+
+  console.log(res)
+  return res
+}
 
 export {
   getAllPatients,
@@ -82,4 +88,5 @@ export {
   newMessage,
   getAllDoctors,
   newMessageImage,
+  clinicVerify,
 }

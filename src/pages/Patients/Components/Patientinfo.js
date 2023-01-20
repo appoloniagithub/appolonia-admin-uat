@@ -1,10 +1,35 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import moment from "moment"
 import { Button } from "reactstrap"
 import user1 from "../../../assets/images/users/avatar-1.jpg"
+import BootstrapSwitchButton from "bootstrap-switch-button-react"
+import { clinicVerify } from "Connection/Patients"
 
 const Patientinfo = ({ data, view, handleView, handleOpen }) => {
+  const [clinic, setClinic] = useState({
+    clinicVerified: false,
+    active: false,
+    connected: false,
+  })
+
   console.log(data)
+  let getPatientData = async () => {
+    let res = await clinicVerify({ phoneNumber: data?.phoneNumber })
+
+    if (res.data && res.data.data && res.data.data.foundFile) {
+      console.log(res.data.data.foundFile)
+      setClinic({
+        ...clinic,
+        clinicVerified: res.data.data.foundFile.clinicVerified,
+        active: res.data.data.foundFile.active,
+        connected: false,
+      })
+    }
+  }
+  useEffect(() => {
+    getPatientData()
+  }, [])
+  console.log(clinic, "clinicverify")
   return (
     <div className="border border-secondary rounded  ">
       <div
@@ -47,6 +72,42 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                   {data?.firstName} {data?.lastName}
                 </h5>
               </div>
+            </div>
+
+            <div className="m-2">
+              <strong>Clinic Verify</strong>{" "}
+              <BootstrapSwitchButton
+                checked={clinic.clinicVerified}
+                // onlabel=" Yes"
+                // offlabel="No"
+                onChange={checked => {
+                  setClinic({ ...clinic, clinicVerified: checked })
+                }}
+              />
+            </div>
+            <div className="m-2">
+              <strong>Active</strong>{" "}
+              <div className="m-2">
+                <BootstrapSwitchButton
+                  checked={clinic.active}
+                  // onlabel="Yes"
+                  // offlabel="No"
+                  onChange={checked => {
+                    setClinic({ ...clinic, active: checked })
+                  }}
+                />
+              </div>
+            </div>
+            <div className="m-2">
+              <strong>Connected</strong>{" "}
+              <BootstrapSwitchButton
+                checked={clinic.connected}
+                // onlabel="Yes"
+                // offlabel="No"
+                onChange={checked => {
+                  setClinic({ ...clinic, connected: checked })
+                }}
+              />
             </div>
             <ul className="p-0" style={{ listStyle: "none" }}>
               <li>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import url from "../../Connection/Api/api"
+import { ImageGroup, Image } from "react-fullscreen-image"
 import {
   Container,
   Row,
@@ -97,6 +98,7 @@ export default function Showpatient({
     emiratesId: data?.uniqueId1,
     firstName: data?.firstName,
     lastName: data?.lastName,
+    phoneNumber: data?.phoneNumber,
   })
   const [patientScans, setPatientScans] = React.useState()
   const [scan1Images, setScan1Images] = React.useState({})

@@ -1,6 +1,8 @@
 import PropTypes from "prop-types"
 import React from "react"
-
+import { useState } from "react"
+import { useHistory } from "react-router-dom"
+import url from "Connection/Api/api"
 import {
   Row,
   Col,
@@ -14,90 +16,62 @@ import {
   Label,
 } from "reactstrap"
 
-//redux
-import { useSelector, useDispatch } from "react-redux"
-
 import { withRouter, Link } from "react-router-dom"
-
-// Formik validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
-
-//Social Media Imports
-import { GoogleLogin } from "react-google-login"
-// import TwitterLogin from "react-twitter-auth"
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
-
-// actions
-import { loginUser, socialLogin } from "../../store/actions"
 
 // import images
 import profile from "assets/images/profile-img.png"
 import logo from "assets/images/logo.svg"
 
-//Import config
-import { facebook, google } from "../../config"
 import applogo from "../../assets/images/applogo.png"
 
 const Login = props => {
   //meta title
   document.title = "Login | Appolonia Dental Care"
+  let history = useHistory()
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [password, setPassword] = useState("")
+  const [message, setMessage] = useState("")
+  const handleLoginDetails = () => {
+    if (phoneNumber && password) {
+      const axios = require("axios")
+      const data = JSON.stringify({
+        phoneNumber: phoneNumber,
+        password: password,
+      })
 
-  const dispatch = useDispatch()
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      email: "admin@appolonia.ae" || "",
-      password: "123456" || "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      password: Yup.string().required("Please Enter Your Password"),
-    }),
-    onSubmit: values => {
-      dispatch(loginUser(values, props.history))
-    },
-  })
-
-  const { error } = useSelector(state => ({
-    error: state.Login.error,
-  }))
-
-  const signIn = (res, type) => {
-    if (type === "google" && res) {
-      const postData = {
-        name: res.profileObj.name,
-        email: res.profileObj.email,
-        token: res.tokenObj.access_token,
-        idToken: res.tokenId,
+      const config = {
+        method: "post",
+        url: `${url}/api/doctors/doctorlogin`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
       }
-      dispatch(socialLogin(postData, props.history, type))
-    } else if (type === "facebook" && res) {
-      const postData = {
-        name: res.name,
-        email: res.email,
-        token: res.accessToken,
-        idToken: res.tokenId,
-      }
-      dispatch(socialLogin(postData, props.history, type))
+
+      axios(config)
+        .then(response => {
+          console.log(response.data.message)
+          if (response.data && response.data.success === 1) {
+            setPhoneNumber("")
+            setPassword("")
+            sessionStorage.setItem("loggedIn", true)
+            sessionStorage.setItem("role", response.data.doctorFound.role)
+            if (response.data.doctorFound.role == "Doctor") {
+              history.push("/patients")
+            } else {
+              history.push("/doctors")
+            }
+          }
+          setMessage(response.data.message)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      setMessage("No field should be empty.")
     }
   }
-
-  //handleGoogleLoginResponse
-  const googleResponse = response => {
-    signIn(response, "google")
-  }
-
-  //handleTwitterLoginResponse
-  // const twitterResponse = e => {}
-
-  //handleFacebookLoginResponse
-  const facebookResponse = response => {
-    signIn(response, "facebook")
-  }
+  console.log(phoneNumber, password, "in login")
 
   return (
     <React.Fragment>
@@ -138,48 +112,37 @@ const Login = props => {
                     </Link>
                   </div>
                   <div className="p-2">
-                    <Form
-                      className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
-                      }}
-                    >
-                      {error ? <Alert color="danger">{error}</Alert> : null}
+                    <Form className="form-horizontal">
+                      {/* <Alert color="danger"></Alert> */}
 
                       <div className="mb-3">
-                        <Label className="form-label">Email</Label>
+                        <Label className="form-label">Phone Number</Label>
                         <Input
-                          name="email"
+                          name="phone number"
                           className="form-control"
-                          placeholder="Enter email"
-                          type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.initialValues.email || ""}
+                          placeholder="Enter phone number"
+                          type="number"
+                          value={phoneNumber}
+                          onChange={e => setPhoneNumber(e.target.value)}
+
                           // invalid={
                           //   validation.touched.email && validation.errors.email
                           //     ? true
                           //     : false
                           // }
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
+
+                        <FormFeedback type="invalid"></FormFeedback>
                       </div>
 
                       <div className="mb-3">
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
-                          value={validation.initialValues.password || ""}
                           type="password"
                           placeholder="Enter Password"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
+                          value={password}
+                          onChange={e => setPassword(e.target.value)}
 
                           // invalid={
                           //   validation.touched.password &&
@@ -194,6 +157,7 @@ const Login = props => {
                             {validation.errors.password}
                           </FormFeedback>
                         ) : null} */}
+                        <a href="/forgot-password">Forgot password?</a>
                       </div>
 
                       <div className="form-check">
@@ -214,9 +178,17 @@ const Login = props => {
                         <button
                           className="btn btn-primary btn-block"
                           type="submit"
+                          onClick={e => {
+                            e.preventDefault()
+                            handleLoginDetails()
+                          }}
                         >
                           Log In
                         </button>
+                        <br />
+                        {message && (
+                          <span className="text-danger">{message}</span>
+                        )}
                       </div>
                       {/* 
                       <div className="mt-4 text-center">

@@ -230,7 +230,7 @@ const CreateDoctor = props => {
       formdata.append("speciality", speciality)
       formdata.append("password", password)
       formdata.append("phoneNumber", phoneNumber)
-      formdata.append("image", image, image.name)
+      formdata.append("image", image)
       formdata.append("gender", gender)
       formdata.append("nationality", nationality)
       formdata.append("totalExperience", totalExperience)
