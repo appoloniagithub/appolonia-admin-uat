@@ -73,7 +73,7 @@ const Navbar = props => {
     }
     return false
   }
-
+  //console.log(props, "props")
   return (
     <React.Fragment>
       <div className="topnav">
@@ -83,87 +83,162 @@ const Navbar = props => {
             id="navigation"
           >
             <Collapse isOpen={props.leftMenu} className="navbar-collapse" id="">
-              {/* {props.role == "Doctor" && ( */}
-              <ul className="navbar-nav">
-                <li className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle arrow-none"
-                    onClick={e => {
-                      //e.preventDefault()
-                      setdashboard(!dashboard)
-                    }}
-                    to="/dashboard"
-                  >
-                    <i className="bx bx-home-circle me-2"></i>
-                    {props.t("Dashboard")} {props.menuOpen}
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link
-                    className="nav-link"
-                    onClick={e => {
-                      // e.preventDefault()
-                      setPatient(!patient)
-                    }}
-                    to="/patients"
-                  >
-                    {props.t("Patients")}
-                  </Link>
-                </li>
-              </ul>
-              {/* )}
-              {props.role == "Admin" && ( */}
-              <ul className="navbar-nav">
-                <li className="nav-item ">
-                  <Link
-                    className="nav-link"
-                    onClick={e => {
-                      // e.preventDefault()
-                      setPatient(!patient)
-                    }}
-                    to="/doctors"
-                  >
-                    {props.t("Doctors")}
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link
-                    className="nav-link"
-                    onClick={e => {
-                      e.preventDefault()
-                      setPatient(!patient)
-                    }}
-                    to="/settings"
-                  >
-                    {props.t("Settings")}
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link
-                    className="nav-link"
-                    onClick={e => {
-                      e.preventDefault()
-                      setPatient(!patient)
-                    }}
-                    to="/library"
-                  >
-                    {props.t("Library")}
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link
-                    className="nav-link"
-                    onClick={e => {
-                      e.preventDefault()
-                      setPatient(!patient)
-                    }}
-                    to="/support"
-                  >
-                    {props.t("Support")}
-                  </Link>
-                </li>
-              </ul>
-              {/* )} */}
+              {props.role == "3" && (
+                <ul className="navbar-nav">
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle arrow-none"
+                      onClick={e => {
+                        //e.preventDefault()
+                        setdashboard(!dashboard)
+                      }}
+                      to="/dashboard"
+                    >
+                      <i className="bx bx-home-circle me-2"></i>
+                      {props.t("Dashboard")} {props.menuOpen}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/patients"
+                    >
+                      {props.t("Patients")}
+                    </Link>
+                  </li>
+
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/doctors"
+                    >
+                      {props.t("Doctors")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/settings"
+                    >
+                      {props.t("Settings")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/library"
+                    >
+                      {props.t("Library")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/support"
+                    >
+                      {props.t("Support")}
+                    </Link>
+                  </li>
+                </ul>
+              )}
+              {props.role == "Doctor" && (
+                <ul className="navbar-nav">
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle arrow-none"
+                      onClick={e => {
+                        //e.preventDefault()
+                        setdashboard(!dashboard)
+                      }}
+                      to="/dashboard"
+                    >
+                      <i className="bx bx-home-circle me-2"></i>
+                      {props.t("Dashboard")} {props.menuOpen}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/patients"
+                    >
+                      {props.t("Patients")}
+                    </Link>
+                  </li>
+
+                  {/* <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/doctors"
+                    >
+                      {props.t("Doctors")}
+                    </Link>
+                  </li> */}
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/settings"
+                    >
+                      {props.t("Settings")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/library"
+                    >
+                      {props.t("Library")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/support"
+                    >
+                      {props.t("Support")}
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </Collapse>
           </nav>
         </div>

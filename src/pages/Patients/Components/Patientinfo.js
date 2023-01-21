@@ -4,6 +4,7 @@ import { Button } from "reactstrap"
 import user1 from "../../../assets/images/users/avatar-1.jpg"
 import BootstrapSwitchButton from "bootstrap-switch-button-react"
 import { clinicVerify } from "Connection/Patients"
+import { updateClinicDetails } from "Connection/Patients"
 
 const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   const [clinic, setClinic] = useState({
@@ -11,6 +12,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
     active: false,
     connected: false,
   })
+  const [fileData, setFileData] = useState("")
 
   console.log(data)
   let getPatientData = async () => {
@@ -18,6 +20,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
 
     if (res.data && res.data.data && res.data.data.foundFile) {
       console.log(res.data.data.foundFile)
+      setFileData(res.data.data.foundFile)
       setClinic({
         ...clinic,
         clinicVerified: res.data.data.foundFile.clinicVerified,
@@ -29,7 +32,17 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   useEffect(() => {
     getPatientData()
   }, [])
+
+  const handleUpdate = async (type, value) => {
+    console.log(clinic, "in update")
+    let reqObj = { fileId: fileData?._id, [type]: value }
+
+    let res = await updateClinicDetails(reqObj)
+    console.log(res)
+  }
   console.log(clinic, "clinicverify")
+  console.log(fileData, "fileData")
+
   return (
     <div className="border border-secondary rounded  ">
       <div
@@ -82,6 +95,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                 // offlabel="No"
                 onChange={checked => {
                   setClinic({ ...clinic, clinicVerified: checked })
+                  handleUpdate("clinicVerified", checked)
                 }}
               />
             </div>
@@ -93,10 +107,11 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                 // offlabel="No"
                 onChange={checked => {
                   setClinic({ ...clinic, active: checked })
+                  handleUpdate("active", checked)
                 }}
               />
             </div>
-            <div className="m-2">
+            {/* <div className="m-2">
               <strong>Connected</strong>{" "}
               <BootstrapSwitchButton
                 checked={clinic.connected}
@@ -106,7 +121,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                   setClinic({ ...clinic, connected: checked })
                 }}
               />
-            </div>
+            </div> */}
             <ul className="p-0" style={{ listStyle: "none" }}>
               <li>
                 <strong>File Number</strong>:{" "}
