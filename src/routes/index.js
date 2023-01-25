@@ -56,12 +56,12 @@ const authProtectedRoutes = [
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
 ]
 
 const publicRoutes = [
   { path: "/logout", component: Logout },
-  { path: "/login", component: Login },
+  { path: "/", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
   { path: "/register", component: Register },
   { path: "/users", component: User },
