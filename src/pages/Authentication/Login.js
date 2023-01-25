@@ -56,11 +56,12 @@ const Login = props => {
             setPassword("")
             sessionStorage.setItem("loggedIn", true)
             sessionStorage.setItem("role", response.data.doctorFound.role)
-            if (response.data.doctorFound.role == "Doctor") {
-              history.push("/patients")
-            } else {
-              history.push("/patients")
-            }
+            history.push("/patients")
+            // if (response.data.doctorFound.role == "Doctor") {
+            //   history.push("/patients")
+            // } else {
+            //   history.push("/patients")
+            // }
           }
           setMessage(response.data.message)
         })
