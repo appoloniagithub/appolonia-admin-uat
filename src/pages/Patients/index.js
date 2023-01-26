@@ -27,7 +27,7 @@ const Allpatients = props => {
     }
   }
   let handleGetConversations = async () => {
-    let res = await getConversations({ userId: "63c2a25f6f3a0590e4cbf2b9" })
+    let res = await getConversations({ userId: "63c69a3dde89b01bdc85fb90" })
     console.log(res)
     try {
       if (res.data.data.success === 1) {
