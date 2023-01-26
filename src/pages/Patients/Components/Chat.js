@@ -41,7 +41,7 @@ const Chat = ({
     let file = event.target.files[0]
     var formdata = new FormData()
     formdata.append("conversationId", patientConversation?.conversationId)
-    formdata.append("senderId", "63c69a3dde89b01bdc85fb90")
+    formdata.append("senderId", "63c2a25f6f3a0590e4cbf2b9")
     formdata.append("message", file, file.name)
     formdata.append("format", "image")
     formdata.append("scanId", "")
@@ -81,7 +81,7 @@ const Chat = ({
       transports: ["websocket"],
     })
     //socket.current = io("http://localhost:8900")
-    socket.current.emit("new-user-add", "63c69a3dde89b01bdc85fb90")
+    socket.current.emit("new-user-add", "63c2a25f6f3a0590e4cbf2b9")
     socket.current.on("get-users", users => {
       console.log(users, "connected users")
     })
@@ -91,7 +91,7 @@ const Chat = ({
   const handleSend = async e => {
     e.preventDefault()
     const message = {
-      senderId: "63c69a3dde89b01bdc85fb90",
+      senderId: "63c2a25f6f3a0590e4cbf2b9",
       receiverId: patientInfo?.patientId,
       message: curMessage,
       conversationId: patientConversation?.conversationId,
@@ -107,8 +107,8 @@ const Chat = ({
     try {
       let res = await newMessage({
         conversationId: patientConversation?.conversationId,
-        senderId: "63c69a3dde89b01bdc85fb90",
-        //receiverId: patientInfo?.patientId,
+        senderId: "63c2a25f6f3a0590e4cbf2b9",
+        receiverId: patientInfo?.patientId,
         message: curMessage,
         format: "text",
         scanId: "",
