@@ -465,21 +465,16 @@ const CreateDoctor = props => {
                           country={"ae"}
                           placeholder="Enter phone number"
                           name="phoneNumber"
+                          {...register("phoneNumber", {
+                            required: true,
+                          })}
                           value={phoneNumber}
                           onChange={setPhoneNumber}
                         />
-                        {/* <Form.Control
-                          type="number"
-                          value={phoneNumber}
-                          onChange={e => setPhoneNumber(e.target.value)}
-                        /> */}
                       </Form.Group>
-                      {/* {isPhoneNumber && (
-                        <p className="text-danger">
-                          {" "}
-                          Please Enter phone number
-                        </p>
-                      )} */}
+                      {errors.email && errors.email.type === "required" && (
+                        <p className="text-danger">Please Enter phone number</p>
+                      )}
                     </Col>
                   </Row>
 

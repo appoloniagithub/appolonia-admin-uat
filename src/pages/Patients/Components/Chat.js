@@ -45,6 +45,7 @@ const Chat = ({
     formdata.append("message", file, file.name)
     formdata.append("format", "image")
     formdata.append("scanId", "")
+    formdata.append("type", "Doctor")
     formdata.append("receiverId", patientInfo?.patientId)
     formdata.append("createdAt", moment(Date.now()).format("DD-MM-YY hh:mm"))
     console.log(formdata, "formdata in handle send")
@@ -53,8 +54,10 @@ const Chat = ({
       console.log(res.data.data.message, "res in upload file")
       if (res.data.success === 1) {
         setSendMessage({ ...res.data.data })
-        setChatMessages([...chatMessages, res.data.data])
+
         handleGetPatientConversation()
+
+        setChatMessages([...chatMessages, res.data.data])
       } else {
         toast.error(res.data.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -94,6 +97,7 @@ const Chat = ({
       conversationId: patientConversation?.conversationId,
       format: "text",
       scanId: "",
+      type: "Doctor",
       //createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
 
@@ -104,9 +108,11 @@ const Chat = ({
       let res = await newMessage({
         conversationId: patientConversation?.conversationId,
         senderId: "63c69a3dde89b01bdc85fb90",
+        //receiverId: patientInfo?.patientId,
         message: curMessage,
         format: "text",
         scanId: "",
+        type: "Doctor",
       })
       console.log(res.data)
       setChatMessages([...chatMessages, res.data])
@@ -197,8 +203,11 @@ const Chat = ({
                     <span className="title">Today</span>
                   </div>
                 </li>
-                {!chatMessages && <Spinner className="ms-2" color="primary" />}
-                {chatMessages?.length === 0 && <p>No Messages found</p>}
+                {!chatMessages && <p>No Messages found</p>}
+                {chatMessages?.length === 0 && (
+                  <Spinner className="ms-2" color="primary" />
+                )}
+                {/* <p>No Messages found</p> */}
                 {chatMessages &&
                   chatMessages.map((message, i) => (
                     <li
@@ -218,9 +227,9 @@ const Chat = ({
                               : ""
                           }`}
                         >
-                          <div className="conversation-name">
+                          {/* <div className="conversation-name">
                             {message.sender}
-                          </div>
+                          </div> */}
                           <div>
                             <img
                               style={{ width: "40px" }}

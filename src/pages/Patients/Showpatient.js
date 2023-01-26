@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import url from "../../Connection/Api/api"
 import { ImageGroup, Image } from "react-fullscreen-image"
+//import Modal from "./Components/Modal"
 import {
   Container,
   Row,
@@ -111,6 +112,8 @@ export default function Showpatient({
   const [faceView, setFaceView] = React.useState(true)
   const [patientConversation, setPatientConversation] = React.useState()
   const [messages, setMessages] = React.useState([])
+  //const [clickedImg, setClickedImg] = useState(null)
+  //const [currentIndex, setCurrentIndex] = useState(null)
 
   // const chartOptions1 = {
   //   series: [
@@ -275,8 +278,8 @@ export default function Showpatient({
   }
 
   const handleGetMyScans = async () => {
+    let res = await getPatientScans({ userId: data?._id })
     try {
-      let res = await getPatientScans({ userId: data?._id })
       console.log(res)
       if (res?.data?.data?.success === 1) {
         setPatientScans(res.data.data.scans)
@@ -344,11 +347,6 @@ export default function Showpatient({
     setChecked(event.target.checked)
   }
 
-  // const handleClick = event => {
-  //   handleScan1(singleScan?.faceScanImages, singleScan?.teethScanImages)
-  //   setActive(event.target.id)
-  // }
-
   const handleGetPatientConversation = async () => {
     let foundConversation = await handleGetConversation(data?._id)
     console.log(foundConversation)
@@ -394,9 +392,48 @@ export default function Showpatient({
   }, [isConversations])
   console.log(patientScans)
 
-  const handleClose = () => {
-    history.push("/patients")
-  }
+  // const handleClose = () => {
+  //   history.push("/patients")
+  // }
+
+  // const handleClick = (image, i) => {
+  //   setCurrentIndex(i)
+  //   setClickedImg(image.link)
+  // }
+
+  // const handelRotationRight = () => {
+  //   const totalLength = selectedScanImages1.length
+  //   if (currentIndex + 1 >= totalLength) {
+  //     setCurrentIndex(0)
+  //     const newUrl = selectedScanImages1[0].link
+  //     setClickedImg(newUrl)
+  //     return
+  //   }
+  //   const newIndex = currentIndex + 1
+  //   const newUrl = selectedScanImages1.filter(image => {
+  //     return selectedScanImages1.indexOf(image) === newIndex
+  //   })
+  //   const newItem = newUrl[0].link
+  //   setClickedImg(newItem)
+  //   setCurrentIndex(newIndex)
+  // }
+
+  // const handelRotationLeft = () => {
+  //   const totalLength = selectedScanImages1.length
+  //   if (currentIndex === 0) {
+  //     setCurrentIndex(totalLength - 1)
+  //     const newUrl = selectedScanImages1[totalLength - 1].link
+  //     setClickedImg(newUrl)
+  //     return
+  //   }
+  //   const newIndex = currentIndex - 1
+  //   const newUrl = selectedScanImages1.filter(image => {
+  //     return selectedScanImages1.indexOf(image) === newIndex
+  //   })
+  //   const newItem = newUrl[0].link
+  //   setClickedImg(newItem)
+  //   setCurrentIndex(newIndex)
+  // }
   return (
     <div>
       <div>
@@ -605,13 +642,27 @@ export default function Showpatient({
                                             }}
                                             className="mx-1 rounded"
                                             src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-
+                                            // onClick={() =>
+                                            //   handleClick(image, i)
+                                            // }
                                             // alt={item.altText}
                                           />
                                         )
                                       })}
                                     </div>
                                   )}
+                                  {/* <div>
+                                    {clickedImg && (
+                                      <Modal
+                                        clickedImg={clickedImg}
+                                        handelRotationRight={
+                                          handelRotationRight
+                                        }
+                                        setClickedImg={setClickedImg}
+                                        handelRotationLeft={handelRotationLeft}
+                                      />
+                                    )}
+                                  </div> */}
                                 </div>
                               </div>
                             </Col>
