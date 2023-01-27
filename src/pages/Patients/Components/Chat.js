@@ -47,7 +47,7 @@ const Chat = ({
     formdata.append("scanId", "")
     formdata.append("type", "Doctor")
     formdata.append("receiverId", patientInfo?.patientId)
-    formdata.append("createdAt", moment(Date.now()).format("DD-MM-YY hh:mm"))
+    formdata.append("createdAt", moment(Date.now()).format("DD-MM-YY HH:mm"))
     console.log(formdata, "formdata in handle send")
     try {
       let res = await newMessageImage(formdata)
