@@ -237,9 +237,9 @@ const CreateDoctor = props => {
       formdata.append("profile", profile)
       formdata.append("certifications", certifications)
       formdata.append("education", education)
-
+      console.log(formdata)
       axios
-        .post(`${url}/api/doctors/createdoctor`, formdata)
+        .post("http://localhost:3001/api/doctors/createdoctor", formdata)
         .then(res => {
           setFirstName(""),
             setLastName(""),
@@ -465,16 +465,16 @@ const CreateDoctor = props => {
                           country={"ae"}
                           placeholder="Enter phone number"
                           name="phoneNumber"
-                          {...register("phoneNumber", {
-                            required: true,
-                          })}
+                          // {...register("phoneNumber", {
+                          //   required: true,
+                          // })}
                           value={phoneNumber}
                           onChange={setPhoneNumber}
                         />
                       </Form.Group>
-                      {errors.email && errors.email.type === "required" && (
+                      {/* {errors.email && errors.email.type === "required" && (
                         <p className="text-danger">Please Enter phone number</p>
-                      )}
+                      )} */}
                     </Col>
                   </Row>
 
