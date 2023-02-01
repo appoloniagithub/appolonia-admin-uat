@@ -38,7 +38,7 @@ const ForgetPasswordPage = props => {
 
       const config = {
         method: "post",
-        url: `${url}/api/doctors/forgotpwd`,
+        url: "http://doctors.appolonia.ae:7051/api/doctors/forgotpwd",
         headers: {
           "Content-Type": "application/json",
         },

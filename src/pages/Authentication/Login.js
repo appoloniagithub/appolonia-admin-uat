@@ -41,7 +41,7 @@ const Login = props => {
 
       const config = {
         method: "post",
-        url: "https://appolonia-api-uat.herokuapp.com/api/doctors/doctorlogin",
+        url: "http://doctors.appolonia.ae:7051/api/doctors/doctorlogin",
         headers: {
           "Content-Type": "application/json",
         },
