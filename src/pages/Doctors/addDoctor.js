@@ -239,7 +239,7 @@ const CreateDoctor = props => {
       formdata.append("education", education)
       console.log(formdata)
       axios
-        .post("http://localhost:3001/api/doctors/createdoctor", formdata)
+        .post(`${url}/api/doctors/createdoctor`, formdata)
         .then(res => {
           setFirstName(""),
             setLastName(""),
