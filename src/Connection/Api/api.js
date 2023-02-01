@@ -1,9 +1,9 @@
 import axios from "axios"
 // import url from "./API/api"
 
-let url = "https://appolonia-api-uat.herokuapp.com"
+//let url = "https://appolonia-api-uat.herokuapp.com"
 // let url = "http://localhost:3001"
-//let url = "http://doctors.appolonia.ae:7051"
+let url = "http://doctors.appolonia.ae:7051"
 
 const instance = axios.create({
   baseURL: url,
