@@ -6,6 +6,8 @@ import React, { Component } from "react"
 //   CarouselIndicators,
 // } from "reactstrap"
 import Carousel from "react-bootstrap/Carousel"
+import Fullscreen from "../fullscreen"
+import Zoom from "../zoom"
 
 // Carousel images
 // import img3 from
@@ -185,8 +187,10 @@ const Scancarousal = ({ scanImages }) => {
       {scanImages?.map((image, i) => {
         console.log(scanImages.length, "i am scvan images")
         return (
+          // <Zoom key={i} scanImages={scanImages} />
           <Carousel.Item key={i}>
             <div style={{ position: "relative" }}>
+              {/* <Zoom scanImages={scanImages} /> */}
               <img
                 style={{
                   transform: `rotate(${0}deg)`,

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import url from "../../Connection/Api/api"
 import { ImageGroup, Image } from "react-fullscreen-image"
+import "lightgallery.js/dist/css/lightgallery.css"
+
 //import Modal from "./Components/Modal"
 import {
   Container,
@@ -34,6 +36,7 @@ import classnames from "classnames"
 import Tabs from "./Components/Toptab"
 import Carousal from "./Components/Carousal"
 import Chat from "./Components/Chat"
+import Fullscreen from "./fullscreen"
 import { ToastContainer, toast } from "react-toastify"
 import { getPatientScans } from "Connection/Patients"
 import Moment from "react-moment"
@@ -70,6 +73,7 @@ import {
   getAllPatients,
   getConversationMessages,
 } from "../../Connection/Patients"
+import Zoom from "./zoom"
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -89,6 +93,7 @@ export default function Showpatient({
   const [customActiveTab, setcustomActiveTab] = useState("1")
   const [customIconActiveTab, setcustomIconActiveTab] = useState("1")
   const [patientInfo, setPatientInfo] = useState({
+    userId: data?._id,
     fileNumber: data?.uniqueId1,
     regisDate: data?.created,
     lastScan: data?.lastScan,
@@ -100,6 +105,7 @@ export default function Showpatient({
     firstName: data?.firstName,
     lastName: data?.lastName,
     phoneNumber: data?.phoneNumber,
+    isHead: data?.isHead,
   })
   const [patientScans, setPatientScans] = React.useState()
   const [scan1Images, setScan1Images] = React.useState({})
@@ -381,6 +387,7 @@ export default function Showpatient({
       patientId: data?._id,
       firstName: data?.firstName,
       lastName: data?.lastName,
+      isHead: data?.isHead,
     })
   }, [open === true])
   useEffect(() => {
@@ -437,77 +444,77 @@ export default function Showpatient({
   return (
     <div>
       <div>
-        <Button
+        {/* <Button
           onClick={handleOpen}
           color="primary"
           className="btn btn-primary "
         >
           View
-        </Button>
-        <Dialog
+        </Button> */}
+        {/* <Dialog
           fullScreen
           open={open}
           onClose={handleOpen}
           TransitionComponent={Transition}
-        >
-          <React.Fragment>
-            <Row className="mb-2">
-              <div className="border border-secondary rounded  ">
-                <div
-                  style={{
-                    backgroundColor: "#20507B",
-                    color: "white",
-                    height: "60px",
-                  }}
-                  className="d-flex justify-content-start align-items-center "
-                >
-                  <div>
-                    <button onClick={handleOpen} className="btn text-light">
-                      <i className="fas fa-arrow-left" />
-                    </button>
-                  </div>
-
-                  <h5 className="mt-2 text-light">Patient Details</h5>
+        > */}
+        <React.Fragment>
+          <Row className="mb-2">
+            <div className="border border-secondary rounded  ">
+              <div
+                style={{
+                  backgroundColor: "#20507B",
+                  color: "white",
+                  height: "60px",
+                }}
+                className="d-flex justify-content-start align-items-center "
+              >
+                <div>
+                  <button onClick={handleOpen} className="btn text-light">
+                    <i className="fas fa-arrow-left" />
+                  </button>
                 </div>
-              </div>
-            </Row>
 
-            <div className="m-2">
-              {/* <Container fluid> */}
-              {/* <h4>Patient Details</h4>
+                <h5 className="mt-2 text-light">Patient Details</h5>
+              </div>
+            </div>
+          </Row>
+
+          <div className="m-2">
+            {/* <Container fluid> */}
+            {/* <h4>Patient Details</h4>
             <br /> */}
-              <Row>
-                <Col sm="12" md="2">
-                  <Row>
-                    <Col sm="12">
-                      <Patientinfo
-                        view={patientInfoView === true ? true : false}
-                        data={patientInfo}
-                        handleView={handlePatientInfoView}
-                        handleOpen={handleOpen}
-                      />
-                    </Col>
-                  </Row>
-                  <br />
-                  <Row>
-                    <Col sm="12">
-                      <Patientnotes
-                        view={patientNoteView === true ? true : false}
-                        handleView={handlePatientNoteView}
-                        data={patientInfo}
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col sm="12" md="7">
-                  <Tabs
-                    toggleIconCustom={toggleIconCustom}
-                    customIconActiveTab={customIconActiveTab}
-                  />
-                  <br />
-                  {customIconActiveTab === "1" && (
-                    <div>
-                      {/* <div className="d-flex justify-content-between">
+            <Row>
+              <Col sm="12" md="2">
+                <Row>
+                  <Col sm="12">
+                    <Patientinfo
+                      view={patientInfoView === true ? true : false}
+                      data={patientInfo}
+                      handleView={handlePatientInfoView}
+                      handleOpen={handleOpen}
+                    />
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col sm="12">
+                    <Patientnotes
+                      view={patientNoteView === true ? true : false}
+                      handleView={handlePatientNoteView}
+                      data={patientInfo}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col sm="12" md="7">
+                <Tabs
+                  toggleIconCustom={toggleIconCustom}
+                  customIconActiveTab={customIconActiveTab}
+                />
+                <br />
+                {customIconActiveTab === "1" && (
+                  <div>
+                    {/* <div className="d-flex justify-content-between">
                     <h5>Compare scans of 2 different timelines </h5>
                     <Form>
                       <Form.Check
@@ -521,16 +528,283 @@ export default function Showpatient({
                     </Form>
                   </div> */}
 
-                      <br />
+                    <br />
 
-                      <Row>
-                        <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
+                    <Row>
+                      <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
+                        <Row>
+                          <Col
+                            sm="12"
+                            // md="6"
+                            // className="d-flex justify-content-center"
+                          >
+                            <div>
+                              <Horizental
+                                content={patientScans?.map((singleScan, i) => {
+                                  return (
+                                    <div key={i}>
+                                      <div className="d-flex">
+                                        <div
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            // backgroundColor: "black",
+                                            borderRadius: "50%",
+                                          }}
+                                          className={
+                                            active === singleScan._id
+                                              ? "bg-secondary mx-2"
+                                              : "bg-primary mx-2"
+                                          }
+                                          onClick={() =>
+                                            handleScan1(
+                                              singleScan?.faceScanImages,
+                                              singleScan?.teethScanImages,
+                                              singleScan?._id
+                                            )
+                                          }
+                                        ></div>
+                                        {i !== patientScans?.length - 1 && (
+                                          <div
+                                            style={{
+                                              width: "50px",
+                                              height: "5px",
+                                              // backgroundColor: "black",
+                                              // borderRadius: "50%",
+                                              marginTop: "10px",
+                                            }}
+                                            className="bg-primary mx-2"
+                                          ></div>
+                                        )}
+                                      </div>
+                                      <p>
+                                        {dateFormat(
+                                          singleScan?.created,
+                                          "mmm dS, yy"
+                                        )}
+                                      </p>
+                                    </div>
+                                  )
+                                })}
+                              />
+                            </div>
+                          </Col>
+                          <Col sm="12">
+                            <div className="border border-secondary bg-white rounded p-2">
+                              {/* <br /> */}
+                              <div className="">
+                                <div>
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("face")
+                                    }
+                                    className="btn btn-primary btn-sm"
+                                  >
+                                    Face Scan
+                                  </button>
+
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("teeth")
+                                    }
+                                    className="btn btn-primary btn-sm mx-1"
+                                  >
+                                    Teeth Scan
+                                  </button>
+                                </div>
+                                <br />
+                                {faceView === false && checked === false && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <div>
+                                        <Carousal
+                                          scanImages={selectedScanImages1}
+                                        />
+                                        <Zoom
+                                          scanImages={selectedScanImages1}
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                {checked === true && (
+                                  <div>
+                                    {/* {selectedScanImages1?.length > 0 && (
+                                      // <Carousal
+                                      //   scanImages={selectedScanImages1}
+                                      // />
+                                    )} */}
+                                  </div>
+                                )}
+
+                                {faceView === true && checked === false && (
+                                  <div className="text-center">
+                                    <Fullscreen
+                                      selectedScanImages1={selectedScanImages1}
+                                      imageId={
+                                        selectedScanImages1 &&
+                                        selectedScanImages1.length > 0 &&
+                                        selectedScanImages1[0].split(".")[0]
+                                      }
+                                    />
+                                    {/* {selectedScanImages1?.map((image, i) => {
+                                        return (
+                                          <img
+                                            key={i}
+                                            style={{
+                                              transform: `rotate(${0}deg)`,
+                                              // minHeight: "200px",
+                                              // height: "auto",
+                                              width: "32%",
+                                              height: "32%",
+                                            }}
+                                            className="mx-1 rounded"
+                                            src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+                                          />
+                                        )
+                                      })} */}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                      {checked === true && (
+                        <Col sm="12" md="6">
                           <Row>
+                            <Col sm="12">
+                              <div>
+                                <Horizental
+                                  content={patientScans?.map(
+                                    (singleScan, i) => {
+                                      console.log(i, "i am index")
+                                      return (
+                                        <div key={i} className="">
+                                          <div className="d-flex">
+                                            <div
+                                              style={{
+                                                width: "25px",
+                                                height: "25px",
+                                                // backgroundColor: "black",
+                                                borderRadius: "50%",
+                                              }}
+                                              className={
+                                                active === singleScan._id
+                                                  ? "bg-secondary mx-2"
+                                                  : "bg-primary mx-2"
+                                              }
+                                              onClick={() =>
+                                                handleScan2(
+                                                  singleScan?.faceScanImages,
+                                                  singleScan?.teethScanImages,
+                                                  singleScan?._id
+                                                )
+                                              }
+                                            ></div>
+                                            {i !== patientScans?.length - 1 && (
+                                              <div
+                                                style={{
+                                                  width: "50px",
+                                                  height: "5px",
+                                                  // backgroundColor: "black",
+                                                  // borderRadius: "50%",
+                                                  marginTop: "10px",
+                                                }}
+                                                className="bg-primary mx-2"
+                                              ></div>
+                                            )}
+                                          </div>
+                                          <p>
+                                            {dateFormat(
+                                              singleScan?.created,
+                                              "mmm dS, yy"
+                                            )}
+                                          </p>
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                />
+                              </div>
+                            </Col>
+
                             <Col
+                              // className={`${checked === true ? "" : "d-none"}`}
                               sm="12"
                               // md="6"
-                              // className="d-flex justify-content-center"
                             >
+                              <div className="border border-secondary bg-white rounded p-2">
+                                <br />
+                                <div className="">
+                                  <div>
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("face")
+                                      }
+                                      className="btn btn-primary btn-sm"
+                                    >
+                                      Face Scan
+                                    </button>
+
+                                    <button
+                                      onClick={() =>
+                                        handleSelectedScanImages2("teeth")
+                                      }
+                                      className="btn btn-primary btn-sm mx-1"
+                                    >
+                                      Teeth Scan
+                                    </button>
+                                  </div>
+                                  <br />
+                                  {selectedScanImages2?.length > 0 && (
+                                    <Carousal
+                                      scanImages={selectedScanImages2}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )}
+                    </Row>
+                    <br />
+                    {!patientScans && (
+                      <Spinner className="ms-2" color="primary" />
+                    )}
+                    {patientScans?.length === 0 && <p>No Scans Found</p>}
+                  </div>
+                )}
+                {customIconActiveTab === "4" && (
+                  <div>
+                    <div className="d-flex justify-content-between">
+                      <h5>Compare scans of 2 different timelines </h5>
+                      {/* <Form>
+                        <Form.Check
+                          type="switch"
+                          id="custom-switch"
+                          label="Check this switch"
+                          onChange={handleChange}
+                          // checked={checked}
+                          value={checked}
+                        />
+                      </Form> */}
+                    </div>
+
+                    <br />
+
+                    <Row>
+                      <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
+                        <Row>
+                          <Col
+                            sm="12"
+                            // md="6"
+                            // className="d-flex justify-content-center"
+                          ></Col>
+                          <Col sm="12">
+                            <div className="border border-secondary bg-white rounded p-2">
+                              <br />
                               <div>
                                 <Horizental
                                   content={patientScans?.map(
@@ -583,95 +857,89 @@ export default function Showpatient({
                                   )}
                                 />
                               </div>
-                            </Col>
-                            <Col sm="12">
-                              <div className="border border-secondary bg-white rounded p-2">
-                                {/* <br /> */}
-                                <div className="">
+                              {/* <br /> */}
+                              <div className="">
+                                <div>
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("face")
+                                    }
+                                    className="btn btn-primary btn-sm"
+                                  >
+                                    Face Scan
+                                  </button>
+
+                                  <button
+                                    onClick={() =>
+                                      handleSelectedScanImages1("teeth")
+                                    }
+                                    className="btn btn-primary btn-sm mx-1"
+                                  >
+                                    Teeth Scan
+                                  </button>
+                                </div>
+                                <br />
+                                {faceView === false && checked === false && (
                                   <div>
-                                    <button
-                                      onClick={() =>
-                                        handleSelectedScanImages1("face")
-                                      }
-                                      className="btn btn-primary btn-sm"
-                                    >
-                                      Face Scan
-                                    </button>
-
-                                    <button
-                                      onClick={() =>
-                                        handleSelectedScanImages1("teeth")
-                                      }
-                                      className="btn btn-primary btn-sm mx-1"
-                                    >
-                                      Teeth Scan
-                                    </button>
-                                  </div>
-                                  <br />
-                                  {faceView === false && checked === false && (
-                                    <div>
-                                      {selectedScanImages1?.length > 0 && (
-                                        <Carousal
-                                          scanImages={selectedScanImages1}
-                                        />
-                                      )}
-                                    </div>
-                                  )}
-                                  {checked === true && (
-                                    <div>
-                                      {selectedScanImages1?.length > 0 && (
-                                        <Carousal
-                                          scanImages={selectedScanImages1}
-                                        />
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {faceView === true && checked === false && (
-                                    <div className="text-center">
-                                      {selectedScanImages1?.map((image, i) => {
-                                        return (
-                                          <img
-                                            key={i}
-                                            style={{
-                                              transform: `rotate(${0}deg)`,
-                                              // minHeight: "200px",
-                                              // height: "auto",
-                                              width: "32%",
-                                              height: "32%",
-                                            }}
-                                            className="mx-1 rounded"
-                                            src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-                                            // onClick={() =>
-                                            //   handleClick(image, i)
-                                            // }
-                                            // alt={item.altText}
-                                          />
-                                        )
-                                      })}
-                                    </div>
-                                  )}
-                                  {/* <div>
-                                    {clickedImg && (
-                                      <Modal
-                                        clickedImg={clickedImg}
-                                        handelRotationRight={
-                                          handelRotationRight
-                                        }
-                                        setClickedImg={setClickedImg}
-                                        handelRotationLeft={handelRotationLeft}
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
                                       />
                                     )}
-                                  </div> */}
-                                </div>
+                                  </div>
+                                )}
+                                {checked === true && (
+                                  <div>
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+
+                                {faceView === true && checked === false && (
+                                  <div className="text-center">
+                                    {selectedScanImages1?.map((image, i) => {
+                                      return (
+                                        <img
+                                          key={i}
+                                          style={{
+                                            transform: `rotate(${0}deg)`,
+                                            // minHeight: "200px",
+                                            // height: "auto",
+                                            width: "32%",
+                                            height: "32%",
+                                          }}
+                                          className="mx-1 rounded"
+                                          src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+
+                                          // alt={item.altText}
+                                        />
+                                      )
+                                    })}
+                                  </div>
+                                )}
                               </div>
-                            </Col>
-                          </Row>
-                        </Col>
-                        {checked === true && (
-                          <Col sm="12" md="6">
-                            <Row>
-                              <Col sm="12">
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                      {checked === true && (
+                        <Col sm="12" md="6">
+                          <Row>
+                            <Col sm="12"></Col>
+
+                            <Col
+                              // className={`${checked === true ? "" : "d-none"}`}
+                              sm="12"
+                              // md="6"
+                            >
+                              <div
+                                style={{ maxHeight: "760px", height: "auto" }}
+                                className="border border-secondary bg-white rounded p-2"
+                              >
+                                <br />
                                 <div>
                                   <Horizental
                                     content={patientScans?.map(
@@ -688,7 +956,7 @@ export default function Showpatient({
                                                   borderRadius: "50%",
                                                 }}
                                                 className={
-                                                  active === singleScan._id
+                                                  activeScan === singleScan._id
                                                     ? "bg-secondary mx-2"
                                                     : "bg-primary mx-2"
                                                 }
@@ -726,143 +994,11 @@ export default function Showpatient({
                                     )}
                                   />
                                 </div>
-                              </Col>
-
-                              <Col
-                                // className={`${checked === true ? "" : "d-none"}`}
-                                sm="12"
-                                // md="6"
-                              >
-                                <div className="border border-secondary bg-white rounded p-2">
-                                  <br />
-                                  <div className="">
-                                    <div>
-                                      <button
-                                        onClick={() =>
-                                          handleSelectedScanImages2("face")
-                                        }
-                                        className="btn btn-primary btn-sm"
-                                      >
-                                        Face Scan
-                                      </button>
-
-                                      <button
-                                        onClick={() =>
-                                          handleSelectedScanImages2("teeth")
-                                        }
-                                        className="btn btn-primary btn-sm mx-1"
-                                      >
-                                        Teeth Scan
-                                      </button>
-                                    </div>
-                                    <br />
-                                    {selectedScanImages2?.length > 0 && (
-                                      <Carousal
-                                        scanImages={selectedScanImages2}
-                                      />
-                                    )}
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-                      </Row>
-                      <br />
-                      {!patientScans && (
-                        <Spinner className="ms-2" color="primary" />
-                      )}
-                      {patientScans?.length === 0 && <p>No Scans Found</p>}
-                    </div>
-                  )}
-                  {customIconActiveTab === "4" && (
-                    <div>
-                      <div className="d-flex justify-content-between">
-                        <h5>Compare scans of 2 different timelines </h5>
-                        {/* <Form>
-                        <Form.Check
-                          type="switch"
-                          id="custom-switch"
-                          label="Check this switch"
-                          onChange={handleChange}
-                          // checked={checked}
-                          value={checked}
-                        />
-                      </Form> */}
-                      </div>
-
-                      <br />
-
-                      <Row>
-                        <Col sm="12" md={`${checked === false ? "12" : "6"}`}>
-                          <Row>
-                            <Col
-                              sm="12"
-                              // md="6"
-                              // className="d-flex justify-content-center"
-                            ></Col>
-                            <Col sm="12">
-                              <div className="border border-secondary bg-white rounded p-2">
-                                <br />
-                                <div>
-                                  <Horizental
-                                    content={patientScans?.map(
-                                      (singleScan, i) => {
-                                        return (
-                                          <div key={i}>
-                                            <div className="d-flex">
-                                              <div
-                                                style={{
-                                                  width: "25px",
-                                                  height: "25px",
-                                                  // backgroundColor: "black",
-                                                  borderRadius: "50%",
-                                                }}
-                                                className={
-                                                  active === singleScan._id
-                                                    ? "bg-secondary mx-2"
-                                                    : "bg-primary mx-2"
-                                                }
-                                                onClick={() =>
-                                                  handleScan1(
-                                                    singleScan?.faceScanImages,
-                                                    singleScan?.teethScanImages,
-                                                    singleScan?._id
-                                                  )
-                                                }
-                                              ></div>
-                                              {i !==
-                                                patientScans?.length - 1 && (
-                                                <div
-                                                  style={{
-                                                    width: "50px",
-                                                    height: "5px",
-                                                    // backgroundColor: "black",
-                                                    // borderRadius: "50%",
-                                                    marginTop: "10px",
-                                                  }}
-                                                  className="bg-primary mx-2"
-                                                ></div>
-                                              )}
-                                            </div>
-                                            <p>
-                                              {dateFormat(
-                                                singleScan?.created,
-                                                "mmm dS, yy"
-                                              )}
-                                            </p>
-                                          </div>
-                                        )
-                                      }
-                                    )}
-                                  />
-                                </div>
-                                {/* <br /> */}
                                 <div className="">
                                   <div>
                                     <button
                                       onClick={() =>
-                                        handleSelectedScanImages1("face")
+                                        handleSelectedScanImages2("face")
                                       }
                                       className="btn btn-primary btn-sm"
                                     >
@@ -871,7 +1007,7 @@ export default function Showpatient({
 
                                     <button
                                       onClick={() =>
-                                        handleSelectedScanImages1("teeth")
+                                        handleSelectedScanImages2("teeth")
                                       }
                                       className="btn btn-primary btn-sm mx-1"
                                     >
@@ -879,185 +1015,46 @@ export default function Showpatient({
                                     </button>
                                   </div>
                                   <br />
-                                  {faceView === false && checked === false && (
-                                    <div>
-                                      {selectedScanImages1?.length > 0 && (
-                                        <Carousal
-                                          scanImages={selectedScanImages1}
-                                        />
-                                      )}
-                                    </div>
+                                  {selectedScanImages2?.length > 0 && (
+                                    <Carousal
+                                      scanImages={selectedScanImages2}
+                                    />
                                   )}
-                                  {checked === true && (
-                                    <div>
-                                      {selectedScanImages1?.length > 0 && (
-                                        <Carousal
-                                          scanImages={selectedScanImages1}
-                                        />
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {faceView === true && checked === false && (
-                                    <div className="text-center">
-                                      {selectedScanImages1?.map((image, i) => {
-                                        return (
-                                          <img
-                                            key={i}
-                                            style={{
-                                              transform: `rotate(${0}deg)`,
-                                              // minHeight: "200px",
-                                              // height: "auto",
-                                              width: "32%",
-                                              height: "32%",
-                                            }}
-                                            className="mx-1 rounded"
-                                            src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-
-                                            // alt={item.altText}
-                                          />
-                                        )
-                                      })}
-                                    </div>
+                                  {selectedScanImages2?.length === 0 && (
+                                    <p className="text-center text-muted mt-5">
+                                      Select Date To View Scan
+                                    </p>
                                   )}
                                 </div>
                               </div>
                             </Col>
                           </Row>
                         </Col>
-                        {checked === true && (
-                          <Col sm="12" md="6">
-                            <Row>
-                              <Col sm="12"></Col>
-
-                              <Col
-                                // className={`${checked === true ? "" : "d-none"}`}
-                                sm="12"
-                                // md="6"
-                              >
-                                <div
-                                  style={{ maxHeight: "760px", height: "auto" }}
-                                  className="border border-secondary bg-white rounded p-2"
-                                >
-                                  <br />
-                                  <div>
-                                    <Horizental
-                                      content={patientScans?.map(
-                                        (singleScan, i) => {
-                                          console.log(i, "i am index")
-                                          return (
-                                            <div key={i} className="">
-                                              <div className="d-flex">
-                                                <div
-                                                  style={{
-                                                    width: "25px",
-                                                    height: "25px",
-                                                    // backgroundColor: "black",
-                                                    borderRadius: "50%",
-                                                  }}
-                                                  className={
-                                                    activeScan ===
-                                                    singleScan._id
-                                                      ? "bg-secondary mx-2"
-                                                      : "bg-primary mx-2"
-                                                  }
-                                                  onClick={() =>
-                                                    handleScan2(
-                                                      singleScan?.faceScanImages,
-                                                      singleScan?.teethScanImages,
-                                                      singleScan?._id
-                                                    )
-                                                  }
-                                                ></div>
-                                                {i !==
-                                                  patientScans?.length - 1 && (
-                                                  <div
-                                                    style={{
-                                                      width: "50px",
-                                                      height: "5px",
-                                                      // backgroundColor: "black",
-                                                      // borderRadius: "50%",
-                                                      marginTop: "10px",
-                                                    }}
-                                                    className="bg-primary mx-2"
-                                                  ></div>
-                                                )}
-                                              </div>
-                                              <p>
-                                                {dateFormat(
-                                                  singleScan?.created,
-                                                  "mmm dS, yy"
-                                                )}
-                                              </p>
-                                            </div>
-                                          )
-                                        }
-                                      )}
-                                    />
-                                  </div>
-                                  <div className="">
-                                    <div>
-                                      <button
-                                        onClick={() =>
-                                          handleSelectedScanImages2("face")
-                                        }
-                                        className="btn btn-primary btn-sm"
-                                      >
-                                        Face Scan
-                                      </button>
-
-                                      <button
-                                        onClick={() =>
-                                          handleSelectedScanImages2("teeth")
-                                        }
-                                        className="btn btn-primary btn-sm mx-1"
-                                      >
-                                        Teeth Scan
-                                      </button>
-                                    </div>
-                                    <br />
-                                    {selectedScanImages2?.length > 0 && (
-                                      <Carousal
-                                        scanImages={selectedScanImages2}
-                                      />
-                                    )}
-                                    {selectedScanImages2?.length === 0 && (
-                                      <p className="text-center text-muted mt-5">
-                                        Select Date To View Scan
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                          </Col>
-                        )}
-                      </Row>
-                      <br />
-                      {!patientScans && (
-                        <Spinner className="ms-2" color="primary" />
                       )}
-                      {patientScans?.length === 0 && <p>No Scans Found</p>}
-                    </div>
-                  )}
-                </Col>
-                <Col sm="12" md="3">
-                  <div>
-                    <Chat
-                      patientConversation={patientConversation}
-                      patientMessages={messages}
-                      patientInfo={patientInfo}
-                      handleGetPatientConversation={
-                        handleGetPatientConversation
-                      }
-                    />
+                    </Row>
+                    <br />
+                    {!patientScans && (
+                      <Spinner className="ms-2" color="primary" />
+                    )}
+                    {patientScans?.length === 0 && <p>No Scans Found</p>}
                   </div>
-                </Col>
-              </Row>
-              {/* </Container> */}
-            </div>
-          </React.Fragment>
-        </Dialog>
+                )}
+              </Col>
+              <Col sm="12" md="3">
+                <div>
+                  <Chat
+                    patientConversation={patientConversation}
+                    patientMessages={messages}
+                    patientInfo={patientInfo}
+                    handleGetPatientConversation={handleGetPatientConversation}
+                  />
+                </div>
+              </Col>
+            </Row>
+            {/* </Container> */}
+          </div>
+        </React.Fragment>
+        {/* </Dialog> */}
       </div>
     </div>
   )

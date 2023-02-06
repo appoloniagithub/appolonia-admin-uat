@@ -13,36 +13,64 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
     connected: false,
   })
   const [fileData, setFileData] = useState("")
-
+  const [id, setId] = useState(true)
+  const [conn, setConn] = useState(false)
   console.log(data)
-  let getPatientData = async () => {
+  let getPatientData = async userId => {
+    console.log(userId, "in get patient")
+    let tempData = data
     let res = await clinicVerify({ phoneNumber: data?.phoneNumber })
 
     if (res.data && res.data.data && res.data.data.foundFile) {
       console.log(res.data.data.foundFile)
       setFileData(res.data.data.foundFile)
+      let getConnected = false
+      for (let i = 0; i < res.data.data.foundFile.familyMembers.length; i++) {
+        console.log(userId)
+        console.log(res.data.data.foundFile.familyMembers[i]?.userId)
+        if (userId === res.data.data.foundFile.familyMembers[i]?.userId) {
+          getConnected = res.data.data.foundFile.familyMembers[i]?.connected
+          console.log("get in if", getConnected)
+          setConn(res.data.data.foundFile.familyMembers[i]?.connected)
+        }
+      }
       setClinic({
         ...clinic,
         clinicVerified: res.data.data.foundFile.clinicVerified,
         active: res.data.data.foundFile.active,
-        connected: false,
+        connected: getConnected,
       })
     }
   }
   useEffect(() => {
-    getPatientData()
+    let splitData = location.pathname.split("/")
+    console.log(splitData)
+
+    if (splitData && splitData.length === 4) {
+      let userId = splitData[3]
+      setId(userId)
+      getPatientData(userId)
+    }
   }, [])
 
   const handleUpdate = async (type, value) => {
     console.log(clinic, "in update")
-    let reqObj = { fileId: fileData?._id, [type]: value }
-
+    let reqObj
+    if (type === "connected") {
+      let updatedData = fileData?.familyMembers.map(member =>
+        member.userId === id ? { ...member, connected: value } : member
+      )
+      reqObj = { fileId: fileData?._id, familyMembers: updatedData }
+      console.log(updatedData, "updateddata")
+    } else {
+      reqObj = { fileId: fileData?._id, [type]: value }
+    }
     let res = await updateClinicDetails(reqObj)
     console.log(res)
   }
   console.log(clinic, "clinicverify")
   console.log(fileData, "fileData")
-
+  //console.log(conn, "conn")
   return (
     <div className="border border-secondary rounded  ">
       <div
@@ -86,42 +114,41 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                 </h5>
               </div>
             </div>
-
-            <div className="m-2">
-              <strong>Clinic Verify</strong>{" "}
-              <BootstrapSwitchButton
-                checked={clinic.clinicVerified}
-                // onlabel=" Yes"
-                // offlabel="No"
-                onChange={checked => {
-                  setClinic({ ...clinic, clinicVerified: checked })
-                  handleUpdate("clinicVerified", checked)
-                }}
-              />
-            </div>
-            <div className="m-2">
-              <strong>Active</strong>{" "}
-              <BootstrapSwitchButton
-                checked={clinic.active}
-                // onlabel="Yes"
-                // offlabel="No"
-                onChange={checked => {
-                  setClinic({ ...clinic, active: checked })
-                  handleUpdate("active", checked)
-                }}
-              />
-            </div>
-            {/* <div className="m-2">
-              <strong>Connected</strong>{" "}
-              <BootstrapSwitchButton
-                checked={clinic.connected}
-                // onlabel="Yes"
-                // offlabel="No"
-                onChange={checked => {
-                  setClinic({ ...clinic, connected: checked })
-                }}
-              />
-            </div> */}
+            {data?.isHead === "1" ? (
+              <div>
+                <div className="m-2">
+                  <strong>Clinic Verify</strong>{" "}
+                  <BootstrapSwitchButton
+                    checked={clinic.clinicVerified}
+                    onChange={checked => {
+                      setClinic({ ...clinic, clinicVerified: checked })
+                      handleUpdate("clinicVerified", checked)
+                    }}
+                  />
+                </div>
+                <div className="m-2">
+                  <strong>Active</strong>{" "}
+                  <BootstrapSwitchButton
+                    checked={clinic.active}
+                    onChange={checked => {
+                      setClinic({ ...clinic, active: checked })
+                      handleUpdate("active", checked)
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="m-2">
+                <strong>Clinic Verify</strong>{" "}
+                <BootstrapSwitchButton
+                  checked={clinic.connected}
+                  onChange={checked => {
+                    setClinic({ ...clinic, connected: checked })
+                    handleUpdate("connected", checked)
+                  }}
+                />
+              </div>
+            )}
             <ul className="p-0" style={{ listStyle: "none" }}>
               <li>
                 <strong>File Number</strong>:{" "}

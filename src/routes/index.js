@@ -21,6 +21,8 @@ import CreateDoctor from "../pages/Doctors/addDoctor"
 import EditDoctor from "pages/Doctors/updateDoctor"
 import DelDoctor from "pages/Doctors/deleteDoctor"
 import Menubar from "components/HorizontalLayout/Menubar"
+import Fullscreen from "pages/Patients/fullscreen"
+import Zoom from "pages/Patients/zoom"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -29,6 +31,7 @@ const authProtectedRoutes = [
   //   path: "/menubar",
   //   component: props => <Menubar {...props} />,
   // },
+
   {
     path: "/patients",
     component: props => <Allpatients {...props} />,
@@ -65,6 +68,8 @@ const publicRoutes = [
   { path: "/forgot-password", component: ForgetPwd },
   { path: "/register", component: Register },
   { path: "/users", component: User },
+  { path: "/fullscreen", component: Fullscreen },
+  { path: "/zoom", component: Zoom },
 ]
 
 export { publicRoutes, authProtectedRoutes }
