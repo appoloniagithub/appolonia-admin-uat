@@ -23,6 +23,7 @@ import DelDoctor from "pages/Doctors/deleteDoctor"
 import Menubar from "components/HorizontalLayout/Menubar"
 import Fullscreen from "pages/Patients/fullscreen"
 import Zoom from "pages/Patients/zoom"
+import Thumbnail from "pages/Patients/thumbnail"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -70,6 +71,7 @@ const publicRoutes = [
   { path: "/users", component: User },
   { path: "/fullscreen", component: Fullscreen },
   { path: "/zoom", component: Zoom },
+  { path: "/thumbnail", component: Thumbnail },
 ]
 
 export { publicRoutes, authProtectedRoutes }

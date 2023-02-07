@@ -15,7 +15,8 @@ import {
   FormFeedback,
   Label,
 } from "reactstrap"
-
+import PhoneInput from "react-phone-input-2"
+import "react-phone-input-2/lib/style.css"
 import { withRouter, Link } from "react-router-dom"
 
 // import images
@@ -118,27 +119,45 @@ const Login = props => {
 
                       <div className="mb-3">
                         <Label className="form-label">Phone Number</Label>
-                        <Input
+                        {/* <Input
                           name="phone number"
                           className="form-control"
                           placeholder="Enter phone number"
                           type="number"
                           value={phoneNumber}
                           onChange={e => setPhoneNumber(e.target.value)}
+                        /> */}
 
-                          // invalid={
-                          //   validation.touched.email && validation.errors.email
-                          //     ? true
-                          //     : false
-                          // }
+                        <PhoneInput
+                          country={"ae"}
+                          placeholder="Enter phone number"
+                          name="phoneNumber"
+                          value={phoneNumber}
+                          onChange={setPhoneNumber}
                         />
 
-                        <FormFeedback type="invalid"></FormFeedback>
+                        {/* <FormFeedback type="invalid"></FormFeedback> */}
                       </div>
+                      {/* <Form.Group controlId="Phone Number">
+                        <Form.Label className="mt-2">
+                          Phone Number<sup className="text-danger">*</sup>
+                        </Form.Label>
+
+                        <PhoneInput
+                          country={"ae"}
+                          placeholder="Enter phone number"
+                          name="phoneNumber"
+                         
+                          value={phoneNumber}
+                          onChange={setPhoneNumber}
+                        />
+                      </Form.Group> */}
 
                       <div className="mb-3">
                         <Label className="form-label">Password</Label>
                         <Input
+                          className="mb-2"
+                          style={{ width: "75%" }}
                           name="password"
                           type="password"
                           placeholder="Enter Password"
@@ -164,11 +183,11 @@ const Login = props => {
                       <div className="form-check">
                         <input
                           type="checkbox"
-                          className="form-check-input"
+                          className="form-check-input mt-2"
                           id="customControlInline"
                         />
                         <label
-                          className="form-check-label"
+                          className="form-check-label mt-2"
                           htmlFor="customControlInline"
                         >
                           Remember me
@@ -177,6 +196,7 @@ const Login = props => {
 
                       <div className="mt-3 d-grid">
                         <button
+                          //style={{ width: "75%" }}
                           className="btn btn-primary btn-block"
                           type="submit"
                           onClick={e => {

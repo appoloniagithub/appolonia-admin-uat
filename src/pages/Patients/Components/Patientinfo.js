@@ -114,41 +114,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                 </h5>
               </div>
             </div>
-            {data?.isHead === "1" ? (
-              <div>
-                <div className="m-2">
-                  <strong>Clinic Verify</strong>{" "}
-                  <BootstrapSwitchButton
-                    checked={clinic.clinicVerified}
-                    onChange={checked => {
-                      setClinic({ ...clinic, clinicVerified: checked })
-                      handleUpdate("clinicVerified", checked)
-                    }}
-                  />
-                </div>
-                <div className="m-2">
-                  <strong>Active</strong>{" "}
-                  <BootstrapSwitchButton
-                    checked={clinic.active}
-                    onChange={checked => {
-                      setClinic({ ...clinic, active: checked })
-                      handleUpdate("active", checked)
-                    }}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="m-2">
-                <strong>Clinic Verify</strong>{" "}
-                <BootstrapSwitchButton
-                  checked={clinic.connected}
-                  onChange={checked => {
-                    setClinic({ ...clinic, connected: checked })
-                    handleUpdate("connected", checked)
-                  }}
-                />
-              </div>
-            )}
+
             <ul className="p-0" style={{ listStyle: "none" }}>
               <li>
                 <strong>File Number</strong>:{" "}
@@ -194,6 +160,42 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               </li>
             </ul>
           </div>
+          {data?.isHead === "1" ? (
+            <div>
+              <div className="m-2">
+                <strong>Clinic Verify</strong>{" "}
+                <BootstrapSwitchButton
+                  checked={clinic.clinicVerified}
+                  onChange={checked => {
+                    setClinic({ ...clinic, clinicVerified: checked })
+                    handleUpdate("clinicVerified", checked)
+                  }}
+                />
+              </div>
+              <div className="m-2">
+                <strong className="mr-4">Active</strong>{" "}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <BootstrapSwitchButton
+                  checked={clinic.active}
+                  onChange={checked => {
+                    setClinic({ ...clinic, active: checked })
+                    handleUpdate("active", checked)
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="m-2">
+              <strong>Clinic Verify</strong>{" "}
+              <BootstrapSwitchButton
+                checked={clinic.connected}
+                onChange={checked => {
+                  setClinic({ ...clinic, connected: checked })
+                  handleUpdate("connected", checked)
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

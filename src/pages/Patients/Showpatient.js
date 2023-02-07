@@ -74,6 +74,7 @@ import {
   getConversationMessages,
 } from "../../Connection/Patients"
 import Zoom from "./zoom"
+import Thumbnail from "./thumbnail"
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -86,6 +87,7 @@ export default function Showpatient({
   handleGetConversation,
   isConversations,
 }) {
+  //location.reload(true)
   console.log(data, "i am selected")
   // const [open, setOpen] = React.useState(false)
   const [active, setActive] = useState("")
@@ -399,6 +401,12 @@ export default function Showpatient({
   }, [isConversations])
   console.log(patientScans)
 
+  const [value, setValue] = useState()
+
+  const refresh = () => {
+    setValue({})
+  }
+
   // const handleClose = () => {
   //   history.push("/patients")
   // }
@@ -629,11 +637,11 @@ export default function Showpatient({
                                 )}
                                 {checked === true && (
                                   <div>
-                                    {/* {selectedScanImages1?.length > 0 && (
-                                      // <Carousal
-                                      //   scanImages={selectedScanImages1}
-                                      // />
-                                    )} */}
+                                    {selectedScanImages1?.length > 0 && (
+                                      <Carousal
+                                        scanImages={selectedScanImages1}
+                                      />
+                                    )}
                                   </div>
                                 )}
 
@@ -879,12 +887,18 @@ export default function Showpatient({
                                   </button>
                                 </div>
                                 <br />
+                                <Thumbnail scanImages={selectedScanImages1} />
+                                {/* <Fullscreen
+                                  selectedScanImages1={selectedScanImages1}
+                                /> */}
                                 {faceView === false && checked === false && (
                                   <div>
                                     {selectedScanImages1?.length > 0 && (
-                                      <Carousal
-                                        scanImages={selectedScanImages1}
-                                      />
+                                      <div>
+                                        <Carousal
+                                          scanImages={selectedScanImages1}
+                                        />
+                                      </div>
                                     )}
                                   </div>
                                 )}
@@ -1015,6 +1029,7 @@ export default function Showpatient({
                                     </button>
                                   </div>
                                   <br />
+                                  <Thumbnail scanImages={selectedScanImages2} />
                                   {selectedScanImages2?.length > 0 && (
                                     <Carousal
                                       scanImages={selectedScanImages2}

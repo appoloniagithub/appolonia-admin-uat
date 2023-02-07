@@ -1,4 +1,4 @@
-import React from "react"
+import { React, useState } from "react"
 import { Container } from "reactstrap"
 import Showpatient from "../Showpatient"
 import { Link } from "react-router-dom"
@@ -19,9 +19,9 @@ import {
 
 const Patienttable = ({ data, conversations }) => {
   console.log(conversations, data)
-  const [selectedPatient, setSelectedPatient] = React.useState()
-  const [openShowPatient, setOpenShowPatient] = React.useState(false)
-
+  const [selectedPatient, setSelectedPatient] = useState()
+  const [openShowPatient, setOpenShowPatient] = useState(false)
+  const [value, setValue] = useState()
   const handleSelectPatient = patientData => {
     setSelectedPatient(patientData)
     handleOpenShowPatient()
@@ -41,6 +41,15 @@ const Patienttable = ({ data, conversations }) => {
     console.log(foundConversation)
     return foundConversation
   }
+  const refreshPage = () => {
+    handleSelectPatient(patient)
+    window.location.reload()
+  }
+
+  const refresh = () => {
+    // it re-renders the component
+  }
+
   return (
     <div>
       <Card>
@@ -81,7 +90,7 @@ const Patienttable = ({ data, conversations }) => {
                           <Button
                             color="primary"
                             className="btn btn-primary "
-                            onClick={() => handleSelectPatient(patient)}
+                            onClick={refreshPage}
                           >
                             View
                           </Button>
