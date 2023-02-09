@@ -139,7 +139,7 @@ const Navbar = props => {
                     <Link
                       className="nav-link"
                       onClick={e => {
-                        e.preventDefault()
+                        //e.preventDefault()
                         setPatient(!patient)
                       }}
                       to="/library"
@@ -217,7 +217,7 @@ const Navbar = props => {
                     <Link
                       className="nav-link"
                       onClick={e => {
-                        e.preventDefault()
+                        //e.preventDefault()
                         setPatient(!patient)
                       }}
                       to="/library"

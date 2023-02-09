@@ -86,7 +86,7 @@ const Patienttable = ({ data, conversations }) => {
                       <td>{patient.uniqueId2}</td>
 
                       <td>
-                        <Link to={`/patients/showpatient/${patient?._id}`}>
+                        <a href={`/patients/showpatient/${patient?._id}`}>
                           <Button
                             color="primary"
                             className="btn btn-primary "
@@ -94,7 +94,7 @@ const Patienttable = ({ data, conversations }) => {
                           >
                             View
                           </Button>
-                        </Link>
+                        </a>
                       </td>
                     </tr>
                   )

@@ -15,6 +15,8 @@ import { useHistory, useLocation } from "react-router"
 import { getDoctorById } from "Connection/Doctors"
 import { updateDoctor } from "Connection/Doctors"
 import { ToastContainer, toast } from "react-toastify"
+import PhoneInput from "react-phone-input-2"
+import "react-phone-input-2/lib/style.css"
 
 const EditDoctor = () => {
   let history = useHistory()
@@ -265,11 +267,15 @@ const EditDoctor = () => {
                     <Col sm="6">
                       <Form.Group controlId="Phone Number">
                         <Form.Label>Phone Number</Form.Label>
-                        <Form.Control
-                          type="number"
-                          {...register("phoneNumber")}
+                        <PhoneInput
+                          country={"ae"}
+                          placeholder="Enter phone number"
+                          name="phoneNumber"
+                          // {...register("phoneNumber", {
+                          //   required: true,
+                          // })}
                           value={phoneNumber}
-                          onChange={e => setPhoneNumber(e.target.value)}
+                          onChange={setPhoneNumber}
                         />
                       </Form.Group>
                     </Col>

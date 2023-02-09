@@ -205,6 +205,9 @@ const CreateDoctor = props => {
     if (!speciality) {
       setIsSpeciality(true)
     }
+    if (!phoneNumber) {
+      setIsPhoneNumber(true)
+    }
   }
   const hiddenFileInput = React.useRef(null)
 
@@ -220,8 +223,9 @@ const CreateDoctor = props => {
   }
 
   const postData = () => {
+    console.log("test in postdata")
     console.log(role, "above if")
-    if (speciality) {
+    if (speciality && phoneNumber) {
       var formdata = new FormData()
       formdata.append("firstName", firstName)
       formdata.append("lastName", lastName)
@@ -277,7 +281,7 @@ const CreateDoctor = props => {
     } else {
       //setIsRole(true)
       setIsSpeciality(true)
-
+      setIsPhoneNumber(true)
       console.log("else in false data", isRole)
     }
   }
@@ -389,9 +393,11 @@ const CreateDoctor = props => {
                           })}
                           value={firstName}
                           onChange={e => setFirstName(e.target.value)}
+                          autoFocus
                         />
                       </Form.Group>
-                      {errors.firstName &&
+                      {!firstName &&
+                        errors.firstName &&
                         errors.firstName.type === "required" && (
                           <p className="text-danger">Please Enter First Name</p>
                         )}
@@ -418,7 +424,8 @@ const CreateDoctor = props => {
                           onChange={e => setLastName(e.target.value)}
                         />
                       </Form.Group>
-                      {errors.lastName &&
+                      {!lastName &&
+                        errors.lastName &&
                         errors.lastName.type === "required" && (
                           <p className="text-danger">Please Enter Last Name</p>
                         )}
@@ -448,12 +455,16 @@ const CreateDoctor = props => {
                           onChange={e => setEmail(e.target.value)}
                         />
                       </Form.Group>
-                      {errors.email && errors.email.type === "required" && (
-                        <p className="text-danger">Please Enter email</p>
-                      )}
-                      {errors.email && errors.email.type === "pattern" && (
-                        <p className="text-danger">Invalid email</p>
-                      )}
+                      {!email &&
+                        errors.email &&
+                        errors.email.type === "required" && (
+                          <p className="text-danger">Please Enter email</p>
+                        )}
+                      {!email &&
+                        errors.email &&
+                        errors.email.type === "pattern" && (
+                          <p className="text-danger">Invalid email</p>
+                        )}
                     </Col>
                     <Col sm="6">
                       <Form.Group controlId="Phone Number">
@@ -465,16 +476,13 @@ const CreateDoctor = props => {
                           country={"ae"}
                           placeholder="Enter phone number"
                           name="phoneNumber"
-                          // {...register("phoneNumber", {
-                          //   required: true,
-                          // })}
                           value={phoneNumber}
                           onChange={setPhoneNumber}
                         />
                       </Form.Group>
-                      {/* {errors.email && errors.email.type === "required" && (
+                      {!phoneNumber && isPhoneNumber && (
                         <p className="text-danger">Please Enter phone number</p>
-                      )} */}
+                      )}
                     </Col>
                   </Row>
 
@@ -544,11 +552,13 @@ const CreateDoctor = props => {
                           onChange={e => setPassword(e.target.value)}
                         />
                       </Form.Group>
-                      {errors.password &&
+                      {!password &&
+                        errors.password &&
                         errors.password.type === "required" && (
                           <p className="text-danger">Please Enter password</p>
                         )}
-                      {errors.password &&
+                      {!password &&
+                        errors.password &&
                         errors.password.type === "pattern" && (
                           <p className="text-danger">Invalid password</p>
                         )}

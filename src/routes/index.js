@@ -24,6 +24,7 @@ import Menubar from "components/HorizontalLayout/Menubar"
 import Fullscreen from "pages/Patients/fullscreen"
 import Zoom from "pages/Patients/zoom"
 import Thumbnail from "pages/Patients/thumbnail"
+import Library from "pages/Library"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -55,6 +56,7 @@ const authProtectedRoutes = [
     path: "/doctors/delete-doctor/:id",
     component: props => <DelDoctor {...props} />,
   },
+  { path: "/library", component: Library },
   // //profile
   { path: "/profile", component: UserProfile },
 
