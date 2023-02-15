@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import { deleteDoctor } from "Connection/Doctors"
 import { getDoctorById } from "Connection/Doctors"
-
+import url from "../../../Connection/Api/api"
 import {
   Table,
   Row,
@@ -23,12 +23,13 @@ import {
 const Doctortable = ({ data }) => {
   const history = useHistory()
   console.log(data, "table")
-  //const [id, setId] = useState("")
+  const [deleteId, setDeleteId] = useState("")
 
   const [open, setOpen] = React.useState(false)
 
-  const handleClickOpen = () => {
+  const handleClickOpen = delId => {
     setOpen(true)
+    setDeleteId(delId)
   }
 
   const handleClose = () => {
@@ -36,6 +37,8 @@ const Doctortable = ({ data }) => {
   }
 
   const deleteData = async id => {
+    console.log(id, "in delete")
+
     await deleteDoctor({ doctorId: id }).then(res => {
       console.log(res)
       history.push("/doctors")
@@ -77,7 +80,7 @@ const Doctortable = ({ data }) => {
                       <td>
                         {/* <Link to={`/doctors/delete-doctor/${doctor?._id}`}> */}
                         <i
-                          onClick={handleClickOpen}
+                          onClick={() => handleClickOpen(doctor?._id)}
                           className="mdi mdi-delete-outline"
                           style={{ fontSize: "18px" }}
                         ></i>
@@ -104,9 +107,9 @@ const Doctortable = ({ data }) => {
                             <Button
                               className="btn btn-primary m-2 "
                               color="primary"
-                              onClick={() => deleteData(doctor?._id)}
-                              autoFocus
+                              onClick={() => deleteData(deleteId)}
                             >
+                              {console.log(doctor?._id, "test")}
                               DELETE
                             </Button>
                           </DialogActions>

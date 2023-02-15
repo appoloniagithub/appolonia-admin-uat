@@ -2,7 +2,11 @@ import { React, useState } from "react"
 import { Container } from "reactstrap"
 import Showpatient from "../Showpatient"
 import { Link } from "react-router-dom"
-
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import { useHistory, useLocation } from "react-router-dom"
 //Import Breadcrumb
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
 
@@ -16,12 +20,17 @@ import {
   CardSubtitle,
   Button,
 } from "reactstrap"
+import { deletePatient } from "Connection/Patients"
 
 const Patienttable = ({ data, conversations }) => {
   console.log(conversations, data)
+  const history = useHistory()
   const [selectedPatient, setSelectedPatient] = useState()
   const [openShowPatient, setOpenShowPatient] = useState(false)
+  const [open, setOpen] = useState(false)
   const [value, setValue] = useState()
+  const [deleteId, setDeleteId] = useState("")
+
   const handleSelectPatient = patientData => {
     setSelectedPatient(patientData)
     handleOpenShowPatient()
@@ -41,15 +50,27 @@ const Patienttable = ({ data, conversations }) => {
     console.log(foundConversation)
     return foundConversation
   }
+  const handleClickOpen = delId => {
+    setOpen(true)
+    setDeleteId(delId)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
   const refreshPage = () => {
     handleSelectPatient(patient)
     window.location.reload()
   }
+  const deleteData = async id => {
+    console.log(id, "in delete")
 
-  const refresh = () => {
-    // it re-renders the component
+    await deletePatient({ patientId: id }).then(res => {
+      console.log(res)
+      history.push("/patients")
+      window.location.reload()
+    })
   }
-
   return (
     <div>
       <Card>
@@ -72,6 +93,8 @@ const Patienttable = ({ data, conversations }) => {
                   <th>Emirates Id</th>
                   <th>File Number</th>
                   <th>View</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,25 +105,68 @@ const Patienttable = ({ data, conversations }) => {
                       <td>{patient.lastName}</td>
                       <td>{patient.email}</td>
                       <td>{patient.phoneNumber}</td>
-                      <td>{patient.uniqueId1}</td>
                       <td>{patient.uniqueId2}</td>
+                      <td>{patient.uniqueId1}</td>
 
                       <td>
                         <a href={`/patients/showpatient/${patient?._id}`}>
                           <Button
                             color="primary"
                             className="btn btn-primary "
-                            onClick={refreshPage}
+                            onClick={() => handleSelectPatient(patient)}
                           >
                             View
                           </Button>
                         </a>
+                      </td>
+                      <td>
+                        <Link to={`/patients/edit-patient/${patient?._id}`}>
+                          <i
+                            className="mdi mdi-square-edit-outline"
+                            style={{ fontSize: "18px" }}
+                          ></i>
+                        </Link>
+                      </td>
+                      <td>
+                        <i
+                          onClick={() => handleClickOpen(patient?._id)}
+                          className="mdi mdi-delete-outline"
+                          style={{ fontSize: "18px" }}
+                        ></i>
                       </td>
                     </tr>
                   )
                 })}
               </tbody>
             </Table>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to delete?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  CANCEL
+                </Button>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={() => deleteData(deleteId)}
+                >
+                  DELETE
+                </Button>
+              </DialogActions>
+            </Dialog>
             <div>
               {openShowPatient && (
                 <Showpatient

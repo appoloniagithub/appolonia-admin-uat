@@ -9,17 +9,24 @@ import { logoutUser } from "../../store/actions"
 import { useSelector, useDispatch } from "react-redux"
 
 const Logout = props => {
-  const dispatch = useDispatch()
+  //const dispatch = useDispatch()
 
+  // useEffect(() => {
+  //   dispatch(logoutUser(props.history))
+  // }, [dispatch])
   useEffect(() => {
-    dispatch(logoutUser(props.history))
-  }, [dispatch])
+    sessionStorage.clear()
+  })
 
-  return <></>
+  return (
+    <>
+      <div>Logout</div>
+    </>
+  )
 }
 
-Logout.propTypes = {
-  history: PropTypes.object,
-}
+// Logout.propTypes = {
+//   history: PropTypes.object,
+// }
 
 export default withRouter(Logout)

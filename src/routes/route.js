@@ -16,9 +16,7 @@ const Authmiddleware = ({
 
       if (isAuthProtected && !sessionStorage.getItem("loggedIn")) {
         return (
-          <Redirect
-            to={{ pathname: "/login", state: { from: props.location } }}
-          />
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
         )
       }
       console.log({ ...rest }, "IN ROUTES", path)
@@ -29,6 +27,9 @@ const Authmiddleware = ({
       if (path === "/patients/showpatient/:id") {
         return <Component {...props} />
       }
+      if (path === "/patients/edit-patient/:id") {
+        return <Component {...props} />
+      }
       if (path === "/doctors/create-doctor") {
         return <Component {...props} />
       }
@@ -36,6 +37,19 @@ const Authmiddleware = ({
         return <Component {...props} />
       }
       if (path === "/doctors/delete-doctor/:id") {
+        return <Component {...props} />
+      }
+      if (path === "/library/create-article") {
+        return <Component {...props} />
+      }
+      if (path === "/library/edit-article/:id") {
+        return <Component {...props} />
+      }
+      if (path === "/library/showlibrary/:id") {
+        return <Component {...props} />
+      }
+
+      if (path === "/profile/edit-profile/:id") {
         return <Component {...props} />
       }
       return (

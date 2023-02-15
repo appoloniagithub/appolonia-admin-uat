@@ -83,7 +83,18 @@ const updateClinicDetails = async data => {
   console.log(res)
   return res
 }
+const updateUserProfile = async data => {
+  let res = await axios.post(`${url}/api/user/updateprofile`, data)
 
+  console.log(res)
+  return res
+}
+const deletePatient = async data => {
+  let res = await axios.post(`${url}/api/user/deletepatient`, data)
+
+  console.log(res)
+  return res
+}
 export {
   getAllPatients,
   getPatientById,
@@ -97,4 +108,6 @@ export {
   newMessageImage,
   clinicVerify,
   updateClinicDetails,
+  updateUserProfile,
+  deletePatient,
 }

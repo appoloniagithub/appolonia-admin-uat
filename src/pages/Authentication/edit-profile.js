@@ -18,7 +18,7 @@ import { ToastContainer, toast } from "react-toastify"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 
-const EditDoctor = () => {
+const EditProfile = () => {
   let history = useHistory()
   const location = useLocation()
   const roleOptions = ["Select", "Admin", "Doctor"]
@@ -70,7 +70,7 @@ const EditDoctor = () => {
     hiddenFileInput.current.click()
   }
   const handleClose = () => {
-    history.push("/doctors")
+    history.push("/profile")
   }
   useEffect(() => {
     console.log(location, "doctor loc")
@@ -106,53 +106,61 @@ const EditDoctor = () => {
   }, [])
 
   const updateData = async () => {
-    var formdata = new FormData()
-    formdata.append("_id", id)
-    formdata.append("firstName", firstName)
-    formdata.append("lastName", lastName)
-    formdata.append("role", role)
-    formdata.append("email", email)
-    formdata.append("speciality", speciality)
-    formdata.append("password", password)
-    formdata.append("phoneNumber", phoneNumber)
-    formdata.append("image", image)
-    formdata.append("gender", gender)
-    formdata.append("nationality", nationality)
-    formdata.append("totalExperience", totalExperience)
-    formdata.append("profile", profile)
-    formdata.append("certifications", certifications)
-    formdata.append("education", education)
-    console.log(formdata)
-    await updateDoctor(
-      //{
-      // _id: id,
-      // firstName,
-      // lastName,
-      // email,
-      // phoneNumber,
-      // speciality,
-      // image,
-      // password,
-      // role,
-      // gender,
-      // nationality,
-      // totalExperience,
-      // profile,
-      // certifications,
-      // education,
-      //}
-      formdata
-    )
+    console.log(typeof image)
+    let reqObj
+    if (typeof image === "object") {
+      var formdata = new FormData()
+      formdata.append("_id", id)
+      formdata.append("firstName", firstName)
+      formdata.append("lastName", lastName)
+      formdata.append("role", role)
+      formdata.append("email", email)
+      formdata.append("speciality", speciality)
+      formdata.append("password", password)
+      formdata.append("phoneNumber", phoneNumber)
+      formdata.append("image", image)
+      formdata.append("gender", gender)
+      formdata.append("nationality", nationality)
+      formdata.append("totalExperience", totalExperience)
+      formdata.append("profile", profile)
+      formdata.append("certifications", certifications)
+      formdata.append("education", education)
+      console.log(formdata)
+      reqObj = formdata
+    } else {
+      let updateImage = [image]
+      let tempObj = {
+        _id: id,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        speciality,
+        image: updateImage,
+        password,
+        role,
+        gender,
+        nationality,
+        totalExperience,
+        profile,
+        certifications,
+        education,
+      }
+      console.log(tempObj, image, updateImage, "temp")
+      reqObj = tempObj
+    }
+
+    await updateDoctor(reqObj)
       .then(res => {
         console.log(res)
-        history.push("/doctors")
-        toast.success("Doctor successfully updated")
+        history.push("/profile")
+        toast.success("Profile updated successfully ")
       })
       .catch(err => {
-        toast.error("Error while updating a doctor")
+        toast.error("Error while updating profile")
       })
   }
-  console.log(gender)
+  console.log(image, "image")
   return (
     <>
       <Row>
@@ -171,7 +179,7 @@ const EditDoctor = () => {
               </button>
             </div>
 
-            <h5 className="mt-2 text-light">Doctor Details</h5>
+            <h5 className="mt-2 text-light">Profile Details</h5>
           </div>
         </div>
       </Row>
@@ -180,7 +188,7 @@ const EditDoctor = () => {
           <Col sm="4">
             <div className="border border-secondary rounded mt-4 ml-4 p-2">
               <div className="justify-content-between p-2">
-                <h5>Edit Doctor</h5>
+                <h5>Edit Profile</h5>
                 <Divider />
                 <img
                   className="m-2"
@@ -234,7 +242,7 @@ const EditDoctor = () => {
           <Col sm="8">
             <div className="border border-secondary rounded mt-4 mr-4 p-2">
               <div className="justify-content-between p-2">
-                <h5>Edit Doctor Information</h5>
+                <h5>Edit Profile Information</h5>
                 <Divider />
                 <div className="form-wrapper">
                   <Row>
@@ -453,7 +461,7 @@ const EditDoctor = () => {
                     color="primary"
                     className="btn btn-primary m-2 "
                   >
-                    Update Doctor
+                    Update Profile
                   </Button>
                 </div>
               </div>
@@ -465,4 +473,4 @@ const EditDoctor = () => {
   )
 }
 
-export default EditDoctor
+export default EditProfile

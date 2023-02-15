@@ -16,14 +16,18 @@ import {
   Label,
 } from "reactstrap"
 import PhoneInput from "react-phone-input-2"
-import "react-phone-input-2/lib/style.css"
+//import "react-phone-input-2/lib/style.css"
 import { withRouter, Link } from "react-router-dom"
 
 // import images
 import profile from "assets/images/profile-img.png"
-import logo from "assets/images/logo.svg"
 
 import applogo from "../../assets/images/applogo.png"
+import Tab from "@mui/material/Tab"
+import TabContext from "@mui/lab/TabContext"
+import TabList from "@mui/lab/TabList"
+import TabPanel from "@mui/lab/TabPanel"
+import Box from "@mui/material/Box"
 
 const Login = props => {
   //meta title
@@ -32,6 +36,12 @@ const Login = props => {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
+  const [emiratesId, setEmiratesId] = useState("")
+  const [isEmiratesId, setIsEmiratesId] = useState(false)
+  const [isPhoneNumber, setIsPhoneNumber] = useState(false)
+  const [isPassword, setIsPassword] = useState(false)
+  const [value, setValue] = React.useState("1")
+
   const handleLoginDetails = () => {
     if (phoneNumber && password) {
       const axios = require("axios")
@@ -51,12 +61,27 @@ const Login = props => {
 
       axios(config)
         .then(response => {
-          console.log(response.data.message)
+          console.log(response.data)
           if (response.data && response.data.success === 1) {
             setPhoneNumber("")
             setPassword("")
+            sessionStorage.setItem("id", response.data.doctorFound._id)
             sessionStorage.setItem("loggedIn", true)
             sessionStorage.setItem("role", response.data.doctorFound.role)
+            sessionStorage.setItem(
+              "firstName",
+              response.data.doctorFound.firstName
+            )
+            sessionStorage.setItem(
+              "lastName",
+              response.data.doctorFound.lastName
+            )
+            sessionStorage.setItem("image", response.data.doctorFound.image[0])
+            sessionStorage.setItem(
+              "phoneNumber",
+              response.data.doctorFound.phoneNumber
+            )
+            sessionStorage.setItem("email", response.data.doctorFound.email)
             history.push("/patients")
             // if (response.data.doctorFound.role == "Doctor") {
             //   history.push("/patients")
@@ -75,17 +100,32 @@ const Login = props => {
   }
   console.log(phoneNumber, password, "in login")
 
+  const handleValidation = () => {
+    if (!password) {
+      setIsPassword(true)
+    }
+    if (!phoneNumber) {
+      setIsPhoneNumber(true)
+    }
+    if (!emiratesId) {
+      setIsEmiratesId(true)
+    }
+  }
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
   return (
     <React.Fragment>
-      <div className="home-btn d-none d-sm-block">
+      {/* <div className="home-btn d-none d-sm-block">
         <Link to="/" className="text-dark">
           <i className="fas fa-home h2" />
         </Link>
-      </div>
+      </div> */}
       <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row className="justify-content-center">
-            <Col md={8} lg={6} xl={5}>
+            <Col style={{ width: "48.78%" }} md={8} lg={6} xl={5}>
               <Card className="overflow-hidden">
                 <div className="bg-primary bg-soft">
                   <Row>
@@ -103,7 +143,7 @@ const Login = props => {
                 <CardBody className="pt-0">
                   <div>
                     <Link to="/" className="auth-logo-light">
-                      <div className="avatar-md profile-user-wid mb-4">
+                      <div className="avatar-md profile-user-wid mb-2">
                         <span
                           style={{ backgroundColor: "#20507B" }}
                           className="avatar-title rounded-circle "
@@ -113,13 +153,33 @@ const Login = props => {
                       </div>
                     </Link>
                   </div>
-                  <div className="p-2">
-                    <Form className="form-horizontal">
-                      {/* <Alert color="danger"></Alert> */}
-
-                      <div className="mb-3">
-                        <Label className="form-label">Phone Number</Label>
-                        {/* <Input
+                  <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                      >
+                        <Tab
+                          className="text-primary"
+                          style={{ width: "50%" }}
+                          label="Phone Number"
+                          value="1"
+                        />
+                        <Tab
+                          className="text-primary"
+                          style={{ width: "50%" }}
+                          label="Emirates ID"
+                          value="2"
+                        />
+                      </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                      <div className="p-2">
+                        <Form className="form-horizontal">
+                          {message && <Alert color="danger">{message}</Alert>}
+                          <div className="mb-3">
+                            <Label className="form-label">Phone Number</Label>
+                            {/* <Input
                           name="phone number"
                           className="form-control"
                           placeholder="Enter phone number"
@@ -128,90 +188,162 @@ const Login = props => {
                           onChange={e => setPhoneNumber(e.target.value)}
                         /> */}
 
-                        <PhoneInput
-                          country={"ae"}
-                          placeholder="Enter phone number"
-                          name="phoneNumber"
-                          value={phoneNumber}
-                          onChange={setPhoneNumber}
-                        />
+                            <PhoneInput
+                              country={"ae"}
+                              placeholder="Enter phone number"
+                              name="phoneNumber"
+                              value={phoneNumber}
+                              onChange={setPhoneNumber}
+                            />
+                            {!phoneNumber && isPhoneNumber && (
+                              <p className="text-danger">
+                                Please Enter phone number
+                              </p>
+                            )}
+                          </div>
 
-                        {/* <FormFeedback type="invalid"></FormFeedback> */}
-                      </div>
-                      {/* <Form.Group controlId="Phone Number">
-                        <Form.Label className="mt-2">
-                          Phone Number<sup className="text-danger">*</sup>
-                        </Form.Label>
-
-                        <PhoneInput
-                          country={"ae"}
-                          placeholder="Enter phone number"
-                          name="phoneNumber"
-                         
-                          value={phoneNumber}
-                          onChange={setPhoneNumber}
-                        />
-                      </Form.Group> */}
-
-                      <div className="mb-3">
-                        <Label className="form-label">Password</Label>
-                        <Input
-                          className="mb-2"
-                          style={{ width: "75%" }}
-                          name="password"
-                          type="password"
-                          placeholder="Enter Password"
-                          value={password}
-                          onChange={e => setPassword(e.target.value)}
-
-                          // invalid={
-                          //   validation.touched.password &&
-                          //   validation.errors.password
-                          //     ? true
-                          //     : false
-                          // }
-                        />
-                        {/* {validation.touched.password &&
+                          <div className="mb-3">
+                            <Label className="form-label">Password</Label>
+                            <Input
+                              className=""
+                              name="password"
+                              type="password"
+                              placeholder="Enter Password"
+                              value={password}
+                              onChange={e => setPassword(e.target.value)}
+                            />
+                            {!password && isPassword && (
+                              <p className="text-danger">
+                                Please Enter password
+                              </p>
+                            )}
+                            {/* {validation.touched.password &&
                         validation.errors.password ? (
                           <FormFeedback type="invalid">
                             {validation.errors.password}
                           </FormFeedback>
                         ) : null} */}
-                        <a href="/forgot-password">Forgot password?</a>
-                      </div>
+                            <a
+                              className="d-flex justify-content-end mt-2"
+                              //style={{ paddingLeft: "11.5rem" }}
+                              href="/forgot-password"
+                            >
+                              Forgot password?
+                            </a>
+                          </div>
 
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input mt-2"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label mt-2"
-                          htmlFor="customControlInline"
-                        >
-                          Remember me
-                        </label>
-                      </div>
+                          <div className="form-check">
+                            <input
+                              type="checkbox"
+                              className="form-check-input mt-2"
+                              id="customControlInline"
+                            />
+                            <label
+                              className="form-check-label mt-2"
+                              htmlFor="customControlInline"
+                            >
+                              Remember me
+                            </label>
+                          </div>
 
-                      <div className="mt-3 d-grid">
-                        <button
-                          //style={{ width: "75%" }}
-                          className="btn btn-primary btn-block"
-                          type="submit"
-                          onClick={e => {
-                            e.preventDefault()
-                            handleLoginDetails()
-                          }}
-                        >
-                          Log In
-                        </button>
-                        <br />
-                        {message && (
-                          <span className="text-danger">{message}</span>
-                        )}
+                          <div className="mt-3 d-grid">
+                            <button
+                              className="btn btn-primary btn-block"
+                              type="submit"
+                              onClick={e => {
+                                e.preventDefault()
+                                handleLoginDetails()
+                                handleValidation()
+                              }}
+                            >
+                              Log In
+                            </button>
+                            <br />
+                          </div>
+                        </Form>
                       </div>
-                      {/* 
+                    </TabPanel>
+                    <TabPanel value="2">
+                      <div className="p-2">
+                        <Form className="form-horizontal">
+                          {message && <Alert color="danger">{message}</Alert>}
+                          <div className="mb-3">
+                            <Label className="form-label">Emirates ID</Label>
+
+                            <Input
+                              name="Emirates ID"
+                              className="form-control"
+                              placeholder="Enter emirates ID"
+                              type="number"
+                              value={emiratesId}
+                              onChange={e => setEmiratesId(e.target.value)}
+                            />
+                            {!emiratesId && isEmiratesId && (
+                              <p className="text-danger">
+                                Please Enter emirates Id
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="mb-3">
+                            <Label className="form-label">Password</Label>
+                            <Input
+                              className=""
+                              name="password"
+                              type="password"
+                              placeholder="Enter Password"
+                              value={password}
+                              onChange={e => setPassword(e.target.value)}
+                            />
+                            {!password && isPassword && (
+                              <p className="text-danger">
+                                Please Enter password
+                              </p>
+                            )}
+
+                            <a
+                              className="d-flex justify-content-end mt-2"
+                              //style={{ paddingLeft: "11.5rem" }}
+                              href="/forgot-password"
+                            >
+                              Forgot password?
+                            </a>
+                          </div>
+
+                          <div className="form-check">
+                            <input
+                              type="checkbox"
+                              className="form-check-input mt-2"
+                              id="customControlInline"
+                            />
+                            <label
+                              className="form-check-label mt-2"
+                              htmlFor="customControlInline"
+                            >
+                              Remember me
+                            </label>
+                          </div>
+
+                          <div className="mt-3 d-grid">
+                            <button
+                              className="btn btn-primary btn-block"
+                              type="submit"
+                              onClick={e => {
+                                e.preventDefault()
+                                handleLoginDetails()
+                                handleValidation()
+                              }}
+                            >
+                              Log In
+                            </button>
+                            <br />
+                          </div>
+                        </Form>
+                      </div>
+                    </TabPanel>
+                  </TabContext>
+
+                  {/* 
                       <div className="mt-4 text-center">
                         <h5 className="font-size-14 mb-3">Sign in with</h5>
 
@@ -249,26 +381,17 @@ const Login = props => {
                             />
                           </li>
                         </ul>
-                      </div>
+                      </div>*/}
 
-                      <div className="mt-4 text-center">
+                  {/* <div className="mt-4 text-center">
                         <Link to="/forgot-password" className="text-muted">
                           <i className="mdi mdi-lock me-1" />
                           Forgot your password?
                         </Link>
                       </div> */}
-                    </Form>
-                  </div>
                 </CardBody>
               </Card>
-              <div className="mt-5 text-center">
-                {/* <p>
-                  Don&#39;t have an account ?{" "}
-                  <Link to="/register" className="fw-medium text-primary">
-                    {" "}
-                    Signup now{" "}
-                  </Link>{" "}
-                </p> */}
+              <div className="mt-3 text-center">
                 <p>
                   © {new Date().getFullYear()} Appolonia Dental Care{" "}
                   {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}

@@ -85,7 +85,7 @@ const Navbar = props => {
             <Collapse isOpen={props.leftMenu} className="navbar-collapse" id="">
               {props.role == "3" && (
                 <ul className="navbar-nav">
-                  <li className="nav-item dropdown">
+                  {/* <li className="nav-item dropdown">
                     <Link
                       className="nav-link dropdown-toggle arrow-none"
                       onClick={e => {
@@ -97,7 +97,7 @@ const Navbar = props => {
                       <i className="bx bx-home-circle me-2"></i>
                       {props.t("Dashboard")} {props.menuOpen}
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item ">
                     <Link
                       className="nav-link"
@@ -123,7 +123,7 @@ const Navbar = props => {
                       {props.t("Doctors")}
                     </Link>
                   </li>
-                  <li className="nav-item ">
+                  {/* <li className="nav-item ">
                     <Link
                       className="nav-link"
                       onClick={e => {
@@ -134,7 +134,7 @@ const Navbar = props => {
                     >
                       {props.t("Settings")}
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item ">
                     <Link
                       className="nav-link"
@@ -147,7 +147,7 @@ const Navbar = props => {
                       {props.t("Library")}
                     </Link>
                   </li>
-                  <li className="nav-item ">
+                  {/* <li className="nav-item ">
                     <Link
                       className="nav-link"
                       onClick={e => {
@@ -158,12 +158,12 @@ const Navbar = props => {
                     >
                       {props.t("Support")}
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               )}
               {props.role == "Doctor" && (
                 <ul className="navbar-nav">
-                  <li className="nav-item dropdown">
+                  {/* <li className="nav-item dropdown">
                     <Link
                       className="nav-link dropdown-toggle arrow-none"
                       onClick={e => {
@@ -175,7 +175,7 @@ const Navbar = props => {
                       <i className="bx bx-home-circle me-2"></i>
                       {props.t("Dashboard")} {props.menuOpen}
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item ">
                     <Link
                       className="nav-link"
@@ -201,7 +201,7 @@ const Navbar = props => {
                       {props.t("Doctors")}
                     </Link>
                   </li> */}
-                  <li className="nav-item ">
+                  {/* <li className="nav-item ">
                     <Link
                       className="nav-link"
                       onClick={e => {
@@ -212,7 +212,7 @@ const Navbar = props => {
                     >
                       {props.t("Settings")}
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item ">
                     <Link
                       className="nav-link"
@@ -225,7 +225,7 @@ const Navbar = props => {
                       {props.t("Library")}
                     </Link>
                   </li>
-                  <li className="nav-item ">
+                  {/* <li className="nav-item ">
                     <Link
                       className="nav-link"
                       onClick={e => {
@@ -236,7 +236,7 @@ const Navbar = props => {
                     >
                       {props.t("Support")}
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               )}
             </Collapse>

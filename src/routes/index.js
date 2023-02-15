@@ -25,6 +25,12 @@ import Fullscreen from "pages/Patients/fullscreen"
 import Zoom from "pages/Patients/zoom"
 import Thumbnail from "pages/Patients/thumbnail"
 import Library from "pages/Library"
+import Allarticles from "pages/Library"
+import CreateArticle from "pages/Library/addArticle"
+import EditArticle from "pages/Library/updateArticle"
+import Showlibrary from "pages/Library/Showlibrary"
+import EditPatient from "pages/Patients/updatePatient"
+import EditProfile from "pages/Authentication/edit-profile"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -42,6 +48,10 @@ const authProtectedRoutes = [
     path: "/patients/showpatient/:id",
     component: props => <PatientDetails {...props} />,
   },
+  {
+    path: "/patients/edit-patient/:id",
+    component: props => <EditPatient {...props} />,
+  },
 
   { path: "/doctors", component: Alldoctors },
   {
@@ -56,9 +66,22 @@ const authProtectedRoutes = [
     path: "/doctors/delete-doctor/:id",
     component: props => <DelDoctor {...props} />,
   },
-  { path: "/library", component: Library },
+  { path: "/library", component: Allarticles },
+  {
+    path: "/library/create-article",
+    component: props => <CreateArticle {...props} />,
+  },
+  {
+    path: "/library/edit-article/:id",
+    component: props => <EditArticle {...props} />,
+  },
+  {
+    path: "/library/showlibrary/:id",
+    component: props => <Showlibrary {...props} />,
+  },
   // //profile
   { path: "/profile", component: UserProfile },
+  { path: "/profile/edit-profile/:id", component: EditProfile },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

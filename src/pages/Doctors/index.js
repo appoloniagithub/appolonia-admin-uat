@@ -48,9 +48,9 @@ const Alldoctors = () => {
       <div className="page-content">
         {/* <Container fluid> */}
         <div className="d-flex justify-content-between">
-          <h4>Doctors</h4>
+          <h4 style={{ paddingLeft: "30px" }}>Doctors</h4>
           <Link to="/doctors/create-doctor">
-            <Button color="primary" className="btn btn-primary ">
+            <Button color="primary" className="btn btn-primary mr-4">
               Add Doctor
             </Button>
           </Link>
