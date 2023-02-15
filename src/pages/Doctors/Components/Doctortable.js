@@ -85,52 +85,40 @@ const Doctortable = ({ data }) => {
                           style={{ fontSize: "18px" }}
                         ></i>
                         {/* </Link> */}
-                        <Dialog
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              Are you sure you want to delete?
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button
-                              className="btn btn-primary m-2 "
-                              color="primary"
-                              onClick={handleClose}
-                            >
-                              CANCEL
-                            </Button>
-                            <Button
-                              className="btn btn-primary m-2 "
-                              color="primary"
-                              onClick={() => deleteData(deleteId)}
-                            >
-                              {console.log(doctor?._id, "test")}
-                              DELETE
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
                       </td>
                     </tr>
                   )
                 })}
               </tbody>
             </Table>
-            <div>
-              {/* {openShowPatient && (
-                <Showpatient
-                  open={openShowPatient}
-                  handleOpen={handleOpenShowPatient}
-                  data={selectedPatient}
-                  handleGetConversation={handleGetConversation}
-                />
-              )} */}
-            </div>
-            {/* {selectedPatient && } */}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to delete?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  CANCEL
+                </Button>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={() => deleteData(deleteId)}
+                >
+                  DELETE
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </CardBody>
       </Card>

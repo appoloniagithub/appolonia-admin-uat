@@ -27,6 +27,7 @@ const EditDoctor = () => {
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [emiratesId, setEmiratesId] = useState("")
   const [speciality, setSpeciality] = useState(options[0])
   const [image, setImage] = useState("")
   const [role, setRole] = useState(roleOptions[0])
@@ -88,6 +89,7 @@ const EditDoctor = () => {
           setEmail(res.data.data.foundDoctor.email)
           setPhoneNumber(res.data.data.foundDoctor.phoneNumber)
           setSpeciality(res.data.data.foundDoctor.speciality)
+          setEmiratesId(res.data.data.foundDoctor.emiratesId)
           setImage(res.data.data.foundDoctor.image[0])
           setPassword(res.data.data.foundDoctor.password)
           setGender(res.data.data.foundDoctor.gender)
@@ -113,6 +115,7 @@ const EditDoctor = () => {
     formdata.append("role", role)
     formdata.append("email", email)
     formdata.append("speciality", speciality)
+    formdata.append("emiratesId", emiratesId)
     formdata.append("password", password)
     formdata.append("phoneNumber", phoneNumber)
     formdata.append("image", image)
@@ -225,6 +228,21 @@ const EditDoctor = () => {
                           ))}
                         </select>
                       </div>
+                    </Form.Group>
+                    <Form.Group controlId="Emirates ID">
+                      <Form.Label className="mt-2">
+                        Emirates ID
+                        {/* <sup className="text-danger">*</sup> */}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="emiratesId"
+                        // {...register("emiratesId", {
+                        //   required: true,
+                        // })}
+                        value={emiratesId}
+                        onChange={e => setEmiratesId(e.target.value)}
+                      />
                     </Form.Group>
                   </Form>
                 </div>
