@@ -279,6 +279,7 @@ const CreateDoctor = props => {
           }
         })
         .catch(err => {
+          console.log(err)
           toast.error("Error while creating Doctor")
         })
     } else {
@@ -478,11 +479,9 @@ const CreateDoctor = props => {
                         errors.email.type === "required" && (
                           <p className="text-danger">Please Enter email</p>
                         )}
-                      {!email &&
-                        errors.email &&
-                        errors.email.type === "pattern" && (
-                          <p className="text-danger">Invalid email</p>
-                        )}
+                      {errors.email && errors.email.type === "pattern" && (
+                        <p className="text-danger">Invalid email</p>
+                      )}
                     </Col>
                     <Col sm="6">
                       <Form.Group controlId="Phone Number">
@@ -575,8 +574,7 @@ const CreateDoctor = props => {
                         errors.password.type === "required" && (
                           <p className="text-danger">Please Enter password</p>
                         )}
-                      {!password &&
-                        errors.password &&
+                      {errors.password &&
                         errors.password.type === "pattern" && (
                           <p className="text-danger">Invalid password</p>
                         )}

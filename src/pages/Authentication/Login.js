@@ -35,19 +35,23 @@ const Login = props => {
   let history = useHistory()
   const [phoneNumber, setPhoneNumber] = useState("")
   const [password, setPassword] = useState("")
+  const [pwd, setPwd] = useState("")
   const [message, setMessage] = useState("")
   const [emiratesId, setEmiratesId] = useState("")
   const [isEmiratesId, setIsEmiratesId] = useState(false)
-  const [isPhoneNumber, setIsPhoneNumber] = useState(false)
+  const [isPhoneNumber, setIsPhoneNumber] = useState("1")
+  const [isPhoneNum, setIsPhoneNum] = useState(false)
   const [isPassword, setIsPassword] = useState(false)
   const [value, setValue] = React.useState("1")
 
   const handleLoginDetails = () => {
-    if (phoneNumber && password) {
+    if (phoneNumber || password || emiratesId || isPhoneNumber) {
       const axios = require("axios")
       const data = JSON.stringify({
         phoneNumber: phoneNumber,
         password: password,
+        emiratesId: emiratesId,
+        isPhoneNumber: isPhoneNumber,
       })
 
       const config = {
@@ -65,6 +69,7 @@ const Login = props => {
           if (response.data && response.data.success === 1) {
             setPhoneNumber("")
             setPassword("")
+            setEmiratesId("")
             sessionStorage.setItem("id", response.data.doctorFound._id)
             sessionStorage.setItem("loggedIn", true)
             sessionStorage.setItem("role", response.data.doctorFound.role)
@@ -98,23 +103,32 @@ const Login = props => {
       setMessage("No field should be empty.")
     }
   }
-  console.log(phoneNumber, password, "in login")
+  console.log(phoneNumber, emiratesId, password, "in login")
 
   const handleValidation = () => {
     if (!password) {
       setIsPassword(true)
     }
     if (!phoneNumber) {
-      setIsPhoneNumber(true)
+      setIsPhoneNum(true)
     }
+  }
+  const handleValidation1 = () => {
     if (!emiratesId) {
       setIsEmiratesId(true)
+    }
+    if (!password) {
+      setIsPassword(true)
     }
   }
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
+  if (sessionStorage.getItem("loggedIn")) {
+    history.push("/patients")
+    return
+  }
   return (
     <React.Fragment>
       {/* <div className="home-btn d-none d-sm-block">
@@ -164,15 +178,18 @@ const Login = props => {
                           style={{ width: "50%" }}
                           label="Phone Number"
                           value="1"
+                          onClick={() => setIsPhoneNumber("1")}
                         />
                         <Tab
                           className="text-primary"
                           style={{ width: "50%" }}
                           label="Emirates ID"
                           value="2"
+                          onClick={() => setIsPhoneNumber("0")}
                         />
                       </TabList>
                     </Box>
+                    {/* {isPhoneNumber === true && ( */}
                     <TabPanel value="1">
                       <div className="p-2">
                         <Form className="form-horizontal">
@@ -195,7 +212,7 @@ const Login = props => {
                               value={phoneNumber}
                               onChange={setPhoneNumber}
                             />
-                            {!phoneNumber && isPhoneNumber && (
+                            {!phoneNumber && isPhoneNum && (
                               <p className="text-danger">
                                 Please Enter phone number
                               </p>
@@ -263,6 +280,8 @@ const Login = props => {
                         </Form>
                       </div>
                     </TabPanel>
+                    {/* )} */}
+                    {/* {isPhoneNumber === false && ( */}
                     <TabPanel value="2">
                       <div className="p-2">
                         <Form className="form-horizontal">
@@ -331,7 +350,7 @@ const Login = props => {
                               onClick={e => {
                                 e.preventDefault()
                                 handleLoginDetails()
-                                handleValidation()
+                                handleValidation1()
                               }}
                             >
                               Log In
@@ -341,6 +360,7 @@ const Login = props => {
                         </Form>
                       </div>
                     </TabPanel>
+                    {/* )} */}
                   </TabContext>
 
                   {/* 

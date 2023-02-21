@@ -89,7 +89,7 @@ const EditProfile = () => {
           setPhoneNumber(res.data.data.foundDoctor.phoneNumber)
           setSpeciality(res.data.data.foundDoctor.speciality)
           setImage(res.data.data.foundDoctor.image[0])
-          setPassword(res.data.data.foundDoctor.password)
+          setPassword(res.data.data.foundDoctor.uniqueId)
           setGender(res.data.data.foundDoctor.gender)
           setNationality(res.data.data.foundDoctor.nationality)
           setTotalExperience(res.data.data.foundDoctor.totalExperience)
@@ -97,7 +97,7 @@ const EditProfile = () => {
           setCertifications(res.data.data.foundDoctor.certifications)
           setEducation(res.data.data.foundDoctor.education)
           setRole(res.data.data.foundDoctor.role)
-          //console.log(res.data.data.found.firstName)
+          console.log(res.data.data)
         } else {
           console.log("no doctor found")
         }

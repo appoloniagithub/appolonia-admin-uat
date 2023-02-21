@@ -91,7 +91,7 @@ const EditDoctor = () => {
           setSpeciality(res.data.data.foundDoctor.speciality)
           setEmiratesId(res.data.data.foundDoctor.emiratesId)
           setImage(res.data.data.foundDoctor.image[0])
-          setPassword(res.data.data.foundDoctor.password)
+          setPassword(res.data.data.foundDoctor.uniqueId)
           setGender(res.data.data.foundDoctor.gender)
           setNationality(res.data.data.foundDoctor.nationality)
           setTotalExperience(res.data.data.foundDoctor.totalExperience)

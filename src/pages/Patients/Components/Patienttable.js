@@ -167,7 +167,7 @@ const Patienttable = ({ data, conversations }) => {
                 </Button>
               </DialogActions>
             </Dialog>
-            <div>
+            {/* <div>
               {openShowPatient && (
                 <Showpatient
                   open={openShowPatient}
@@ -176,7 +176,7 @@ const Patienttable = ({ data, conversations }) => {
                   handleGetConversation={handleGetConversation}
                 />
               )}
-            </div>
+            </div> */}
             {/* {selectedPatient && } */}
           </div>
         </CardBody>

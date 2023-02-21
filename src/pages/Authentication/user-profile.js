@@ -105,7 +105,7 @@ const UserProfile = props => {
       setIsPhoneNumber(true)
     }
   }
-
+  console.log(image, "image")
   return (
     <React.Fragment>
       <div className="page-content">
