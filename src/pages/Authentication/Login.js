@@ -136,9 +136,12 @@ const Login = props => {
           <i className="fas fa-home h2" />
         </Link>
       </div> */}
-      <div className="account-pages my-5 pt-sm-5">
+      <div className="account-pages">
         <Container>
-          <Row className="justify-content-center">
+          <Row
+            className="justify-content-center mt-4"
+            style={{ paddingTop: "10px" }}
+          >
             <Col style={{ width: "48.78%" }} md={8} lg={6} xl={5}>
               <Card className="overflow-hidden">
                 <div className="bg-primary bg-soft">
@@ -332,11 +335,11 @@ const Login = props => {
                           <div className="form-check">
                             <input
                               type="checkbox"
-                              className="form-check-input mt-2"
+                              className="form-check-input "
                               id="customControlInline"
                             />
                             <label
-                              className="form-check-label mt-2"
+                              className="form-check-label "
                               htmlFor="customControlInline"
                             >
                               Remember me
@@ -409,14 +412,14 @@ const Login = props => {
                           Forgot your password?
                         </Link>
                       </div> */}
+                  <div className="mt-2 text-center">
+                    <p>
+                      © {new Date().getFullYear()} Appolonia Dental Care{" "}
+                      {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}
+                    </p>
+                  </div>
                 </CardBody>
               </Card>
-              <div className="mt-3 text-center">
-                <p>
-                  © {new Date().getFullYear()} Appolonia Dental Care{" "}
-                  {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}
-                </p>
-              </div>
             </Col>
           </Row>
         </Container>

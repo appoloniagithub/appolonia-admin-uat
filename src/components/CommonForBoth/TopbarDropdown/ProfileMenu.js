@@ -17,7 +17,7 @@ import { withTranslation } from "react-i18next"
 // Redux
 import { connect } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
-
+import { getDoctorById } from "Connection/Doctors"
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
 
@@ -30,6 +30,23 @@ const ProfileMenu = props => {
   const [lastName, setLastName] = useState("")
   const [image, setImage] = useState("")
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (sessionStorage.getItem("id")) {
+      const doctorId = sessionStorage.getItem("id")
+      console.log(doctorId)
+      //setId(doctorId)
+      getDoctorById({ doctorId }).then(async res => {
+        if (res.data.data.foundDoctor) {
+          //setDoctorData(res.data.data.foundDoctor)
+          setFirstName(res.data.data.foundDoctor.firstName)
+          setLastName(res.data.data.foundDoctor.lastName)
+
+          setImage(res.data.data.foundDoctor.image[0])
+        }
+      })
+    }
+  }, [])
   // useEffect(() => {
   //   if (localStorage.getItem("authUser")) {
   //     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
@@ -45,50 +62,50 @@ const ProfileMenu = props => {
   //   }
   // }, [props.success])
 
-  useEffect(() => {
-    if (sessionStorage.getItem("firstName")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(sessionStorage.getItem("firstName"))
-        setFirstName(obj.displayName)
-        console.log(obj)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        const obj = sessionStorage.getItem("firstName")
-        setFirstName(obj)
-        console.log(obj)
-      }
-    }
-    if (sessionStorage.getItem("lastName")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(sessionStorage.getItem("lastName"))
-        setLastName(obj.displayName)
-        console.log(obj)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        const obj = sessionStorage.getItem("lastName")
-        setLastName(obj)
-        console.log(obj)
-      }
-    }
-    if (sessionStorage.getItem("image")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(sessionStorage.getItem("image"))
-        setImage(obj.displayName)
-        console.log(obj)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        const obj = sessionStorage.getItem("image")
-        setImage(obj)
-        console.log(obj)
-      }
-    }
-  }, [props.success])
+  // useEffect(() => {
+  //   if (sessionStorage.getItem("firstName")) {
+  //     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
+  //       const obj = JSON.parse(sessionStorage.getItem("firstName"))
+  //       setFirstName(obj.displayName)
+  //       console.log(obj)
+  //     } else if (
+  //       process.env.REACT_APP_DEFAULTAUTH === "fake" ||
+  //       process.env.REACT_APP_DEFAULTAUTH === "jwt"
+  //     ) {
+  //       const obj = sessionStorage.getItem("firstName")
+  //       setFirstName(obj)
+  //       console.log(obj)
+  //     }
+  //   }
+  //   if (sessionStorage.getItem("lastName")) {
+  //     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
+  //       const obj = JSON.parse(sessionStorage.getItem("lastName"))
+  //       setLastName(obj.displayName)
+  //       console.log(obj)
+  //     } else if (
+  //       process.env.REACT_APP_DEFAULTAUTH === "fake" ||
+  //       process.env.REACT_APP_DEFAULTAUTH === "jwt"
+  //     ) {
+  //       const obj = sessionStorage.getItem("lastName")
+  //       setLastName(obj)
+  //       console.log(obj)
+  //     }
+  //   }
+  //   if (sessionStorage.getItem("image")) {
+  //     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
+  //       const obj = JSON.parse(sessionStorage.getItem("image"))
+  //       setImage(obj.displayName)
+  //       console.log(obj)
+  //     } else if (
+  //       process.env.REACT_APP_DEFAULTAUTH === "fake" ||
+  //       process.env.REACT_APP_DEFAULTAUTH === "jwt"
+  //     ) {
+  //       const obj = sessionStorage.getItem("image")
+  //       setImage(obj)
+  //       console.log(obj)
+  //     }
+  //   }
+  // }, [props.success])
 
   const handleClickOpen = () => {
     setOpen(true)

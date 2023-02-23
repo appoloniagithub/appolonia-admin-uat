@@ -26,23 +26,23 @@ const Allpatients = props => {
       })
     }
   }
-  let handleGetConversations = async () => {
-    let res = await getConversations({ userId: "63c69a3dde89b01bdc85fb90" })
-    console.log(res)
-    try {
-      if (res.data.data.success === 1) {
-        console.log(res.data.data.conversations)
-        setConversations(res.data.data.conversations)
-      }
-    } catch (err) {
-      toast.error(res.data.data.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      })
-    }
-  }
+  // let handleGetConversations = async () => {
+  //   let res = await getConversations({ userId: "63ee224ec5678c965903d225" })
+  //   console.log(res)
+  //   try {
+  //     if (res.data.data.success === 1) {
+  //       console.log(res.data.data.conversations)
+  //       setConversations(res.data.data.conversations)
+  //     }
+  //   } catch (err) {
+  //     toast.error(res.data.data.message, {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //     })
+  //   }
+  // }
   useEffect(() => {
     handleGetAllPatients()
-    handleGetConversations()
+    //handleGetConversations()
   }, [])
   console.log(conversations)
   return (

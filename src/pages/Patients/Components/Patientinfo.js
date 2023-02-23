@@ -5,6 +5,8 @@ import user1 from "../../../assets/images/users/avatar-1.jpg"
 import BootstrapSwitchButton from "bootstrap-switch-button-react"
 import { clinicVerify } from "Connection/Patients"
 import { updateClinicDetails } from "Connection/Patients"
+import { getPatientById } from "Connection/Patients"
+import profilePic from "../../../assets/images/profile.png"
 
 const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   const [clinic, setClinic] = useState({
@@ -14,6 +16,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   })
   const [fileData, setFileData] = useState("")
   const [id, setId] = useState(true)
+  const [image, setImage] = useState("")
   const [conn, setConn] = useState(false)
   console.log(data)
   let getPatientData = async userId => {
@@ -50,6 +53,19 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
       let userId = splitData[3]
       setId(userId)
       getPatientData(userId)
+    }
+  }, [])
+  useEffect(() => {
+    let splitData = location.pathname.split("/")
+    console.log(splitData)
+
+    if (splitData && splitData.length === 4) {
+      let userId = splitData[3]
+      setId(userId)
+      getPatientById({ userId }).then(async res => {
+        setImage(res.data.data.foundPatient.image[0])
+        console.log(res.data.data.foundPatient)
+      })
     }
   }, [])
 
@@ -105,7 +121,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
             <div className="d-flex">
               <img
                 className="rounded-circle header-profile-user"
-                src={user1}
+                src={image ? image : profilePic}
                 alt="Header Avatar"
               />
               <div className="m-2">

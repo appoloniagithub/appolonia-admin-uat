@@ -75,7 +75,7 @@ import {
 } from "../../Connection/Patients"
 import Zoom from "./zoom"
 import Thumbnail from "./thumbnail"
-
+import { getCon } from "Connection/Patients"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
@@ -84,8 +84,8 @@ export default function Showpatient({
   data,
   open,
   handleOpen,
-  handleGetConversation,
-  isConversations,
+  //handleGetConversation,
+  //isConversations,
 }) {
   //location.reload(true)
   console.log(data, "i am selected")
@@ -120,6 +120,7 @@ export default function Showpatient({
   const [faceView, setFaceView] = React.useState(true)
   const [patientConversation, setPatientConversation] = React.useState()
   const [messages, setMessages] = React.useState([])
+  const [con, setCon] = React.useState()
   //const [clickedImg, setClickedImg] = useState(null)
   //const [currentIndex, setCurrentIndex] = useState(null)
 
@@ -354,25 +355,22 @@ export default function Showpatient({
     console.log(event.target.checked)
     setChecked(event.target.checked)
   }
-
-  const handleGetPatientConversation = async () => {
-    let foundConversation = await handleGetConversation(data?._id)
-    console.log(foundConversation)
-    if (foundConversation) {
-      setPatientConversation(foundConversation)
-      let res = await getConversationMessages({
-        bottomHit: 1,
-        conversationId: foundConversation?.conversationId,
-        userId: data?._id,
-      })
-      console.log(res, "i am messages")
+  let handleGetCon = async () => {
+    let res = await getCon({
+      doctorId: "63ee224ec5678c965903d225",
+      patId: data?._id,
+    })
+    console.log(res)
+    try {
       if (res.data.data.success === 1) {
-        setMessages(res.data.data.messages)
-      } else {
-        toast.error(res.data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        })
+        console.log(res.data.data.conversations, "con")
+        setCon(res.data.data.conversations)
+        return res.data.data.conversations
       }
+    } catch (err) {
+      toast.error(res.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      })
     }
   }
 
@@ -393,19 +391,44 @@ export default function Showpatient({
     })
   }, [open === true])
   useEffect(() => {
-    console.log(isConversations)
-    if (isConversations == "yes") {
-      handleGetMyScans()
-      handleGetPatientConversation()
+    //console.log(isConversations)
+    // if (isConversations == "yes") {
+    handleGetMyScans()
+    handleGetCon()
+    //handleGetPatientConversation()
+
+    // }
+  }, [])
+
+  const handleGetPatientConversation = async () => {
+    let foundConversation = await handleGetCon({
+      doctorId: "63ee224ec5678c965903d225",
+      patId: data?._id,
+    })
+    console.log(foundConversation)
+    if (foundConversation) {
+      setPatientConversation(foundConversation)
+      let res = await getConversationMessages({
+        bottomHit: 1,
+        conversationId: foundConversation[0]?._id,
+        //conversationId: con?._id,
+        userId: data?._id,
+      })
+      console.log(res, "i am messages")
+      if (res.data.data.success === 1) {
+        setMessages(res.data.data.messages)
+      } else {
+        toast.error(res.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      }
     }
-  }, [isConversations])
-  console.log(patientScans)
-
-  const [value, setValue] = useState()
-
-  const refresh = () => {
-    setValue({})
   }
+  useEffect(() => {
+    handleGetPatientConversation()
+  }, [])
+
+  console.log(patientScans)
 
   // const handleClose = () => {
   //   history.push("/patients")
@@ -621,10 +644,14 @@ export default function Showpatient({
                                   </button>
                                 </div>
                                 <br />
+
                                 {faceView === false && checked === false && (
                                   <div>
                                     {selectedScanImages1?.length > 0 && (
                                       <div>
+                                        <Thumbnail
+                                          scanImages={selectedScanImages1}
+                                        />
                                         <Carousal
                                           scanImages={selectedScanImages1}
                                         />
@@ -635,6 +662,7 @@ export default function Showpatient({
                                     )}
                                   </div>
                                 )}
+
                                 {checked === true && (
                                   <div>
                                     {selectedScanImages1?.length > 0 && (

@@ -28,6 +28,13 @@ const getConversations = async data => {
   return res
 }
 
+const getCon = async data => {
+  let res = await axios.post(`${url}/api/chat/getcon`, data)
+
+  console.log(res)
+  return res
+}
+
 const getConversationMessages = async data => {
   let res = await axios.post(`${url}/api/chat/getconversationmessages`, data)
 
@@ -110,4 +117,5 @@ export {
   updateClinicDetails,
   updateUserProfile,
   deletePatient,
+  getCon,
 }
