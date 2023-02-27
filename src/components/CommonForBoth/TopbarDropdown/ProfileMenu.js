@@ -20,7 +20,7 @@ import { withRouter, Link } from "react-router-dom"
 import { getDoctorById } from "Connection/Doctors"
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
-
+import profilePic from "../../../assets/images/profile.png"
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   let history = useHistory()
@@ -131,7 +131,7 @@ const ProfileMenu = props => {
         >
           <img
             className="rounded-circle header-profile-user"
-            src={image}
+            src={image ? image : profilePic}
             alt="Header Avatar"
           />
           <span

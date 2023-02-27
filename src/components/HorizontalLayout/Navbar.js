@@ -83,7 +83,7 @@ const Navbar = props => {
             id="navigation"
           >
             <Collapse isOpen={props.leftMenu} className="navbar-collapse" id="">
-              {props.role == "3" && (
+              {props.role == "Admin" && (
                 <ul className="navbar-nav">
                   {/* <li className="nav-item dropdown">
                     <Link

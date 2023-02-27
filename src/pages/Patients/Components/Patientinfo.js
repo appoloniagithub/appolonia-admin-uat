@@ -134,7 +134,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
             <ul className="p-0" style={{ listStyle: "none" }}>
               <li>
                 <strong>File Number</strong>:{" "}
-                {data.fileNumber ? data?.fileNumber : "12345"}
+                {data.fileNumber ? data?.fileNumber : "NA"}
               </li>
               <li>
                 <strong>Registered On</strong>:
@@ -142,7 +142,9 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               </li>
               <li>
                 <strong>Last Scan Done</strong>:{" "}
-                {moment(data?.lastScan).format("DD-MM-YY hh:mm")}
+                {data?.lastScan
+                  ? moment(data?.lastScan).format("DD-MM-YY hh:mm")
+                  : ""}
               </li>
             </ul>
           </div>
@@ -172,7 +174,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
                 <strong>Emirates Id</strong>: {data.emiratesId}
               </li>
               <li>
-                <strong>Expiry</strong>: 29 oct
+                <strong>Expiry</strong>:
               </li>
             </ul>
           </div>

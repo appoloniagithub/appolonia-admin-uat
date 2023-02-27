@@ -25,23 +25,31 @@ const Chat = ({
 }) => {
   //meta title
   document.title = "Patient View | Appolonia Dental Care"
-
+  console.log(patientConversation, "patcon")
   const [messageBox, setMessageBox] = useState(null)
   const [curMessage, setCurMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([])
   const [sendMessage, setSendMessage] = useState(null)
   const [receivedMessage, setReceivedMessage] = useState(null)
   const [file, setFile] = useState("")
+  const [docId, setDocId] = useState("")
   const socket = useRef()
 
   const hiddenFileInput = React.useRef(null)
-
+  useEffect(() => {
+    if (sessionStorage.getItem("id")) {
+      const doctorId = sessionStorage.getItem("id")
+      console.log(doctorId)
+      setDocId(doctorId)
+    }
+  }, [])
   const handleChange = async event => {
     setFile(event.target.files[0])
     let file = event.target.files[0]
     var formdata = new FormData()
-    formdata.append("conversationId", patientConversation?.conversationId)
-    formdata.append("senderId", "63ee224ec5678c965903d225")
+    formdata.append("conversationId", patientConversation[0]?.conversationId)
+    //formdata.append("senderId", "63f70a84bf696efe6d604035")
+    formdata.append("senderId", docId)
     formdata.append("message", file, file.name)
     formdata.append("format", "image")
     formdata.append("scanId", "")
@@ -81,7 +89,8 @@ const Chat = ({
       transports: ["websocket"],
     })
     //socket.current = io("http://localhost:8900")
-    socket.current.emit("new-user-add", "63ee224ec5678c965903d225")
+    //socket.current.emit("new-user-add", "63f70a84bf696efe6d604035")
+    socket.current.emit("new-user-add", docId)
     socket.current.on("get-users", users => {
       console.log(users, "connected users")
     })
@@ -91,10 +100,11 @@ const Chat = ({
   const handleSend = async e => {
     e.preventDefault()
     const message = {
-      senderId: "63ee224ec5678c965903d225",
+      //senderId: "63f70a84bf696efe6d604035",
+      senderId: docId,
       receiverId: patientInfo?.patientId,
       message: curMessage,
-      conversationId: patientConversation?.conversationId,
+      conversationId: patientConversation[0]?.conversationId,
       format: "text",
       scanId: "",
       type: "Doctor",
@@ -106,8 +116,9 @@ const Chat = ({
     // send message to database
     try {
       let res = await newMessage({
-        conversationId: patientConversation?.conversationId,
-        senderId: "63ee224ec5678c965903d225",
+        conversationId: patientConversation[0]?.conversationId,
+        //senderId: "63f70a84bf696efe6d604035",
+        senderId: docId,
         receiverId: patientInfo?.patientId,
         message: curMessage,
         format: "text",
@@ -144,7 +155,7 @@ const Chat = ({
 
       if (
         data !== null &&
-        data.conversationId === patientConversation?.conversationId
+        data.conversationId === patientConversation[0]?.conversationId
       ) {
         console.log(data, "in if-data")
         setChatMessages([...chatMessages, data])
@@ -158,7 +169,7 @@ const Chat = ({
     console.log("Message Arrived: ", receivedMessage)
     if (
       receivedMessage !== null &&
-      receivedMessage.conversationId === patientConversation?.conversationId
+      receivedMessage.conversationId === patientConversation[0]?.conversationId
     ) {
       console.log(receivedMessage, "in if-receivedmessage")
       setChatMessages([...chatMessages, receivedMessage])
@@ -203,10 +214,10 @@ const Chat = ({
                     <span className="title">Today</span>
                   </div>
                 </li>
-                {!chatMessages && <p>No Messages found</p>}
-                {chatMessages?.length === 0 && (
+                {chatMessages.length === 0 && <p>No Messages found</p>}
+                {/* {chatMessages?.length === 0 && (
                   <Spinner className="ms-2" color="primary" />
-                )}
+                )} */}
                 {/* <p>No Messages found</p> */}
                 {chatMessages &&
                   chatMessages.map((message, i) => (
