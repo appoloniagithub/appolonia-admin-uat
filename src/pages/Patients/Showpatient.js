@@ -3,7 +3,7 @@ import axios from "axios"
 import url from "../../Connection/Api/api"
 import { ImageGroup, Image } from "react-fullscreen-image"
 import "lightgallery.js/dist/css/lightgallery.css"
-
+import { getConversations } from "Connection/Patients"
 //import Modal from "./Components/Modal"
 import {
   Container,
@@ -95,6 +95,7 @@ export default function Showpatient({
   const [activeScan, setActiveScan] = useState("")
   const [customActiveTab, setcustomActiveTab] = useState("1")
   const [customIconActiveTab, setcustomIconActiveTab] = useState("1")
+  const [conversations, setConversations] = useState()
   const [patientInfo, setPatientInfo] = useState({
     userId: data?._id,
     fileNumber: data?.uniqueId1,
@@ -364,29 +365,29 @@ export default function Showpatient({
       setRole(role)
     }
   }, [])
-  let handleGetCon = async () => {
-    if (sessionStorage.getItem("id")) {
-      const doctorId = sessionStorage.getItem("id")
-      console.log(doctorId)
-      let res = await getCon({
-        //doctorId: "63f70a84bf696efe6d604035",
-        doctorId: doctorId,
-        patId: data?._id,
-      })
-      console.log(res)
-      try {
-        if (res.data.data.success === 1) {
-          console.log(res.data.data.conversations, "con")
-          setCon(res.data.data.conversations)
-          return res.data.data.conversations
-        }
-      } catch (err) {
-        toast.error(res.data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        })
-      }
-    }
-  }
+  // let handleGetCon = async () => {
+  //   if (sessionStorage.getItem("id")) {
+  //     const doctorId = sessionStorage.getItem("id")
+  //     console.log(doctorId)
+  //     let res = await getCon({
+  //       //doctorId: "63f70a84bf696efe6d604035",
+  //       doctorId: doctorId,
+  //       patId: data?._id,
+  //     })
+  //     console.log(res)
+  //     try {
+  //       if (res.data.data.success === 1) {
+  //         console.log(res.data.data.conversations, "con")
+  //         setCon(res.data.data.conversations)
+  //         return res.data.data.conversations
+  //       }
+  //     } catch (err) {
+  //       toast.error(res.data.message, {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //       })
+  //     }
+  //   }
+  // }
   React.useEffect(() => {
     setPatientInfo({
       fileNumber: data?.uniqueId1,
@@ -408,45 +409,74 @@ export default function Showpatient({
     //console.log(isConversations)
     // if (isConversations == "yes") {
     handleGetMyScans()
-    handleGetCon()
+    // handleGetCon()
     //handleGetPatientConversation()
 
     // }
   }, [])
 
   const handleGetPatientConversation = async () => {
-    if (sessionStorage.getItem("id")) {
-      const doctorId = sessionStorage.getItem("id")
-      console.log(doctorId)
-      let foundConversation = await handleGetCon({
-        //doctorId: "63f70a84bf696efe6d604035",
-        doctorId: doctorId,
-        patId: data?._id,
+    // if (sessionStorage.getItem("id")) {
+    //   const doctorId = sessionStorage.getItem("id")
+    //   console.log(doctorId)
+    // let foundConversation = await handleGetCon({
+    //   doctorId: "63f70a84bf696efe6d604035",
+    //   doctorId: doctorId,
+    //   patId: data?._id,
+    // })
+    let foundConversations = await handleGetConversations({
+      userId: data?._id,
+    })
+    console.log(foundConversations)
+    if (foundConversations) {
+      setPatientConversation(foundConversations)
+      let res = await getConversationMessages({
+        bottomHit: 1,
+        conversationId: foundConversations[1]?.conversationId,
+        //conversationId: con?._id,
+        userId: data?._id,
       })
-      console.log(foundConversation)
-      if (foundConversation) {
-        setPatientConversation(foundConversation)
-        let res = await getConversationMessages({
-          bottomHit: 1,
-          conversationId: foundConversation[0]?.conversationId,
-          //conversationId: con?._id,
-          userId: data?._id,
+      console.log(res, "i am messages")
+      if (res.data.data.success === 1) {
+        setMessages(res.data.data.messages)
+      } else {
+        toast.error(res.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
         })
-        console.log(res, "i am messages")
-        if (res.data.data.success === 1) {
-          setMessages(res.data.data.messages)
-        } else {
-          toast.error(res.data.message, {
-            position: toast.POSITION.TOP_RIGHT,
-          })
-        }
       }
+    }
+    //}
+  }
+
+  // function handlefoundConversation(patientId) {
+  //   console.log(patientId)
+  //   console.log(conversations, "i am conversations")
+  //   let foundConversation = conversations?.find(convo => {
+  //     return convo?.otherMemberId === patientId
+  //   })
+  //   console.log(foundConversation)
+  //   return foundConversation
+  // }
+  let handleGetConversations = async () => {
+    let res = await getConversations({ userId: data?._id })
+    console.log(res)
+    // setIsconversations("yes")
+    try {
+      if (res.data.data.success === 1) {
+        console.log(res.data.data.conversations)
+        setConversations(res.data.data.conversations)
+        return res.data.data.conversations
+      }
+    } catch (err) {
+      toast.error(res.data.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      })
     }
   }
   useEffect(() => {
+    handleGetConversations()
     handleGetPatientConversation()
   }, [])
-
   console.log(patientScans)
 
   // const handleClose = () => {
