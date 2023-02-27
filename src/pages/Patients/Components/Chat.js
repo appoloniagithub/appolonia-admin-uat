@@ -33,6 +33,7 @@ const Chat = ({
   const [receivedMessage, setReceivedMessage] = useState(null)
   const [file, setFile] = useState("")
   const [docId, setDocId] = useState("")
+  const [role, setRole] = useState("")
   const socket = useRef()
 
   const hiddenFileInput = React.useRef(null)
@@ -42,12 +43,17 @@ const Chat = ({
       console.log(doctorId)
       setDocId(doctorId)
     }
+    if (sessionStorage.getItem("role")) {
+      const role = sessionStorage.getItem("role")
+      console.log(role)
+      setRole(role)
+    }
   }, [])
   const handleChange = async event => {
     setFile(event.target.files[0])
     let file = event.target.files[0]
     var formdata = new FormData()
-    formdata.append("conversationId", patientConversation[0]?.conversationId)
+    formdata.append("conversationId", patientConversation?.conversationId)
     //formdata.append("senderId", "63f70a84bf696efe6d604035")
     formdata.append("senderId", docId)
     formdata.append("message", file, file.name)
@@ -104,7 +110,7 @@ const Chat = ({
       senderId: docId,
       receiverId: patientInfo?.patientId,
       message: curMessage,
-      conversationId: patientConversation[0]?.conversationId,
+      conversationId: patientConversation?.conversationId,
       format: "text",
       scanId: "",
       type: "Doctor",
@@ -116,7 +122,7 @@ const Chat = ({
     // send message to database
     try {
       let res = await newMessage({
-        conversationId: patientConversation[0]?.conversationId,
+        conversationId: patientConversation?.conversationId,
         //senderId: "63f70a84bf696efe6d604035",
         senderId: docId,
         receiverId: patientInfo?.patientId,
@@ -155,7 +161,7 @@ const Chat = ({
 
       if (
         data !== null &&
-        data.conversationId === patientConversation[0]?.conversationId
+        data.conversationId === patientConversation?.conversationId
       ) {
         console.log(data, "in if-data")
         setChatMessages([...chatMessages, data])
@@ -169,7 +175,7 @@ const Chat = ({
     console.log("Message Arrived: ", receivedMessage)
     if (
       receivedMessage !== null &&
-      receivedMessage.conversationId === patientConversation[0]?.conversationId
+      receivedMessage.conversationId === patientConversation?.conversationId
     ) {
       console.log(receivedMessage, "in if-receivedmessage")
       setChatMessages([...chatMessages, receivedMessage])
@@ -238,9 +244,9 @@ const Chat = ({
                               : ""
                           }`}
                         >
-                          {/* <div className="conversation-name">
-                            {message.sender}
-                          </div> */}
+                          <div className="conversation-name">
+                            {/* {message.name} */}
+                          </div>
                           <div>
                             <img
                               style={{ width: "40px" }}
@@ -266,9 +272,12 @@ const Chat = ({
                       ) : (
                         <div className="conversation-list">
                           <div className="ctext-wrap">
-                            <div className="conversation-name">
-                              {message.sender}
-                            </div>
+                            {/* {role !== "Admin" && (
+                              <div className="conversation-name">
+                                {message.name}
+                              </div>
+                            )} */}
+
                             <p>{message.message}</p>
 
                             <p className="chat-time mb-0">

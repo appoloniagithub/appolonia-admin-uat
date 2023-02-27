@@ -121,7 +121,9 @@ export default function Showpatient({
   const [checked, setChecked] = React.useState(false)
   const [faceView, setFaceView] = React.useState(true)
   const [patientConversation, setPatientConversation] = React.useState()
+  const [adminConversation, setAdminConversation] = React.useState()
   const [messages, setMessages] = React.useState([])
+  const [adminMessages, setAdminMessages] = useState([])
   const [con, setCon] = React.useState()
   const [role, setRole] = useState()
   //const [clickedImg, setClickedImg] = useState(null)
@@ -429,7 +431,7 @@ export default function Showpatient({
     })
     console.log(foundConversations)
     if (foundConversations) {
-      setPatientConversation(foundConversations)
+      setPatientConversation(foundConversations[1])
       let res = await getConversationMessages({
         bottomHit: 1,
         conversationId: foundConversations[1]?.conversationId,
@@ -439,6 +441,30 @@ export default function Showpatient({
       console.log(res, "i am messages")
       if (res.data.data.success === 1) {
         setMessages(res.data.data.messages)
+      } else {
+        toast.error(res.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        })
+      }
+    }
+    //}
+  }
+  const handleGetAdminConversation = async () => {
+    let foundConversations = await handleGetConversations({
+      userId: data?._id,
+    })
+    console.log(foundConversations)
+    if (foundConversations) {
+      setAdminConversation(foundConversations[0])
+      let res = await getConversationMessages({
+        bottomHit: 1,
+        conversationId: foundConversations[0]?.conversationId,
+        //conversationId: con?._id,
+        userId: data?._id,
+      })
+      console.log(res, "i am messages")
+      if (res.data.data.success === 1) {
+        setAdminMessages(res.data.data.messages)
       } else {
         toast.error(res.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -476,6 +502,7 @@ export default function Showpatient({
   useEffect(() => {
     handleGetConversations()
     handleGetPatientConversation()
+    handleGetAdminConversation()
   }, [])
   console.log(patientScans)
 
@@ -576,10 +603,10 @@ export default function Showpatient({
               <Col>
                 <div>
                   <Chat
-                    patientConversation={patientConversation}
-                    patientMessages={messages}
+                    patientConversation={adminConversation}
+                    patientMessages={adminMessages}
                     patientInfo={patientInfo}
-                    handleGetPatientConversation={handleGetPatientConversation}
+                    handleGetPatientConversation={handleGetAdminConversation}
                   />
                 </div>
               </Col>
