@@ -31,7 +31,7 @@ const Navbar = props => {
   const [invoice, setinvoice] = useState(false)
   const [auth, setauth] = useState(false)
   const [utility, setutility] = useState(false)
-
+  const [role, setRole] = useState()
   useEffect(() => {
     var matchingMenuItem = null
     var ul = document.getElementById("navigation")
@@ -46,7 +46,13 @@ const Navbar = props => {
       activateParentDropdown(matchingMenuItem)
     }
   })
-
+  useEffect(() => {
+    if (sessionStorage.getItem("role")) {
+      const role = sessionStorage.getItem("role")
+      console.log(role)
+      setRole(role)
+    }
+  }, [])
   function activateParentDropdown(item) {
     item.classList.add("active")
     const parent = item.parentElement
@@ -83,7 +89,7 @@ const Navbar = props => {
             id="navigation"
           >
             <Collapse isOpen={props.leftMenu} className="navbar-collapse" id="">
-              {props.role == "Admin" && (
+              {role === "Admin" ? (
                 <ul className="navbar-nav">
                   {/* <li className="nav-item dropdown">
                     <Link
@@ -160,8 +166,7 @@ const Navbar = props => {
                     </Link>
                   </li> */}
                 </ul>
-              )}
-              {props.role == "Doctor" && (
+              ) : (
                 <ul className="navbar-nav">
                   {/* <li className="nav-item dropdown">
                     <Link
