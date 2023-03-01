@@ -91,7 +91,7 @@ const Chat = ({
 
   //connect to Socket.io
   useEffect(() => {
-    socket.current = io("https://socket-uat.herokuapp.com/", {
+    socket.current = io("http://socket.appolonia.ae:7052/", {
       transports: ["websocket"],
     })
     //socket.current = io("http://localhost:8900")
