@@ -91,15 +91,20 @@ const Chat = ({
 
   //connect to Socket.io
   useEffect(() => {
-    socket.current = io("http://socket.appolonia.ae:7052/", {
-      transports: ["websocket"],
-    })
-    //socket.current = io("http://localhost:8900")
-    //socket.current.emit("new-user-add", "63f70a84bf696efe6d604035")
-    socket.current.emit("new-user-add", docId)
-    socket.current.on("get-users", users => {
-      console.log(users, "connected users")
-    })
+    if (sessionStorage.getItem("id")) {
+      const doctorId = sessionStorage.getItem("id")
+      console.log(doctorId)
+
+      socket.current = io("http://socket.appolonia.ae:7052/", {
+        transports: ["websocket"],
+      })
+      //socket.current = io("http://localhost:8900")
+      //socket.current.emit("new-user-add", "63f70a84bf696efe6d604035")
+      socket.current.emit("new-user-add", doctorId)
+      socket.current.on("get-users", users => {
+        console.log(users, "connected users")
+      })
+    }
   }, [])
 
   // Send Message
