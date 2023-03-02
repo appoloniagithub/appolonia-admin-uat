@@ -95,7 +95,7 @@ export default function Showpatient({
   const [activeScan, setActiveScan] = useState("")
   const [customActiveTab, setcustomActiveTab] = useState("1")
   const [customIconActiveTab, setcustomIconActiveTab] = useState("1")
-  const [conversations, setConversations] = useState()
+  const [conversations, setConversations] = useState([])
   const [patientInfo, setPatientInfo] = useState({
     userId: data?._id,
     fileNumber: data?.uniqueId1,
@@ -411,12 +411,29 @@ export default function Showpatient({
     //console.log(isConversations)
     // if (isConversations == "yes") {
     handleGetMyScans()
+    handleGetConversations()
+    handleGetPatientConversation()
     // handleGetCon()
     //handleGetPatientConversation()
 
     // }
   }, [])
-
+  let handleGetConversations = async () => {
+    let res = await getConversations({ userId: data?._id })
+    console.log(res)
+    // setIsconversations("yes")
+    try {
+      if (res.data.data.success === 1) {
+        console.log(res.data.data.conversations)
+        setConversations(res.data.data.conversations)
+        return res.data.data.conversations
+      }
+    } catch (err) {
+      toast.error(res.data.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      })
+    }
+  }
   const handleGetPatientConversation = async () => {
     // if (sessionStorage.getItem("id")) {
     //   const doctorId = sessionStorage.getItem("id")
@@ -442,35 +459,36 @@ export default function Showpatient({
       if (res.data.data.success === 1) {
         setMessages(res.data.data.messages)
       } else {
-        toast.error(res.data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        })
+        // toast.error(res.data.message, {
+        //   position: toast.POSITION.TOP_RIGHT,
+        // })
       }
     }
     //}
   }
   const handleGetAdminConversation = async () => {
-    let foundConversations = await handleGetConversations({
+    // let foundConversations = await handleGetConversations({
+    //   userId: data?._id,
+    // })
+    // console.log(foundConversations)
+    //if (foundConversations) {
+    setAdminConversation(conversations[0])
+    let res = await getConversationMessages({
+      bottomHit: 1,
+      //conversationId: foundConversations[0]?.conversationId,
+      conversationId: conversations[0]?.conversationId,
       userId: data?._id,
     })
-    console.log(foundConversations)
-    if (foundConversations) {
-      setAdminConversation(foundConversations[0])
-      let res = await getConversationMessages({
-        bottomHit: 1,
-        conversationId: foundConversations[0]?.conversationId,
-        //conversationId: con?._id,
-        userId: data?._id,
-      })
-      console.log(res, "i am messages")
-      if (res.data.data.success === 1) {
-        setAdminMessages(res.data.data.messages)
-      } else {
-        toast.error(res.data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        })
-      }
+    console.log(res, "i am messages")
+    if (res.data.data.success === 1) {
+      setAdminMessages(res.data.data.messages)
+    } else {
+      console.log("error")
+      // toast.error(res.data.message, {
+      //   position: toast.POSITION.TOP_RIGHT,
+      // })
     }
+    //}
     //}
   }
 
@@ -483,28 +501,11 @@ export default function Showpatient({
   //   console.log(foundConversation)
   //   return foundConversation
   // }
-  let handleGetConversations = async () => {
-    let res = await getConversations({ userId: data?._id })
-    console.log(res)
-    // setIsconversations("yes")
-    try {
-      if (res.data.data.success === 1) {
-        console.log(res.data.data.conversations)
-        setConversations(res.data.data.conversations)
-        return res.data.data.conversations
-      }
-    } catch (err) {
-      toast.error(res.data.data.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      })
-    }
-  }
+
   useEffect(() => {
-    handleGetConversations()
-    handleGetPatientConversation()
     handleGetAdminConversation()
-  }, [])
-  console.log(patientScans)
+  }, [conversations[0]?.conversationId])
+  console.log(conversations)
 
   // const handleClose = () => {
   //   history.push("/patients")
