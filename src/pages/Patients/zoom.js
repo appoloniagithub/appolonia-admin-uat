@@ -21,7 +21,7 @@ function Zoom({ scanImages }) {
         height: "100%",
         width: "100%",
         zIndex: 0,
-        transform: `rotate(${0}deg)`,
+        //transform: `rotate(${270}deg)`,
       }}
     >
       <Carousel.Item>
@@ -33,7 +33,10 @@ function Zoom({ scanImages }) {
           >
             <img
               src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                transform: `rotate(${270}deg)`,
+              }}
             />
           </LightgalleryItem>
         </div>

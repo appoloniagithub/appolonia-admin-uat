@@ -185,7 +185,7 @@ const Scancarousal = ({ scanImages }) => {
   return (
     <Carousel interval={null}>
       {scanImages?.map((image, i) => {
-        console.log(scanImages.length, "i am scvan images")
+        console.log(scanImages.length, "i am scan images")
         return (
           // <Zoom key={i} scanImages={scanImages} />
           <Carousel.Item key={i}>
@@ -193,11 +193,11 @@ const Scancarousal = ({ scanImages }) => {
               {/* <Zoom scanImages={scanImages} /> */}
               <img
                 style={{
-                  transform: `rotate(${0}deg)`,
-                  // minHeight: "200px",
-                  // height: "auto",
+                  transform: `rotate(${270}deg)`,
+                  minHeight: "200px",
+                  height: "auto",
                   width: "100%",
-                  height: "100%",
+                  //height: "80%",
                   zIndex: 0,
                 }}
                 src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}

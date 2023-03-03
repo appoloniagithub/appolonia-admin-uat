@@ -21,7 +21,10 @@ function Thumbnail({ scanImages, imageId }) {
         {console.log("image in photo item", image)}
         <img
           src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-          style={{ width: "100%" }}
+          style={{
+            width: "77%",
+            transform: `rotate(${270}deg)`,
+          }}
         />
       </LightgalleryItem>
     </div>
@@ -72,6 +75,7 @@ function Thumbnail({ scanImages, imageId }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              paddingLeft: "30px",
             }}
           >
             {scanImages.map((p, idx) => (
