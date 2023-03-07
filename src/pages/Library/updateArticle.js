@@ -150,7 +150,12 @@ const EditArticle = () => {
                 <Form.Group controlId="Image">
                   <Form.Label>Image</Form.Label>
                   <div>
-                    <img className="m-2" src={image} width="100" height="100" />
+                    <img
+                      className="m-2"
+                      src={`${url}/api/${image}`}
+                      width="100"
+                      height="100"
+                    />
                     <div>
                       <Button
                         color="primary"

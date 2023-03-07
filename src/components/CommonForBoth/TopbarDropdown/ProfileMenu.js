@@ -21,6 +21,7 @@ import { getDoctorById } from "Connection/Doctors"
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
 import profilePic from "../../../assets/images/profile.png"
+import url from "Connection/Api/api"
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   let history = useHistory()
@@ -131,7 +132,7 @@ const ProfileMenu = props => {
         >
           <img
             className="rounded-circle header-profile-user"
-            src={image ? image : profilePic}
+            src={`${url}/api/${image}` ? `${url}/api/${image}` : profilePic}
             alt="Header Avatar"
           />
           <span

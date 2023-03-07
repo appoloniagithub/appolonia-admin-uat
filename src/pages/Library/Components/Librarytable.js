@@ -21,7 +21,7 @@ import { deleteArticle } from "Connection/Libraries"
 import Showlibrary from "../Showlibrary"
 import Modal from "../Modal"
 import DialogModal from "../Modal"
-
+import url from "Connection/Api/api"
 const Librarytable = ({ data }) => {
   console.log(data)
   const history = useHistory()
@@ -82,7 +82,11 @@ const Librarytable = ({ data }) => {
                     <tr key={article?._id}>
                       <td>
                         {/* <a href={article.image[0]}> */}
-                        <img src={article?.image[0]} width="100" height="100" />
+                        <img
+                          src={`${url}/api/${article?.image[0]}`}
+                          width="100"
+                          height="100"
+                        />
                         {/* </a> */}
                       </td>
                       <td style={{ width: "300px", overflowY: "scroll" }}>

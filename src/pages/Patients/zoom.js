@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import PT from "prop-types"
 import ReactDOM from "react-dom"
 import Carousel from "react-bootstrap/Carousel"
+import url from "Connection/Api/api"
 import {
   LightgalleryProvider,
   LightgalleryItem,
@@ -28,11 +29,13 @@ function Zoom({ scanImages }) {
         <div style={{ position: "relative" }}>
           <LightgalleryItem
             group={group}
-            src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+            // src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+            src={`${url}/api/${image}`}
             thumb={thumb}
           >
             <img
-              src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+              //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+              src={`${url}/api/${image}`}
               style={{
                 width: "100%",
                 transform: `rotate(${270}deg)`,

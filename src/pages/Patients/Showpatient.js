@@ -1101,8 +1101,8 @@ export default function Showpatient({
                                               height: "32%",
                                             }}
                                             className="mx-1 rounded"
-                                            src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
-
+                                            //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+                                            src={`${url}/api/${image}`}
                                             // alt={item.altText}
                                           />
                                         )

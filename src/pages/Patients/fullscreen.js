@@ -8,6 +8,7 @@ import {
   useLightgallery,
 } from "react-lightgallery"
 import "lightgallery.js/dist/css/lightgallery.css"
+import url from "Connection/Api/api"
 
 function Fullscreen({ selectedScanImages1, imageId }) {
   //console.log(scanImages, "scan img")
@@ -15,12 +16,14 @@ function Fullscreen({ selectedScanImages1, imageId }) {
     <div className="mx-1 rounded" style={{ height: "32%", width: "32%" }}>
       <LightgalleryItem
         group={group}
-        src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+        //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+        src={`${url}/api/${image}`}
         thumb={thumb}
       >
         {console.log("image in photo item", image)}
         <img
-          src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+          //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+          src={`${url}/api/${image}`}
           style={{ width: "100%" }}
         />
       </LightgalleryItem>

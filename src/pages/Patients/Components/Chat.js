@@ -16,7 +16,7 @@ import { newMessage } from "../../../Connection/Patients"
 import { newMessageImage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
 import { toast } from "react-toastify"
-
+import url from "Connection/Api/api"
 const Chat = ({
   patientMessages,
   patientInfo,
@@ -256,7 +256,7 @@ const Chat = ({
                             <img
                               style={{ width: "40px" }}
                               className=""
-                              src={message.message}
+                              src={`${url}/api/${message.message}`}
                               onClick={() =>
                                 window.open(
                                   message.message,

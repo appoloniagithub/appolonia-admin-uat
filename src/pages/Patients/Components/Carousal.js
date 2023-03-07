@@ -8,7 +8,7 @@ import React, { Component } from "react"
 import Carousel from "react-bootstrap/Carousel"
 import Fullscreen from "../fullscreen"
 import Zoom from "../zoom"
-
+import url from "Connection/Api/api"
 // Carousel images
 // import img3 from
 // import img4 from
@@ -200,7 +200,9 @@ const Scancarousal = ({ scanImages }) => {
                   //height: "80%",
                   zIndex: 0,
                 }}
-                src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+                //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
+                //src={`data:image/jpeg;base64,${image}`}
+                src={`${url}/api/${image}`}
                 // onClick={() =>
                 //   window.open(
                 //     `data:image/jpeg;base64,${image}`,
