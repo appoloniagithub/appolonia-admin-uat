@@ -1,4 +1,4 @@
-import { React, useState } from "react"
+import { React, useEffect, useState } from "react"
 import { Container } from "reactstrap"
 import Showpatient from "../Showpatient"
 import { Link } from "react-router-dom"
@@ -20,18 +20,26 @@ import {
   CardSubtitle,
   Button,
 } from "reactstrap"
-import { deletePatient } from "Connection/Patients"
+import {
+  clinicVerify,
+  deleteAccount,
+  deletePatient,
+  getPatientById,
+} from "Connection/Patients"
 
 const Patienttable = ({ data, conversations }) => {
-  console.log(conversations, data)
+  console.log(data)
   const history = useHistory()
   const [selectedPatient, setSelectedPatient] = useState()
   const [openShowPatient, setOpenShowPatient] = useState(false)
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState()
   const [deleteId, setDeleteId] = useState("")
+  const [patData, setPatData] = useState("")
+  const [fileData, setFileData] = useState("")
 
   const handleSelectPatient = patientData => {
+    console.log(patientData)
     setSelectedPatient(patientData)
     handleOpenShowPatient()
   }
@@ -58,19 +66,49 @@ const Patienttable = ({ data, conversations }) => {
   const handleClose = () => {
     setOpen(false)
   }
-  const refreshPage = () => {
-    handleSelectPatient(patient)
-    window.location.reload()
+  const userData = async () => {
+    await getPatientById({ userId: deleteId }).then(res => {
+      if (res.data && res.data.data && res.data.data.foundPatient) {
+        console.log(res)
+        setPatData(res.data.data.foundPatient.phoneNumber)
+      }
+    })
   }
-  const deleteData = async id => {
-    console.log(id, "in delete")
+  const userFileData = async () => {
+    await clinicVerify({ phoneNumber: patData }).then(res => {
+      if (res.data && res.data.data && res.data.data.foundFile) {
+        console.log(res.data.data.foundFile)
+        setFileData(res.data.data.foundFile?._id)
+      }
+    })
+  }
+  useEffect(() => {
+    userData()
+  }, [deleteId])
+  useEffect(() => {
+    userFileData()
+  }, [patData])
 
-    await deletePatient({ patientId: id }).then(res => {
+  // const deleteData = async id => {
+  //   console.log(id, "in delete")
+
+  //   await deletePatient({ patientId: id }).then(res => {
+  //     console.log(res)
+  //     history.push("/patients")
+  //     window.location.reload()
+  //   })
+  // }
+
+  const deleteData = async () => {
+    //console.log(fileData, "in delete")
+
+    await deleteAccount({ fileId: fileData }).then(res => {
       console.log(res)
       history.push("/patients")
       window.location.reload()
     })
   }
+  console.log(deleteId, fileData)
   return (
     <div>
       <Card>
@@ -161,7 +199,7 @@ const Patienttable = ({ data, conversations }) => {
                 <Button
                   className="btn btn-primary m-2 "
                   color="primary"
-                  onClick={() => deleteData(deleteId)}
+                  onClick={() => deleteData()}
                 >
                   DELETE
                 </Button>

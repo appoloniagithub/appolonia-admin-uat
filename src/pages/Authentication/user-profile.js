@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { getDoctorById } from "Connection/Doctors"
+import url from "Connection/Api/api"
 import {
   Container,
   Row,
@@ -20,6 +21,8 @@ import Form from "react-bootstrap/Form"
 //Import Breadcrumb
 import Breadcrumb from "../../components/Common/Breadcrumb"
 import { updateDoctor } from "Connection/Doctors"
+import profilePic from "../../assets/images/profile.png"
+
 const UserProfile = props => {
   //meta title
   document.title = "Profile | Appolonia Dental Care"
@@ -123,7 +126,7 @@ const UserProfile = props => {
                   <div className="d-flex justify-content-around">
                     <div className="ms-3">
                       <img
-                        src={image}
+                        src={image ? `${url}/api/${image}` : profilePic}
                         alt=""
                         //className="avatar-md rounded-circle img-thumbnail"
                         width="300"

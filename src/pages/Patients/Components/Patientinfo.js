@@ -7,7 +7,7 @@ import { clinicVerify } from "Connection/Patients"
 import { updateClinicDetails } from "Connection/Patients"
 import { getPatientById } from "Connection/Patients"
 import profilePic from "../../../assets/images/profile.png"
-
+import url from "Connection/Api/api"
 const Patientinfo = ({ data, view, handleView, handleOpen }) => {
   const [clinic, setClinic] = useState({
     clinicVerified: false,
@@ -121,7 +121,7 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
             <div className="d-flex">
               <img
                 className="rounded-circle header-profile-user"
-                src={image ? image : profilePic}
+                src={image ? `${url}/api/${image}` : profilePic}
                 alt="Header Avatar"
               />
               <div className="m-2">

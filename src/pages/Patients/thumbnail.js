@@ -25,7 +25,8 @@ function Thumbnail({ scanImages, imageId }) {
           //src={`https://appoloniaapps3.s3.amazonaws.com/${image}`}
           src={`${url}/api/${image}`}
           style={{
-            width: "77%",
+            width: "78%",
+            marginLeft: "16px",
             transform: `rotate(${270}deg)`,
           }}
         />
@@ -78,7 +79,7 @@ function Thumbnail({ scanImages, imageId }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              paddingLeft: "30px",
+              //paddingLeft: "20px",
             }}
           >
             {scanImages.map((p, idx) => (

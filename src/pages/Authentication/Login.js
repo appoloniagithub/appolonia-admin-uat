@@ -73,6 +73,7 @@ const Login = props => {
             sessionStorage.setItem("id", response.data.doctorFound._id)
             sessionStorage.setItem("loggedIn", true)
             sessionStorage.setItem("role", response.data.doctorFound.role)
+            sessionStorage.setItem("token", response.data.access_token)
             sessionStorage.setItem(
               "firstName",
               response.data.doctorFound.firstName

@@ -44,7 +44,7 @@ const Allpatients = props => {
     handleGetAllPatients()
     //handleGetConversations()
   }, [])
-  console.log(conversations)
+  //console.log(conversations)
   return (
     <React.Fragment>
       <div className="page-content">

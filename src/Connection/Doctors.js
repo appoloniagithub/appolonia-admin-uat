@@ -1,14 +1,24 @@
 import axios from "axios"
 import url from "./Api/api"
 
+const token = sessionStorage.getItem("token")
+console.log(token)
+
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer " + token,
+}
+
 const getAllDoctors = async () => {
-  let res = await axios.get(`${url}/api/doctors/getalldoctors`)
+  let res = await axios.get(`${url}/api/doctors/getalldoctors`, { headers })
 
   console.log(res)
   return res
 }
 const getDoctorById = async data => {
-  let res = await axios.post(`${url}/api/doctors/getDoctorById`, data)
+  let res = await axios.post(`${url}/api/doctors/getDoctorById`, data, {
+    headers,
+  })
 
   console.log(res, "in res")
   return res

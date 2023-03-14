@@ -189,13 +189,14 @@ const Scancarousal = ({ scanImages }) => {
         return (
           // <Zoom key={i} scanImages={scanImages} />
           <Carousel.Item key={i}>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", overflow: "hidden" }}>
               {/* <Zoom scanImages={scanImages} /> */}
               <img
                 style={{
-                  transform: `rotate(${270}deg)`,
+                  transform: `rotate(${270}deg) scale(1.8)`,
                   minHeight: "200px",
-                  height: "auto",
+                  //transform: "scale(1.2)",
+                  height: "100%",
                   width: "100%",
                   //height: "80%",
                   zIndex: 0,

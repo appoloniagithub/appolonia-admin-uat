@@ -39,6 +39,7 @@ const ProfileMenu = props => {
       //setId(doctorId)
       getDoctorById({ doctorId }).then(async res => {
         if (res.data.data.foundDoctor) {
+          console.log(res.data.data.foundDoctor)
           //setDoctorData(res.data.data.foundDoctor)
           setFirstName(res.data.data.foundDoctor.firstName)
           setLastName(res.data.data.foundDoctor.lastName)
@@ -132,7 +133,7 @@ const ProfileMenu = props => {
         >
           <img
             className="rounded-circle header-profile-user"
-            src={`${url}/api/${image}` ? `${url}/api/${image}` : profilePic}
+            src={image ? `${url}/api/${image}` : profilePic}
             alt="Header Avatar"
           />
           <span

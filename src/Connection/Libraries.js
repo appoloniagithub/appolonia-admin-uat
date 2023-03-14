@@ -2,14 +2,16 @@ import axios from "axios"
 import url from "./Api/api"
 
 const getAllArticles = async () => {
-  let res = await axios.get(`${url}/api/library/getarticles`)
+  let res = await axios.get(`${url}/api/library/getarticles`, { headers })
 
   console.log(res)
   return res
 }
 
 const getSingleArticle = async data => {
-  let res = await axios.post(`${url}/api/library/getsinglearticle`, data)
+  let res = await axios.post(`${url}/api/library/getsinglearticle`, data, {
+    headers,
+  })
 
   console.log(res)
   return res

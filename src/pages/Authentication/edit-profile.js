@@ -17,6 +17,7 @@ import { updateDoctor } from "Connection/Doctors"
 import { ToastContainer, toast } from "react-toastify"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
+import url from "Connection/Api/api"
 
 const EditProfile = () => {
   let history = useHistory()
@@ -193,7 +194,9 @@ const EditProfile = () => {
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={image ? image : profilePic}
+                  src={
+                    `${url}/api/${image}` ? `${url}/api/${image}` : profilePic
+                  }
                   width="100"
                   height="100"
                 />

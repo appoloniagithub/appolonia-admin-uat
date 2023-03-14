@@ -1,49 +1,60 @@
 import axios from "axios"
 import url from "./Api/api"
 
+const token = sessionStorage.getItem("token")
+console.log(token)
+
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer " + token,
+}
+
 const getAllPatients = async () => {
-  let res = await axios.get(`${url}/api/patient/getallpatients`)
+  let res = await axios.get(`${url}/api/patient/getallpatients`, { headers })
 
   console.log(res)
   return res
 }
 const getPatientById = async data => {
-  let res = await axios.post(`${url}/api/patient/getpatient`, data)
+  let res = await axios.post(`${url}/api/patient/getpatient`, data, { headers })
 
   console.log(res)
   return res
 }
 
 const getPatientScans = async data => {
-  let res = await axios.post(`${url}/api/scans/getmyscans`, data)
-
+  let res = await axios.post(`${url}/api/scans/getmyscans`, data, { headers })
   console.log(res)
   return res
 }
 
 const getConversations = async data => {
-  let res = await axios.post(`${url}/api/chat/getconversations`, data)
+  let res = await axios.post(`${url}/api/chat/getconversations`, data, {
+    headers,
+  })
 
   console.log(res)
   return res
 }
 
 const getCon = async data => {
-  let res = await axios.post(`${url}/api/chat/getcon`, data)
+  let res = await axios.post(`${url}/api/chat/getcon`, data, { headers })
 
   console.log(res)
   return res
 }
 
 const getConversationMessages = async data => {
-  let res = await axios.post(`${url}/api/chat/getconversationmessages`, data)
+  let res = await axios.post(`${url}/api/chat/getconversationmessages`, data, {
+    headers,
+  })
 
   console.log(res)
   return res
 }
 
 const newMessage = async data => {
-  let res = await axios.post(`${url}/api/chat/newmessage`, data)
+  let res = await axios.post(`${url}/api/chat/newmessage`, data, { headers })
 
   console.log(res)
   return res
@@ -56,7 +67,9 @@ const newMessageImage = async data => {
 }
 
 const addNewNote = async data => {
-  let res = await axios.post(`${url}/api/patient/addpatientnotes`, data)
+  let res = await axios.post(`${url}/api/patient/addpatientnotes`, data, {
+    headers,
+  })
 
   console.log(res)
   return res
@@ -64,28 +77,30 @@ const addNewNote = async data => {
 
 const getNotes = async data => {
   console.log(data)
-  let res = await axios.post(`${url}/api/patient/getnotes`, data)
+  let res = await axios.post(`${url}/api/patient/getnotes`, data, { headers })
 
   console.log(res)
   return res
 }
 
-const getAllDoctors = async data => {
-  console.log(data)
-  let res = await axios.post(`${url}/api/user/getalldoctors`, data)
+// const getAllDoctors = async data => {
+//   console.log(data)
+//   let res = await axios.post(`${url}/api/user/getalldoctors`, data)
 
-  console.log(res)
-  return res
-}
+//   console.log(res)
+//   return res
+// }
 const clinicVerify = async data => {
-  let res = await axios.post(`${url}/api/file/clinicverify`, data)
+  let res = await axios.post(`${url}/api/file/clinicverify`, data, { headers })
 
   console.log(res)
   return res
 }
 
 const updateClinicDetails = async data => {
-  let res = await axios.post(`${url}/api/file/updateclinicdetails`, data)
+  let res = await axios.post(`${url}/api/file/updateclinicdetails`, data, {
+    headers,
+  })
 
   console.log(res)
   return res
@@ -96,8 +111,14 @@ const updateUserProfile = async data => {
   console.log(res)
   return res
 }
-const deletePatient = async data => {
-  let res = await axios.post(`${url}/api/user/deletepatient`, data)
+// const deletePatient = async data => {
+//   let res = await axios.post(`${url}/api/user/deletepatient`, data)
+
+//   console.log(res)
+//   return res
+// }
+const deleteAccount = async data => {
+  let res = await axios.post(`${url}/api/user/deleteaccount`, data)
 
   console.log(res)
   return res
@@ -111,11 +132,12 @@ export {
   addNewNote,
   getNotes,
   newMessage,
-  getAllDoctors,
+  //getAllDoctors,
   newMessageImage,
   clinicVerify,
   updateClinicDetails,
   updateUserProfile,
-  deletePatient,
+  //deletePatient,
   getCon,
+  deleteAccount,
 }
