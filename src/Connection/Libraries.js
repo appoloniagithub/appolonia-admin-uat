@@ -2,7 +2,12 @@ import axios from "axios"
 import url from "./Api/api"
 
 const getAllArticles = async () => {
-  let res = await axios.get(`${url}/api/library/getarticles`, { headers })
+  let res = await axios.get(`${url}/api/library/getarticles`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
@@ -10,7 +15,10 @@ const getAllArticles = async () => {
 
 const getSingleArticle = async data => {
   let res = await axios.post(`${url}/api/library/getsinglearticle`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res)

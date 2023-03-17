@@ -10,14 +10,22 @@ const headers = {
 }
 
 const getAllDoctors = async () => {
-  let res = await axios.get(`${url}/api/doctors/getalldoctors`, { headers })
+  let res = await axios.get(`${url}/api/doctors/getalldoctors`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
 }
 const getDoctorById = async data => {
   let res = await axios.post(`${url}/api/doctors/getDoctorById`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res, "in res")

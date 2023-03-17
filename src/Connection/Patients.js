@@ -10,27 +10,45 @@ const headers = {
 }
 
 const getAllPatients = async () => {
-  let res = await axios.get(`${url}/api/patient/getallpatients`, { headers })
+  let res = await axios.get(`${url}/api/patient/getallpatients`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
 }
 const getPatientById = async data => {
-  let res = await axios.post(`${url}/api/patient/getpatient`, data, { headers })
+  let res = await axios.post(`${url}/api/patient/getpatient`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
 }
 
 const getPatientScans = async data => {
-  let res = await axios.post(`${url}/api/scans/getmyscans`, data, { headers })
+  let res = await axios.post(`${url}/api/scans/getmyscans`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
   console.log(res)
   return res
 }
 
 const getConversations = async data => {
   let res = await axios.post(`${url}/api/chat/getconversations`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res)
@@ -38,7 +56,12 @@ const getConversations = async data => {
 }
 
 const getCon = async data => {
-  let res = await axios.post(`${url}/api/chat/getcon`, data, { headers })
+  let res = await axios.post(`${url}/api/chat/getcon`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
@@ -46,7 +69,10 @@ const getCon = async data => {
 
 const getConversationMessages = async data => {
   let res = await axios.post(`${url}/api/chat/getconversationmessages`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res)
@@ -54,7 +80,12 @@ const getConversationMessages = async data => {
 }
 
 const newMessage = async data => {
-  let res = await axios.post(`${url}/api/chat/newmessage`, data, { headers })
+  let res = await axios.post(`${url}/api/chat/newmessage`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
@@ -68,7 +99,10 @@ const newMessageImage = async data => {
 
 const addNewNote = async data => {
   let res = await axios.post(`${url}/api/patient/addpatientnotes`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res)
@@ -77,7 +111,12 @@ const addNewNote = async data => {
 
 const getNotes = async data => {
   console.log(data)
-  let res = await axios.post(`${url}/api/patient/getnotes`, data, { headers })
+  let res = await axios.post(`${url}/api/patient/getnotes`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
@@ -91,7 +130,12 @@ const getNotes = async data => {
 //   return res
 // }
 const clinicVerify = async data => {
-  let res = await axios.post(`${url}/api/file/clinicverify`, data, { headers })
+  let res = await axios.post(`${url}/api/file/clinicverify`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
+  })
 
   console.log(res)
   return res
@@ -99,7 +143,10 @@ const clinicVerify = async data => {
 
 const updateClinicDetails = async data => {
   let res = await axios.post(`${url}/api/file/updateclinicdetails`, data, {
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    },
   })
 
   console.log(res)
