@@ -122,6 +122,8 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               <img
                 className="rounded-circle header-profile-user"
                 src={image ? `${url}/api/${image}` : profilePic}
+                width="100"
+                height="100"
                 alt="Header Avatar"
               />
               <div className="m-2">

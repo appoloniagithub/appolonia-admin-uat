@@ -194,9 +194,7 @@ const EditProfile = () => {
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={
-                    `${url}/api/${image}` ? `${url}/api/${image}` : profilePic
-                  }
+                  src={image ? `${url}/api/${image}` : profilePic}
                   width="100"
                   height="100"
                 />

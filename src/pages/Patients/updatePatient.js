@@ -19,6 +19,7 @@ import { getPatientById } from "Connection/Patients"
 import { updateUserProfile } from "Connection/Patients"
 import { clinicVerify } from "Connection/Patients"
 import Footer from "components/HorizontalLayout/Footer"
+import url from "Connection/Api/api"
 const EditPatient = props => {
   let history = useHistory()
   const location = useLocation()
@@ -186,7 +187,7 @@ const EditPatient = props => {
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={image ? image : profilePic}
+                  src={image ? `${url}/api/${image}` : profilePic}
                   width="100"
                   height="100"
                 />
