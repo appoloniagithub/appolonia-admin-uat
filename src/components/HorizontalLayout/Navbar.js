@@ -230,6 +230,18 @@ const Navbar = props => {
                       {props.t("Library")}
                     </Link>
                   </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/appointments"
+                    >
+                      {props.t("Appointments")}
+                    </Link>
+                  </li>
                   {/* <li className="nav-item ">
                     <Link
                       className="nav-link"

@@ -31,6 +31,9 @@ import EditArticle from "pages/Library/updateArticle"
 import Showlibrary from "pages/Library/Showlibrary"
 import EditPatient from "pages/Patients/updatePatient"
 import EditProfile from "pages/Authentication/edit-profile"
+import Allappointments from "pages/Appointments/index"
+import Showappointment from "pages/Appointments/Showappointment"
+import Editappointment from "pages/Appointments/Editappointment"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -78,6 +81,19 @@ const authProtectedRoutes = [
   {
     path: "/library/showlibrary/:id",
     component: props => <Showlibrary {...props} />,
+  },
+  //appointments
+  {
+    path: "/appointments",
+    component: props => <Allappointments {...props} />,
+  },
+  {
+    path: "/appointments/viewappointment/:id",
+    component: props => <Showappointment {...props} />,
+  },
+  {
+    path: "/appointments/edit-appointment/:id",
+    component: props => <Editappointment {...props} />,
   },
   // //profile
   { path: "/profile", component: UserProfile },
