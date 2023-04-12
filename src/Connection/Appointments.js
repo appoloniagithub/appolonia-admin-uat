@@ -21,6 +21,13 @@ const getAppointmentById = async data => {
   return res
 }
 
+const createBooking = async data => {
+  let res = await axios.post(`${url}/api/user/createbooking`, data)
+
+  console.log(res)
+  return res
+}
+
 const updateBooking = async data => {
   let res = await axios.post(`${url}/api/user/updatebooking`, data)
 
@@ -39,6 +46,7 @@ export {
   getAllAppointments,
   confirmBooking,
   getAppointmentById,
+  createBooking,
   updateBooking,
   deleteBooking,
 }

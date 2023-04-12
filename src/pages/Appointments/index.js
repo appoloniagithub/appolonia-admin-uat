@@ -4,6 +4,8 @@ import Appointmenttable from "./Components/Appointmenttable"
 import Toastbar from "../../components/Toast"
 import { ToastContainer, toast } from "react-toastify"
 import Navbar from "components/HorizontalLayout/Navbar"
+import { Button } from "reactstrap"
+import { Link } from "react-router-dom"
 import { getAllAppointments } from "Connection/Appointments"
 
 const Allappointments = props => {
@@ -32,7 +34,15 @@ const Allappointments = props => {
     <React.Fragment>
       <div className="page-content">
         {/* <Container fluid> */}
-        <h4 style={{ paddingLeft: "30px" }}>Appointments</h4>
+        <div className="d-flex justify-content-between">
+          <h4 style={{ paddingLeft: "30px" }}>Appointments</h4>
+          <Link to="/appointments/create-appointment">
+            <Button color="primary" className="btn btn-primary mr-4">
+              New
+            </Button>
+          </Link>
+        </div>
+        <br />
         {appointments?.length === 0 && (
           <Spinner className="ms-2" color="primary" />
         )}

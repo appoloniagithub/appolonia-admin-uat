@@ -58,7 +58,9 @@ const Authmiddleware = ({
       if (path === "/appointments/edit-appointment/:id") {
         return <Component {...props} />
       }
-
+      if (path === "/appointments/create-appointment") {
+        return <Component {...props} />
+      }
       return (
         <Layout>
           <Component {...props} />

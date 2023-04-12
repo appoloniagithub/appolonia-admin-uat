@@ -34,6 +34,7 @@ import EditProfile from "pages/Authentication/edit-profile"
 import Allappointments from "pages/Appointments/index"
 import Showappointment from "pages/Appointments/Showappointment"
 import Editappointment from "pages/Appointments/Editappointment"
+import Createappointment from "pages/Appointments/Createappointment"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -86,6 +87,10 @@ const authProtectedRoutes = [
   {
     path: "/appointments",
     component: props => <Allappointments {...props} />,
+  },
+  {
+    path: "/appointments/create-appointment",
+    component: props => <Createappointment {...props} />,
   },
   {
     path: "/appointments/viewappointment/:id",

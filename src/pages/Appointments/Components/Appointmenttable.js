@@ -7,7 +7,7 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import { useHistory, useLocation } from "react-router-dom"
-import { confirmBooking } from "Connection/Appointments"
+import { confirmBooking, deleteBooking } from "Connection/Appointments"
 
 import {
   Table,
@@ -24,7 +24,9 @@ const Appointmenttable = ({ data }) => {
   console.log(data)
   const history = useHistory()
   const [appointmentData, setAppointmentData] = useState(data)
+  const [apptId, setApptId] = useState("")
   const [status, setStatus] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleConfirmBooking = async appointmentId => {
     await confirmBooking({ bookingId: appointmentId }).then(res => {
@@ -37,6 +39,27 @@ const Appointmenttable = ({ data }) => {
       setAppointmentData([...tempData])
     })
   }
+
+  const handleClickOpen = appointmentId => {
+    setOpen(true)
+    setApptId(appointmentId)
+  }
+
+  const handleClose = () => {
+    history.push("/appointments")
+    setOpen(false)
+  }
+
+  const deleteData = async () => {
+    //console.log(fileData, "in delete")
+
+    await deleteBooking({ bookingId: apptId }).then(res => {
+      console.log(res)
+      history.push("/appointments")
+      window.location.reload()
+    })
+  }
+
   console.log(appointmentData)
   return (
     <>
@@ -69,7 +92,7 @@ const Appointmenttable = ({ data }) => {
                       <td>{appointment.serviceName}</td>
                       <td>{appointment.consultationType}</td>
                       <td>
-                        {appointment.status === "pending" ? (
+                        {appointment.status === "Pending" ? (
                           <p className="text-danger">{appointment.status}</p>
                         ) : (
                           <p className="text-success">{appointment.status}</p>
@@ -122,6 +145,34 @@ const Appointmenttable = ({ data }) => {
                 })}
               </tbody>
             </Table>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to delete?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  CANCEL
+                </Button>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={() => deleteData()}
+                >
+                  DELETE
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </CardBody>
       </Card>
