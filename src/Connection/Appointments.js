@@ -42,6 +42,13 @@ const deleteBooking = async data => {
   return res
 }
 
+const getBookingData = async () => {
+  let res = await axios.get(`${url}/api/user/getbookingdata`)
+
+  console.log(res)
+  return res
+}
+
 export {
   getAllAppointments,
   confirmBooking,
@@ -49,4 +56,5 @@ export {
   createBooking,
   updateBooking,
   deleteBooking,
+  getBookingData,
 }

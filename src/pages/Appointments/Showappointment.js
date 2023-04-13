@@ -80,7 +80,7 @@ export default function Showappointment() {
     history.push("/appointments")
   }
   console.log(doctors)
-  console.log(startDate)
+  console.log(time)
   return (
     <>
       <div className="form-wrapper">
@@ -187,9 +187,16 @@ export default function Showappointment() {
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Date</Form.Label>
-                <DatePicker
+                {/* <DatePicker
                   selected={startDate}
                   onChange={date => setStartDate(date)}
+                /> */}
+                <Form.Control
+                  className="mb-4"
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  name="Date"
                 />
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">

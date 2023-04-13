@@ -40,7 +40,8 @@ export default function Editappointment() {
         console.log(res.data.data.foundAppointement)
         setDoctorId(res.data.data.foundAppointement[0].doctorId)
 
-        //setStartDate(res.data.data.foundAppointement[0]?.date)
+        setStartDate(res.data.data.foundAppointement[0]?.date)
+        setTime(Date.parse(res.data.data.foundAppointement[0].time))
         // setTime(
         //   moment(res.data.data.foundAppointement[0].time).format("h:mm A")
         // )
@@ -158,9 +159,16 @@ export default function Editappointment() {
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Date</Form.Label>
-                <DatePicker
+                {/* <DatePicker
                   selected={startDate}
                   onChange={date => setStartDate(date)}
+                /> */}
+                <Form.Control
+                  className="mb-4"
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  name="Date"
                 />
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">

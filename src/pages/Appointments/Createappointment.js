@@ -9,12 +9,12 @@ import { useHistory, useLocation } from "react-router"
 import { getAllDoctors } from "Connection/Doctors"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
-import { createBooking } from "Connection/Appointments"
+import { createBooking, getBookingData } from "Connection/Appointments"
 import { toast } from "react-toastify"
 
 export default function Createappointment() {
   let history = useHistory()
-  const services = [
+  const serviceData = [
     "Pediatric Dentistry",
     "Orthodontics",
     "Endodontics",
@@ -24,11 +24,12 @@ export default function Createappointment() {
   const consult = ["Remote Consultation", "Face-To-Face Consultation"]
   const [doctors, setDoctors] = useState([])
   const [doctorId, setDoctorId] = useState("")
+  const [services, setServices] = useState("")
   const [patientName, setPatientName] = useState("")
   const [email, setEmail] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [clinicName, setClinicName] = useState(clinics[0])
-  const [serviceName, setServiceName] = useState(services[1])
+  const [serviceName, setServiceName] = useState("")
   const [emiratesId, setEmiratesId] = useState("")
   const [consultationType, setConsultationType] = useState("")
   const [id, setId] = useState("")
@@ -46,7 +47,12 @@ export default function Createappointment() {
       }
     })
   }, [])
-
+  useEffect(() => {
+    getBookingData().then(res => {
+      console.log(res.data.data.services)
+      setServices(res.data.data.services)
+    })
+  }, [])
   const handleBooking = async () => {
     let res = await createBooking({
       patientName: patientName,
@@ -82,6 +88,7 @@ export default function Createappointment() {
   const handleClose = () => {
     history.push("/appointments")
   }
+  console.log(services)
   return (
     <>
       <div className="form-wrapper">
@@ -210,7 +217,7 @@ export default function Createappointment() {
                             setServiceName(e.target.value)
                           }}
                         >
-                          {services.map(value => (
+                          {serviceData.map(value => (
                             <option value={value} key={value}>
                               {value}
                             </option>
@@ -318,9 +325,16 @@ export default function Createappointment() {
                 </Form.Group>
                 <Form.Group className="mt-2" controlId="Date">
                   <Form.Label className="mt-2">Select Date</Form.Label>
-                  <DatePicker
+                  {/* <DatePicker
                     selected={startDate}
                     onChange={date => setStartDate(date)}
+                  /> */}
+                  <Form.Control
+                    className="mb-4"
+                    type="date"
+                    value={startDate}
+                    onChange={e => setStartDate(e.target.value)}
+                    name="Date"
                   />
                 </Form.Group>
                 <Form.Group className="mt-2" controlId="Date">
