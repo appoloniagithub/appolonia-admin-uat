@@ -28,6 +28,13 @@ const createBooking = async data => {
   return res
 }
 
+const newBooking = async data => {
+  let res = await axios.post(`${url}/api/user/newbooking`, data)
+
+  console.log(res)
+  return res
+}
+
 const updateBooking = async data => {
   let res = await axios.post(`${url}/api/user/updatebooking`, data)
 
@@ -54,6 +61,7 @@ export {
   confirmBooking,
   getAppointmentById,
   createBooking,
+  newBooking,
   updateBooking,
   deleteBooking,
   getBookingData,

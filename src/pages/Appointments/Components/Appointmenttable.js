@@ -77,8 +77,8 @@ const Appointmenttable = ({ data }) => {
                   <th>Service Name</th>
                   <th>Consultation Type</th>
                   <th>Status</th>
-                  <th>View</th>
-                  <th>Edit</th>
+                  <th>Confirm</th>
+                  <th>Reschedule</th>
                   <th>Delete</th>
                 </tr>
               </thead>
@@ -92,10 +92,10 @@ const Appointmenttable = ({ data }) => {
                       <td>{appointment.serviceName}</td>
                       <td>{appointment.consultationType}</td>
                       <td>
-                        {appointment.status === "Pending" ? (
-                          <p className="text-danger">{appointment.status}</p>
-                        ) : (
+                        {appointment.status === "Confirmed" ? (
                           <p className="text-success">{appointment.status}</p>
+                        ) : (
+                          <p className="text-danger">{appointment.status}</p>
                         )}
 
                         {/* <BootstrapSwitchButton
@@ -111,28 +111,64 @@ const Appointmenttable = ({ data }) => {
                         /> */}
                       </td>
                       <td>
-                        <a
-                          href={`/appointments/viewappointment/${appointment?._id}`}
-                        >
+                        {" "}
+                        {appointment.status === "Pending" ? (
+                          <a
+                            href={`/appointments/viewappointment/${appointment?._id}`}
+                          >
+                            <Button
+                              color="primary"
+                              className="btn btn-primary "
+                              // onClick={() => handleSelectPatient(patient)}
+                            >
+                              Confirm
+                            </Button>
+                          </a>
+                        ) : (
                           <Button
+                            disabled
                             color="primary"
                             className="btn btn-primary "
                             // onClick={() => handleSelectPatient(patient)}
                           >
-                            View
+                            Confirm
                           </Button>
-                        </a>
+                        )}
                       </td>
                       <td>
-                        <Link
-                          to={`/appointments/edit-appointment/${appointment?._id}`}
-                        >
-                          <i
-                            className="mdi mdi-square-edit-outline"
-                            style={{ fontSize: "18px" }}
-                          ></i>
-                        </Link>
+                        {
+                          appointment.status === "Pending" && (
+                            <i
+                              disabled
+                              className="mdi mdi-square-edit-outline"
+                              style={{ fontSize: "18px", color: "transparent" }}
+                            ></i>
+                          )
+
+                          // <Link
+                          //   to={`/appointments/edit-appointment/${appointment?._id}`}
+                          // >
+                          //   <i
+                          //     className="mdi mdi-square-edit-outline"
+                          //     style={{ fontSize: "18px" }}
+                          //   ></i>
+                          // </Link>
+                        }
+                        {appointment.status === "Reschedule" && (
+                          <Link
+                            to={`/appointments/edit-appointment/${appointment?._id}`}
+                          >
+                            <Button
+                              color="primary"
+                              className="btn btn-primary "
+                              // onClick={() => handleSelectPatient(patient)}
+                            >
+                              Reschedule
+                            </Button>
+                          </Link>
+                        )}
                       </td>
+
                       <td>
                         <i
                           onClick={() => handleClickOpen(appointment?._id)}

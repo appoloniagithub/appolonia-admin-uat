@@ -35,6 +35,8 @@ import Allappointments from "pages/Appointments/index"
 import Showappointment from "pages/Appointments/Showappointment"
 import Editappointment from "pages/Appointments/Editappointment"
 import Createappointment from "pages/Appointments/Createappointment"
+import SendNotification from "pages/Notification"
+import Existing from "pages/Appointments/Existing"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -99,6 +101,14 @@ const authProtectedRoutes = [
   {
     path: "/appointments/edit-appointment/:id",
     component: props => <Editappointment {...props} />,
+  },
+  {
+    path: "/appointments/existing",
+    component: props => <Existing {...props} />,
+  },
+  {
+    path: "/send-notification",
+    component: props => <SendNotification {...props} />,
   },
   // //profile
   { path: "/profile", component: UserProfile },

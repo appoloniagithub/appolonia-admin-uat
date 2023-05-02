@@ -19,6 +19,7 @@ export default function Showappointment() {
     "Dr.Mohammad Tarek Ajaj",
     "Dr.Moaffak Hasan",
   ]
+  const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
   const [doctorId, setDoctorId] = useState("")
   const [id, setId] = useState("")
@@ -115,8 +116,21 @@ export default function Showappointment() {
                 <Form.Label>
                   Assign a Doctor<sup className="text-danger">*</sup>
                 </Form.Label>
-
-                <div className="border border-secondary rounded mb-2">
+                <br />
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  disabled={false}
+                  value={doctorId}
+                  onChange={e => setDoctorId(e.currentTarget.value)}
+                >
+                  {doctors.map(item => (
+                    <option key={item._id} value={item._id}>
+                      {item.firstName} {item.lastName}
+                    </option>
+                  ))}
+                </select>
+                {/* <div className="border border-secondary rounded mb-2">
                   <div className="form-check">
                     <br />
                     <input
@@ -183,7 +197,7 @@ export default function Showappointment() {
                     </label>
                     <p className="pl-3">{doctors[3]?.speciality}</p>
                   </div>
-                </div>
+                </div> */}
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Date</Form.Label>

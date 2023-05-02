@@ -9,14 +9,11 @@ import { useHistory, useLocation } from "react-router"
 import { getAllDoctors } from "Connection/Doctors"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
-import {
-  createBooking,
-  getBookingData,
-  newBooking,
-} from "Connection/Appointments"
+import { createBooking, getBookingData } from "Connection/Appointments"
 import { toast } from "react-toastify"
+import { getAllPatients } from "Connection/Patients"
 
-export default function Createappointment() {
+export default function Existing() {
   let history = useHistory()
   const serviceData = [
     "Pediatric Dentistry",
@@ -29,6 +26,8 @@ export default function Createappointment() {
   const patients = ["New", "Existing"]
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
+  const [patientId, setPatientId] = useState("")
+  const [allPatients, setAllPatients] = useState([])
   const [patient, setPatient] = useState()
   const [doctorId, setDoctorId] = useState("")
   const [services, setServices] = useState("")
@@ -59,10 +58,15 @@ export default function Createappointment() {
       console.log(res.data.data.services)
       setServices(res.data.data.services)
     })
+    getAllPatients().then(res => {
+      console.log(res.data.data.allPatients)
+      setAllPatients(res.data.data.allPatients)
+    })
   }, [])
   const handleBooking = async () => {
-    let res = await newBooking({
-      patientName: patientName,
+    let res = await createBooking({
+      userId: patientId,
+      //patientName: patientName,
       email: email,
       phoneNumber: phoneNumber,
       clinicName: clinicName,
@@ -95,7 +99,8 @@ export default function Createappointment() {
   const handleClose = () => {
     history.push("/appointments")
   }
-  console.log(doctorId)
+  console.log(services)
+  console.log(patientId)
   return (
     <>
       <div className="form-wrapper">
@@ -115,7 +120,7 @@ export default function Createappointment() {
                 </button>
               </div>
 
-              <h5 className="mt-2 text-light">Book New Appointment</h5>
+              <h5 className="mt-2 text-light">Existing Patient Appointment</h5>
             </div>
           </div>
         </Row>
@@ -127,55 +132,26 @@ export default function Createappointment() {
 
               <Divider />
               <Form>
-                {/* <Form.Group controlId="Service Name">
+                <Form.Group className="mt-2" controlId="Patient Name">
                   <Form.Label className="mt-2">
-                    Select Patient<sup className="text-danger">*</sup>
+                    Select Patient with Emirates ID
                   </Form.Label>
-                  <div>
-                    <select
-                      name="Select Patien"
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={patient}
-                      onChange={e => {
-                        setPatient(e.target.value)
-                      }}
-                    >
-                      {patients.map(value => (
-                        <option value={value} key={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </Form.Group> */}
-                <Row>
-                  <Col sm="6">
-                    <Form.Group className="mt-2" controlId="Patient Name">
-                      <Form.Label className="mt-2">Patient Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="patientName"
-                        value={patientName}
-                        onChange={e => setPatientName(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col sm="6">
-                    <Form.Group className="mt-2" controlId="Emirates ID">
-                      <Form.Label className="mt-2">
-                        Emirates ID
-                        {/* <sup className="text-danger">*</sup> */}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="emiratesId"
-                        value={emiratesId}
-                        onChange={e => setEmiratesId(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    disabled={false}
+                    value={patientId}
+                    onChange={e => setPatientId(e.currentTarget.value)}
+                  >
+                    {allPatients.map(item => (
+                      <option key={item._id} value={item._id}>
+                        {item.firstName} {item.lastName} &nbsp;&nbsp; (Emirates
+                        ID -{item.uniqueId2})
+                      </option>
+                    ))}
+                  </select>
+                </Form.Group>
+
                 <Row>
                   <Col sm="6">
                     <Form.Group controlId="Email">

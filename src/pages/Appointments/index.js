@@ -36,11 +36,18 @@ const Allappointments = props => {
         {/* <Container fluid> */}
         <div className="d-flex justify-content-between">
           <h4 style={{ paddingLeft: "30px" }}>Appointments</h4>
-          <Link to="/appointments/create-appointment">
-            <Button color="primary" className="btn btn-primary mr-4">
-              New
-            </Button>
-          </Link>
+          <div>
+            <Link to="/appointments/existing">
+              <Button color="primary" className="btn btn-primary mr-4">
+                Existing Patient
+              </Button>
+            </Link>
+            <Link to="/appointments/create-appointment">
+              <Button color="primary" className="btn btn-primary mr-4">
+                New
+              </Button>
+            </Link>
+          </div>
         </div>
         <br />
         {appointments?.length === 0 && (

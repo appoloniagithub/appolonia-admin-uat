@@ -7,13 +7,15 @@ import "react-datepicker/dist/react-datepicker.css"
 import Divider from "@mui/material/Divider"
 import { useHistory, useLocation } from "react-router"
 import { getAllDoctors } from "Connection/Doctors"
-import { getAppointmentById } from "Connection/Appointments"
+import { getAppointmentById, updateBooking } from "Connection/Appointments"
 import moment from "moment"
+import { toast } from "react-toastify"
 
 export default function Editappointment() {
   let history = useHistory()
 
   const [doctors, setDoctors] = useState([])
+  const [doctorName, setDoctorName] = useState("")
   const [doctorId, setDoctorId] = useState("")
   const [id, setId] = useState("")
   // const [date, setDate] = useState(new Date())
@@ -49,6 +51,23 @@ export default function Editappointment() {
     }
   }, [])
 
+  const handleUpdateBooking = async () => {
+    await updateBooking({
+      bookingId: id,
+      doctorId: doctorId,
+      doctorName,
+      date: startDate,
+      time: time,
+    }).then(res => {
+      console.log(res)
+      if (res.data.data.success === 1) {
+        history.push("/appointments")
+        toast.success("Appointment rescheduled successfully")
+      } else {
+        toast.error("Error rescheduling an appointment")
+      }
+    })
+  }
   const handleClose = () => {
     history.push("/appointments")
   }
@@ -80,15 +99,27 @@ export default function Editappointment() {
         <section style={{ padding: "0 25%" }}>
           <Row>
             <Col>
-              <h5 className="mt-2">Confirm Appointment</h5>
+              <h5 className="mt-2">Reschedule Appointment</h5>
 
               <Divider />
               <Form.Group className="mt-2" controlId="Assign a Doctor">
                 <Form.Label>
                   Assign a Doctor<sup className="text-danger">*</sup>
                 </Form.Label>
-
-                <div className="border border-secondary rounded mb-2">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  disabled={false}
+                  value={doctorId}
+                  onChange={e => setDoctorId(e.currentTarget.value)}
+                >
+                  {doctors.map(item => (
+                    <option key={item._id} value={item._id}>
+                      {item.firstName} {item.lastName}
+                    </option>
+                  ))}
+                </select>
+                {/* <div className="border border-secondary rounded mb-2">
                   <div className="form-check">
                     <br />
                     <input
@@ -155,7 +186,7 @@ export default function Editappointment() {
                     </label>
                     <p className="pl-3">{doctors[3]?.speciality}</p>
                   </div>
-                </div>
+                </div> */}
               </Form.Group>
               <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Date</Form.Label>
@@ -164,7 +195,7 @@ export default function Editappointment() {
                   onChange={date => setStartDate(date)}
                 /> */}
                 <Form.Control
-                  className="mb-4"
+                  className="mb-2"
                   type="date"
                   value={startDate}
                   onChange={e => setStartDate(e.target.value)}
@@ -189,9 +220,9 @@ export default function Editappointment() {
           <Button
             color="primary"
             className="btn btn-primary mt-4"
-            //onClick={handleConfirmBooking}
+            onClick={handleUpdateBooking}
           >
-            Update Appointment
+            Reschedule Appointment
           </Button>
         </section>
       </div>
