@@ -10,17 +10,29 @@ import { getAllPatients } from "Connection/Patients"
 export default function SendNotification() {
   const [heading, setHeading] = useState("")
   const [message, setMessage] = useState("")
+  const [doctors, setDoctors] = useState([])
+  const [patients, setPatients] = useState([])
   const [sendTo, setSendTo] = useState("")
   const options = ["All patients", "All Doctors"]
+  //const options = [doctors, patients]
 
   useEffect(() => {
     getAllDoctors().then(res => {
       console.log(res.data.data.doctors)
+      setDoctors(res.data.data.doctors)
     })
     getAllPatients().then(res => {
       console.log(res.data.data.allPatients)
+      setPatients(res.data.data.allPatients)
+      // if (res.data && res.data.data && res.data.data.allPatients) {
+      //   for (let i = 0; i <= res.data.data.allPatients.length; i++) {
+      //     setPatients(res.data.data.allPatients[i]._id)
+      //   }
+      // }
     })
   }, [])
+  console.log(patients, doctors)
+  console.log(sendTo)
   return (
     <>
       <div className="page-content">
@@ -85,11 +97,14 @@ export default function SendNotification() {
                         setSendTo(e.target.value)
                       }}
                     >
-                      {options.map(value => (
-                        <option value={value} key={value}>
-                          {value}
+                      <option value={patients}>All patients</option>
+                      <option value={doctors}>All doctors</option>
+
+                      {/* {patients.map(value => (
+                        <option value={value._id} key={value._id}>
+                          All patients
                         </option>
-                      ))}
+                      ))} */}
                     </select>
                   </div>
                 </Form.Group>

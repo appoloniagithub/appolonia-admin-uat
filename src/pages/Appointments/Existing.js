@@ -15,26 +15,27 @@ import { getAllPatients } from "Connection/Patients"
 
 export default function Existing() {
   let history = useHistory()
-  const serviceData = [
-    "Pediatric Dentistry",
-    "Orthodontics",
-    "Endodontics",
-    "Oral Surgery",
-  ]
-  const clinics = ["Khalifa City", "Abu Dhabi City", "Dubai"]
+  //   const serviceData = [
+  //     "Pediatric Dentistry",
+  //     "Orthodontics",
+  //     "Endodontics",
+  //     "Oral Surgery",
+  //   ]
+  //const clinics = ["Khalifa City", "Abu Dhabi City", "Dubai"]
   const consult = ["Tele Consultation", "Face-To-Face Consultation"]
-  const patients = ["New", "Existing"]
+
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
   const [patientId, setPatientId] = useState("")
   const [allPatients, setAllPatients] = useState([])
   const [patient, setPatient] = useState()
   const [doctorId, setDoctorId] = useState("")
-  const [services, setServices] = useState("")
+  const [services, setServices] = useState([])
+  const [clinics, setClinics] = useState([])
   const [patientName, setPatientName] = useState("")
   const [email, setEmail] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
-  const [clinicName, setClinicName] = useState(clinics[0])
+  const [clinicName, setClinicName] = useState("")
   const [serviceName, setServiceName] = useState("")
   const [emiratesId, setEmiratesId] = useState("")
   const [consultationType, setConsultationType] = useState("")
@@ -55,8 +56,9 @@ export default function Existing() {
   }, [])
   useEffect(() => {
     getBookingData().then(res => {
-      console.log(res.data.data.services)
+      console.log(res)
       setServices(res.data.data.services)
+      setClinics(res.data.data.clinic)
     })
     getAllPatients().then(res => {
       console.log(res.data.data.allPatients)
@@ -199,8 +201,8 @@ export default function Existing() {
                           }}
                         >
                           {clinics.map(value => (
-                            <option value={value} key={value}>
-                              {value}
+                            <option value={value.address} key={value.address}>
+                              {value.address}
                             </option>
                           ))}
                         </select>
@@ -222,7 +224,7 @@ export default function Existing() {
                             setServiceName(e.target.value)
                           }}
                         >
-                          {serviceData.map(value => (
+                          {services.map(value => (
                             <option value={value} key={value}>
                               {value}
                             </option>

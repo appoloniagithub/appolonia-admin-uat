@@ -170,6 +170,28 @@ const deleteAccount = async data => {
   console.log(res)
   return res
 }
+const activePatients = async () => {
+  let res = await axios.get(`${url}/api/user/activepatients`)
+  console.log(res)
+  return res
+}
+
+const newPatientRequests = async () => {
+  let res = await axios.get(`${url}/api/user/newpatientreq`)
+  console.log(res)
+  return res
+}
+
+const doctorScans = async () => {
+  let res = await axios.get(`${url}/api/doctors/getdoctorscans`)
+  console.log(res)
+  return res
+}
+const unSeenMessages = async () => {
+  let res = await axios.get(`${url}/api/chat/unseen`)
+  console.log(res)
+  return res
+}
 export {
   getAllPatients,
   getPatientById,
@@ -187,4 +209,8 @@ export {
   //deletePatient,
   getCon,
   deleteAccount,
+  activePatients,
+  newPatientRequests,
+  doctorScans,
+  unSeenMessages,
 }

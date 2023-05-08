@@ -120,6 +120,7 @@ const Chat = ({
       format: "text",
       scanId: "",
       type: "Doctor",
+      isRead: "0",
       //createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
 
@@ -137,6 +138,7 @@ const Chat = ({
         format: "text",
         scanId: "",
         type: "Doctor",
+        isRead: "0",
       })
       console.log(res.data)
       setChatMessages([...chatMessages, res.data])
