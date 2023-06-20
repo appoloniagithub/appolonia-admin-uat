@@ -3,7 +3,10 @@ import axios from "axios"
 import url from "../../Connection/Api/api"
 import { ImageGroup, Image } from "react-fullscreen-image"
 import "lightgallery.js/dist/css/lightgallery.css"
-import { getConversations } from "Connection/Patients"
+import { cronSchedule, getConversations } from "Connection/Patients"
+import BootstrapSwitchButton from "bootstrap-switch-button-react"
+import Button from "react-bootstrap/Button"
+import moment from "moment"
 //import Modal from "./Components/Modal"
 import {
   Container,
@@ -57,8 +60,6 @@ import {
   scroller,
 } from "react-scroll"
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu"
-
-import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
@@ -76,6 +77,7 @@ import {
 import Zoom from "./zoom"
 import Thumbnail from "./thumbnail"
 import { getCon } from "Connection/Patients"
+import { element } from "prop-types"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
@@ -123,148 +125,23 @@ export default function Showpatient({
   const [patientConversation, setPatientConversation] = React.useState()
   const [adminConversation, setAdminConversation] = React.useState()
   const [messages, setMessages] = React.useState([])
+  const [frequency, setFrequency] = React.useState()
+  const [scanType, setScanType] = React.useState()
   const [adminMessages, setAdminMessages] = useState([])
   const [con, setCon] = React.useState()
   const [role, setRole] = useState()
-  //const [clickedImg, setClickedImg] = useState(null)
-  //const [currentIndex, setCurrentIndex] = useState(null)
-
-  // const chartOptions1 = {
-  //   series: [
-  //     {
-  //       name: "Scans",
-  //       data: [12, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  //     },
-  //     // {
-  //     //   name: "Store Customers",
-  //     //   data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10]
-  //     // }
-  //   ],
-  //   options: {
-  //     chart: {
-  //       background: "white",
-  //       toolbar: {
-  //         show: false,
-  //       },
-  //       type: "line",
-  //       events: {
-  //         dataPointMouseEnter: function (event, chartContext, config) {
-  //           // ...
-  //           console.log("i am mouse")
-  //         },
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: true,
-  //     },
-  //     stroke: {
-  //       curve: "smooth",
-  //     },
-  //     yaxis: {
-  //       show: false,
-  //       labels: {
-  //         show: false,
-  //       },
-  //       axisBorder: {
-  //         show: false,
-  //       },
-  //       axisTicks: {
-  //         show: false,
-  //       },
-  //     },
-
-  //     xaxis: {
-  //       categories: [
-  //         "Jan",
-  //         "Feb",
-  //         "Mar",
-  //         "Apr",
-  //         "May",
-  //         "Jun",
-  //         "Jul",
-  //         "Aug",
-  //         "Sep",
-  //         "Oct",
-  //         "Nov",
-  //         "Dec",
-  //       ],
-  //     },
-  //     legend: {
-  //       position: "bottom",
-  //     },
-  //     grid: {
-  //       show: false,
-  //     },
-  //   },
-  // }
-
-  // const [chartOptions2, setChartOptions2] = React.useState({
-  //   series: [
-  //     {
-  //       name: "Scans",
-  //       data: [48, 70, 20, 90, 36, 80, 30, 91, 60],
-  //     },
-  //     // {
-  //     //   name: "Store Customers",
-  //     //   data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10]
-  //     // }
-  //   ],
-  //   options: {
-  //     chart: {
-  //       background: "white",
-  //       toolbar: {
-  //         show: false,
-  //       },
-  //       events: {
-  //         dataPointSelection: (event, chartContext, config) => {
-  //           console.log(chartContext, config)
-  //           alert(chartContext, config)
-  //         },
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: false,
-  //     },
-  //     stroke: {
-  //       curve: "smooth",
-  //     },
-  //     yaxis: {
-  //       show: false,
-  //       labels: {
-  //         show: false,
-  //       },
-  //       axisBorder: {
-  //         show: false,
-  //       },
-  //       axisTicks: {
-  //         show: false,
-  //       },
-  //     },
-
-  //     xaxis: {
-  //       categories: [
-  //         "Jan",
-  //         "Feb",
-  //         "Mar",
-  //         "Apr",
-  //         "May",
-  //         "Jun",
-  //         "Jul",
-  //         "Aug",
-  //         "Sep",
-  //         "Oct",
-  //         "Nov",
-  //         "Dec",
-  //       ],
-  //     },
-  //     legend: {
-  //       position: "bottom",
-  //     },
-  //     grid: {
-  //       show: false,
-  //     },
-  //   },
-  // })
+  const [show, setShow] = useState(false)
+  const options = [
+    { label: "Everyday", value: 1 },
+    { label: "7 days", value: 7 },
+    { label: "15 days", value: 15 },
+    { label: "Monthly", value: 30 },
+    { label: "Quarterly", value: 120 },
+    { label: "Half Yearly", value: 183 },
+    { label: "Yearly", value: 365 },
+  ]
+  const scans = ["Face Only", "Teeth Only", "Face & Teeth Only"]
+  const [scanDate, setScanDate] = useState()
 
   const toggleIconCustom = tab => {
     if (customIconActiveTab !== tab) {
@@ -511,44 +388,28 @@ export default function Showpatient({
   //   history.push("/patients")
   // }
 
-  // const handleClick = (image, i) => {
-  //   setCurrentIndex(i)
-  //   setClickedImg(image.link)
-  // }
+  const handleCronSchedule = async () => {
+    await cronSchedule({
+      userId: patientInfo?.patientId,
+      days: frequency,
+      scanType: scanType,
+    })
+  }
 
-  // const handelRotationRight = () => {
-  //   const totalLength = selectedScanImages1.length
-  //   if (currentIndex + 1 >= totalLength) {
-  //     setCurrentIndex(0)
-  //     const newUrl = selectedScanImages1[0].link
-  //     setClickedImg(newUrl)
-  //     return
-  //   }
-  //   const newIndex = currentIndex + 1
-  //   const newUrl = selectedScanImages1.filter(image => {
-  //     return selectedScanImages1.indexOf(image) === newIndex
-  //   })
-  //   const newItem = newUrl[0].link
-  //   setClickedImg(newItem)
-  //   setCurrentIndex(newIndex)
-  // }
+  const date = new Date(patientInfo?.lastScan)
+  //const date = moment(patientInfo?.lastScan).format("YYYY/D/MM GMT")
+  console.log(date)
+  let d1 = Date.parse(date)
+  console.log(d1)
+  console.log(typeof date)
+  let d2 = date.setDate(date.getDate() + 15)
+  let d3 = new Date(d2)
+  //setScanDate(d3)
+  console.log(d3)
 
-  // const handelRotationLeft = () => {
-  //   const totalLength = selectedScanImages1.length
-  //   if (currentIndex === 0) {
-  //     setCurrentIndex(totalLength - 1)
-  //     const newUrl = selectedScanImages1[totalLength - 1].link
-  //     setClickedImg(newUrl)
-  //     return
-  //   }
-  //   const newIndex = currentIndex - 1
-  //   const newUrl = selectedScanImages1.filter(image => {
-  //     return selectedScanImages1.indexOf(image) === newIndex
-  //   })
-  //   const newItem = newUrl[0].link
-  //   setClickedImg(newItem)
-  //   setCurrentIndex(newIndex)
-  // }
+  console.log(moment(patientInfo?.lastScan).format("DD-MM-YYYY"))
+  console.log(new Date())
+  console.log(patientInfo)
   return (
     <div>
       {role === "Admin" ? (
@@ -1233,6 +1094,91 @@ export default function Showpatient({
                         <Spinner className="ms-2" color="primary" />
                       )}
                       {patientScans?.length === 0 && <p>No Scans Found</p>}
+                    </div>
+                  )}
+                  {customIconActiveTab === "2" && (
+                    <div>
+                      <h5 className="text-center">Scan Frequency</h5>
+                      <br />
+
+                      <div className="border border-secondary bg-white rounded p-2">
+                        <br />
+                        <div className=" justify-content-between">
+                          <div className="d-flex text-center">
+                            <h6 className="mt-2">Scan Alert</h6>{" "}
+                            &nbsp;&nbsp;&nbsp;
+                            <BootstrapSwitchButton
+                              className=""
+                              checked={d3 === new Date() ? !show : show}
+                              // checked={show}
+                              onChange={e => setShow(!show)}
+                            />
+                          </div>
+                          <br />
+                          {show === true ? (
+                            <div>
+                              <Form.Group
+                                className="mt-2"
+                                controlId="Frequency"
+                              >
+                                <Form.Label className="mb-2">
+                                  Frequency
+                                </Form.Label>
+                                <select
+                                  name="Frequency"
+                                  className="form-select"
+                                  aria-label="Default select example"
+                                  value={frequency}
+                                  onChange={e => {
+                                    setFrequency(e.target.value)
+                                  }}
+                                >
+                                  {options.map(ele => (
+                                    <option value={ele.value} key={ele.value}>
+                                      {ele.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Form.Group>
+                              <br />
+                              <Form.Group
+                                className="mt-2"
+                                controlId="Type of Scan"
+                              >
+                                <Form.Label className="mb-2">
+                                  Type of Scan
+                                </Form.Label>
+                                <select
+                                  name="Type of Scan"
+                                  className="form-select"
+                                  aria-label="Default select example"
+                                  value={scanType}
+                                  onChange={e => {
+                                    setScanType(e.target.value)
+                                  }}
+                                >
+                                  {scans.map(value => (
+                                    <option value={value} key={value}>
+                                      {value}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Form.Group>
+                              <br />
+                              <Button
+                                type="submit"
+                                color="primary"
+                                className="btn btn-primary mt-2"
+                                onClick={handleCronSchedule}
+                              >
+                                SAVE
+                              </Button>
+                            </div>
+                          ) : (
+                            <div></div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </Col>

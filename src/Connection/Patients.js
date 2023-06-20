@@ -192,6 +192,13 @@ const unSeenMessages = async () => {
   console.log(res)
   return res
 }
+
+const cronSchedule = async data => {
+  let res = await axios.post(`${url}/api/scans/cron`, data)
+  console.log(res)
+  return res
+}
+
 export {
   getAllPatients,
   getPatientById,
@@ -213,4 +220,5 @@ export {
   newPatientRequests,
   doctorScans,
   unSeenMessages,
+  cronSchedule,
 }

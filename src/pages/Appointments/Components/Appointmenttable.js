@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react"
+import { React, useEffect, useState, useRef } from "react"
 import { Container } from "reactstrap"
 import BootstrapSwitchButton from "bootstrap-switch-button-react"
 import { Link } from "react-router-dom"
@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import { useHistory, useLocation } from "react-router-dom"
 import { confirmBooking, deleteBooking } from "Connection/Appointments"
-
+import { io } from "socket.io-client"
 import {
   Table,
   Row,
@@ -27,6 +27,7 @@ const Appointmenttable = ({ data }) => {
   const [apptId, setApptId] = useState("")
   const [status, setStatus] = useState(false)
   const [open, setOpen] = useState(false)
+  const socket = useRef()
 
   const handleConfirmBooking = async appointmentId => {
     await confirmBooking({ bookingId: appointmentId }).then(res => {
@@ -60,6 +61,32 @@ const Appointmenttable = ({ data }) => {
     })
   }
 
+  //connect to Socket.io
+  // useEffect(() => {
+  //   socket.current = io("http://localhost:8000", {
+  //     transports: ["websocket"],
+  //   })
+  // }, [])
+  const handleVideoCall = async () => {
+    try {
+      return navigator.mediaDevices
+        .getUserMedia({
+          audio: true,
+          video: true,
+        })
+        .then(stream => {
+          localStream = stream
+          localVideo.srcObject = stream
+
+          return createConnectionAndAddStream()
+        })
+        .catch(function (e) {
+          alert("getUserMedia() error: " + e.name)
+        })
+    } catch (error) {
+      console.log("JavaScript exception occurred:", error)
+    }
+  }
   console.log(appointmentData)
   return (
     <>
@@ -79,6 +106,8 @@ const Appointmenttable = ({ data }) => {
                   <th>Status</th>
                   <th>Confirm</th>
                   <th>Reschedule</th>
+
+                  <th>Video call</th>
                   <th>Delete</th>
                 </tr>
               </thead>
@@ -166,6 +195,25 @@ const Appointmenttable = ({ data }) => {
                               Reschedule
                             </Button>
                           </Link>
+                        )}
+                      </td>
+                      <td>
+                        {appointment.consultationType ===
+                          "Remote Consultation" && (
+                          <a
+                            // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
+                            //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}
+                            href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
+                            target="__blank"
+                          >
+                            <Button
+                              color="primary"
+                              className="btn btn-primary "
+                              // onClick={() => handleSelectPatient(patient)}
+                            >
+                              Start VideoCall
+                            </Button>
+                          </a>
                         )}
                       </td>
 

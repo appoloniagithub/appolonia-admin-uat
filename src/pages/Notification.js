@@ -12,7 +12,7 @@ export default function SendNotification() {
   const [message, setMessage] = useState("")
   const [doctors, setDoctors] = useState([])
   const [patients, setPatients] = useState([])
-  const [sendTo, setSendTo] = useState("")
+  const [sendTo, setSendTo] = useState([])
   const options = ["All patients", "All Doctors"]
   //const options = [doctors, patients]
 
