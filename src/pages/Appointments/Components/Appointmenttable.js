@@ -198,8 +198,7 @@ const Appointmenttable = ({ data }) => {
                         )}
                       </td>
                       <td>
-                        {appointment.consultationType ===
-                          "Remote Consultation" && (
+                        {appointment.consultationType === "Remote" && (
                           <a
                             // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
                             //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}

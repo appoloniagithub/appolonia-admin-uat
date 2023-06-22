@@ -25,7 +25,7 @@ export default function Createappointment() {
     "Oral Surgery",
   ]
   //const clinics = ["Khalifa City", "Abu Dhabi City", "Dubai"]
-  const consult = ["Tele Consultation", "Face-To-Face Consultation"]
+  const consult = ["Remote", "Face-To-Face Consultation"]
   const patients = ["New", "Existing"]
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
