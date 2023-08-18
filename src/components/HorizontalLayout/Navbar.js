@@ -178,6 +178,19 @@ const Navbar = props => {
                       {props.t("Support")}
                     </Link>
                   </li> */}
+
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
+                      to="/calender"
+                    >
+                      {props.t("Work Calender")}
+                    </Link>
+                  </li>
                 </ul>
               ) : (
                 <ul className="navbar-nav">

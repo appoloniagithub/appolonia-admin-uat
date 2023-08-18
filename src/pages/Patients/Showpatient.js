@@ -1133,6 +1133,7 @@ export default function Showpatient({
                                     setFrequency(e.target.value)
                                   }}
                                 >
+                                  <option>Select</option>
                                   {options.map(ele => (
                                     <option value={ele.value} key={ele.value}>
                                       {ele.label}

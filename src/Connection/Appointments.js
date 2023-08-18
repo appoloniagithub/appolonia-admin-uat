@@ -48,7 +48,12 @@ const deleteBooking = async data => {
   console.log(res)
   return res
 }
+const cancelBooking = async data => {
+  let res = await axios.post(`${url}/api/user/cancelbooking`, data)
 
+  console.log(res)
+  return res
+}
 const getBookingData = async () => {
   let res = await axios.get(`${url}/api/user/getbookingdata`)
 
@@ -81,4 +86,5 @@ export {
   getBookingData,
   getAllBookings,
   pendingAppointments,
+  cancelBooking,
 }

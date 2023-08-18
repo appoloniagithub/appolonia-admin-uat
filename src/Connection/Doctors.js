@@ -59,6 +59,24 @@ const forgotPassword = async data => {
   return res
 }
 
+const monthlySchedule = async data => {
+  let res = await axios.post(`${url}/api/doctors/event`, data)
+
+  console.log(res)
+  return res
+}
+const getAllEvents = async () => {
+  let res = await axios.get(`${url}/api/doctors/getallevents`)
+
+  console.log(res)
+  return res
+}
+const deleteEvent = async data => {
+  let res = await axios.post(`${url}/api/doctors/deleteevent`, data)
+
+  console.log(res)
+  return res
+}
 export {
   getAllDoctors,
   addDoctor,
@@ -66,4 +84,7 @@ export {
   deleteDoctor,
   getDoctorById,
   forgotPassword,
+  monthlySchedule,
+  getAllEvents,
+  deleteEvent,
 }

@@ -37,7 +37,7 @@ import Editappointment from "pages/Appointments/Editappointment"
 import Createappointment from "pages/Appointments/Createappointment"
 import SendNotification from "pages/Notification"
 import Existing from "pages/Appointments/Existing"
-
+import MyCalendar from "pages/Doctors/Components/MyCalender"
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
 
@@ -109,6 +109,10 @@ const authProtectedRoutes = [
   {
     path: "/send-notification",
     component: props => <SendNotification {...props} />,
+  },
+  {
+    path: "/calender",
+    component: MyCalendar,
   },
   // //profile
   { path: "/profile", component: UserProfile },

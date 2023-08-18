@@ -16,7 +16,7 @@ import { toast } from "react-toastify"
 import url from "../../Connection/Api/api"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
-
+import { getBookingData } from "Connection/Appointments"
 import { addDoctor } from "Connection/Doctors"
 
 //window.Buffer = window.Buffer || require("buffer").Buffer
@@ -178,6 +178,8 @@ const CreateDoctor = props => {
   const [isPhoneNumber, setIsPhoneNumber] = useState(false)
   const [isPassword, setIsPassword] = useState(false)
   const [response, setResponse] = useState("")
+  const [clinicName, setClinicName] = useState("")
+  const [clinics, setClinics] = useState([])
 
   const {
     register,
@@ -213,7 +215,7 @@ const CreateDoctor = props => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
-    setImage(event.target.files[0])
+    setImage(URL.createObjectURL(event.target.files[0]))
   }
 
   const handleClick = event => {
@@ -222,6 +224,14 @@ const CreateDoctor = props => {
   const handleClose = () => {
     history.push("/doctors")
   }
+
+  useEffect(() => {
+    getBookingData().then(res => {
+      console.log(res)
+      // setServices(res.data.data.services)
+      setClinics(res.data.data.clinic)
+    })
+  }, [])
 
   const postData = () => {
     console.log("test in postdata")
@@ -595,29 +605,53 @@ const CreateDoctor = props => {
                   <br />
                   <h5>Professional Information</h5>
                   <br />
-                  <Form.Group controlId="Speciality">
-                    <Form.Label>
-                      Speciality<sup className="text-danger">*</sup>
-                    </Form.Label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={speciality}
-                      onChange={e => {
-                        setSpeciality(e.target.value)
-                        setIsSpeciality(false)
-                      }}
-                    >
-                      {options.map(value => (
-                        <option value={value} key={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </Form.Group>
-                  {isSpeciality && (
-                    <p className="text-danger"> Please select speciality</p>
-                  )}
+                  <Row>
+                    <Col sm="6">
+                      <Form.Group controlId="Speciality">
+                        <Form.Label>
+                          Speciality<sup className="text-danger">*</sup>
+                        </Form.Label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          value={speciality}
+                          onChange={e => {
+                            setSpeciality(e.target.value)
+                            setIsSpeciality(false)
+                          }}
+                        >
+                          {options.map(value => (
+                            <option value={value} key={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </select>
+                      </Form.Group>
+
+                      {isSpeciality && (
+                        <p className="text-danger"> Please select speciality</p>
+                      )}
+                    </Col>
+
+                    <Col sm="6">
+                      <Form.Group controlId="Clinic Name">
+                        <Form.Label>Clinic Name</Form.Label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          value={clinicName}
+                          onChange={e => setClinicName(e.target.value)}
+                        >
+                          <option>Select</option>
+                          {clinics.map(value => (
+                            <option value={value.address} key={value.address}>
+                              {value.address}
+                            </option>
+                          ))}
+                        </select>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                   <Row>
                     <Col sm="6">
                       <Form.Group controlId="Total Experience">

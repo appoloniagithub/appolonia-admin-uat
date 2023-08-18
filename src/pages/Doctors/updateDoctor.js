@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import url from "Connection/Api/api"
+import { getBookingData } from "Connection/Appointments"
 
 const EditDoctor = () => {
   let history = useHistory()
@@ -39,8 +40,10 @@ const EditDoctor = () => {
   const [education, setEducation] = useState("")
   const [profile, setProfile] = useState("")
   const [password, setPassword] = useState("")
+  const [file, setFile] = useState("")
   const [id, setId] = useState("")
-
+  const [clinicName, setClinicName] = useState("")
+  const [clinics, setClinics] = useState([])
   const {
     register,
     handleSubmit,
@@ -65,6 +68,7 @@ const EditDoctor = () => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
+    //setFile(URL.createObjectURL(event.target.files[0]))
     setImage(event.target.files[0])
   }
 
@@ -106,6 +110,14 @@ const EditDoctor = () => {
         }
       })
     }
+  }, [])
+
+  useEffect(() => {
+    getBookingData().then(res => {
+      console.log(res)
+      //setServices(res.data.data.services)
+      setClinics(res.data.data.clinic)
+    })
   }, [])
 
   const updateData = async () => {
@@ -186,15 +198,17 @@ const EditDoctor = () => {
               <div className="justify-content-between p-2">
                 <h5>Edit Doctor</h5>
                 <Divider />
+                {/* {file.length > 0 ? (
+                  <img width="100" height="100" src={file} />
+                ) : ( */}
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={
-                    `${url}/api/${image}` ? `${url}/api/${image}` : profilePic
-                  }
+                  src={image ? `${url}/api/${image}` : profilePic}
                   width="100"
                   height="100"
                 />
+                {/* )} */}
                 <div>
                   <Button
                     color="primary"
@@ -247,6 +261,16 @@ const EditDoctor = () => {
                         onChange={e => setEmiratesId(e.target.value)}
                       />
                     </Form.Group>
+                    <br />
+
+                    <Button
+                      //onClick={updateData}
+                      //type="submit"
+                      color="primary"
+                      className="btn btn-primary  "
+                    >
+                      Monthly Schedule
+                    </Button>
                   </Form>
                 </div>
               </div>
@@ -323,22 +347,43 @@ const EditDoctor = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Form.Group controlId="Speciality">
-                    <Form.Label>Speciality</Form.Label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={speciality}
-                      onChange={e => setSpeciality(e.target.value)}
-                    >
-                      {options.map(value => (
-                        <option value={value} key={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </Form.Group>
-
+                  <Row>
+                    <Col sm="6">
+                      <Form.Group controlId="Speciality">
+                        <Form.Label>Speciality</Form.Label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          value={speciality}
+                          onChange={e => setSpeciality(e.target.value)}
+                        >
+                          {options.map(value => (
+                            <option value={value} key={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </select>
+                      </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                      <Form.Group controlId="Clinic Name">
+                        <Form.Label>Clinic Name</Form.Label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          value={clinicName}
+                          onChange={e => setClinicName(e.target.value)}
+                        >
+                          <option>Select</option>
+                          {clinics.map(value => (
+                            <option value={value.address} key={value.address}>
+                              {value.address}
+                            </option>
+                          ))}
+                        </select>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                   <Form.Group controlId="Gender">
                     <Form.Label>Gender</Form.Label>
                     &nbsp;&nbsp;&nbsp;

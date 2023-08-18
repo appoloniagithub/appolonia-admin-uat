@@ -92,135 +92,134 @@ const Dashboard = () => {
         </div>
         <br />
         <div className="mt-4 mb-4">
-          {/* <div className="d-flex justify-content-around"> */}
-          <div style={{ padding: "0 7%" }}>
-            <h4 className="text-primary">Messages</h4>
-            <div className="table-responsive">
-              <Table className="table mb-0" size="lg">
-                <thead>
-                  <tr>
-                    <th>Patient Name</th>
+          <div className="d-flex justify-content-around">
+            <div>
+              <h4 className="text-primary">Messages</h4>
+              <div className="table-responsive">
+                <Table className="table mb-0" size="lg">
+                  <thead>
+                    <tr>
+                      <th>Patient Name</th>
 
-                    <th>Message</th>
-                    <th>Received To</th>
-                    <th>Date/Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {messages.map(msg => {
-                    return (
-                      <tr key={msg?._id}>
-                        <td>{msg?.patientName}</td>
-                        <td>{msg?.message}</td>
-                        <td>{msg?.name}</td>
-                        <td>{msg?.createdAt}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
+                      <th>Message</th>
+                      <th>Received To</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {messages.map(msg => {
+                      return (
+                        <tr key={msg?._id}>
+                          <td>{msg?.patientName}</td>
+                          <td>{msg?.message}</td>
+                          <td>{msg?.name}</td>
+                          <td>{msg?.createdAt}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              </div>
             </div>
-          </div>
-          <br />
-          <br />
-          <div style={{ padding: "0 7%" }}>
-            <h4 className="text-primary">Consultation Requests</h4>
-            <div className="table-responsive">
-              <Table className="table mb-0">
-                <thead>
-                  <tr>
-                    {/* <th>File Number</th> */}
-                    <th>Patient Name</th>
-                    <th>Phone Number</th>
-                    <th>Clinic Name</th>
-                    <th>Department</th>
-                    <th>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pending.map(appointment => {
-                    return (
-                      <tr key={appointment?._id}>
-                        {/* <td>123</td> */}
 
-                        <td>{appointment?.patientName}</td>
-                        <td>{appointment?.phoneNumber}</td>
-                        <td>{appointment?.clinicName}</td>
-                        <td>{appointment?.serviceName}</td>
-                        <td>{appointment?.consultationType}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
+            <div>
+              <h4 className="text-primary">Consultation Requests</h4>
+              <div className="table-responsive">
+                <Table className="table mb-0">
+                  <thead>
+                    <tr>
+                      {/* <th>File Number</th> */}
+                      <th>Patient Name</th>
+                      <th>Phone Number</th>
+                      <th>Clinic Name</th>
+                      <th>Department</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pending.map(appointment => {
+                      return (
+                        <tr key={appointment?._id}>
+                          {/* <td>123</td> */}
+
+                          <td>{appointment?.patientName}</td>
+                          <td>{appointment?.phoneNumber}</td>
+                          <td>{appointment?.clinicName}</td>
+                          <td>{appointment?.serviceName}</td>
+                          <td>{appointment?.consultationType}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              </div>
             </div>
-            {/* </div> */}
           </div>
           <br /> <br />
-          {/* <div className="d-flex justify-content-around"> */}
-          <div className="" style={{ padding: "0 7%" }}>
-            <h4 className="text-primary">New Scans</h4>
-            <div className="table-responsive">
-              <Table className="table mb-0">
-                <thead>
-                  <tr>
-                    <th>Patient Name</th>
-                    <th>Doctor Name</th>
-                    <th>Speciality</th>
-                    <th>Date/Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {newScans.map(scan => {
-                    return (
-                      <tr key={scan?._id}>
-                        <td>{scan?.patientName}</td>
-                        <td>{scan?.doctorName}</td>
-                        <td>{scan?.Department}</td>
-                        <td>
-                          {moment(scan?.created).format("DD-MM-YYYY hh:mm A")}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
+          <div className="d-flex justify-content-around">
+            <div className="">
+              <h4 className="text-primary">New Scans</h4>
+              <div className="table-responsive">
+                <Table className="table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Patient Name</th>
+                      <th>Doctor Name</th>
+                      <th>Speciality</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {newScans.map(scan => {
+                      return (
+                        <tr key={scan?._id}>
+                          <td>{scan?.patientName}</td>
+                          <td>{scan?.doctorName}</td>
+                          <td>{scan?.Department}</td>
+                          <td>
+                            {moment(scan?.created).format("DD-MM-YYYY hh:mm A")}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+            <br />
+            <br />
+            <div className="">
+              <h4 className="text-primary">New Patient Requests</h4>
+              <div className="table-responsive">
+                <Table className="table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Patient Name</th>
+                      <th>Emirates ID</th>
+                      <th>Phone Number</th>
+                      <th>City</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {newPatient?.map(patient => {
+                      return (
+                        <tr key={patient?._id}>
+                          <td>
+                            {patient?.firstName}&nbsp;{patient?.lastName}
+                          </td>
+                          <td>{patient?.uniqueId}</td>
+                          <td>{patient?.phoneNumber}</td>
+                          <td>{patient?.city}</td>
+                          <td></td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              </div>
             </div>
           </div>
-          <br />
-          <br />
-          <div className="" style={{ padding: "0 7%" }}>
-            <h4 className="text-primary">New Patient Requests</h4>
-            <div className="table-responsive">
-              <Table className="table mb-0">
-                <thead>
-                  <tr>
-                    <th>Patient Name</th>
-                    <th>Emirates ID</th>
-                    <th>Phone Number</th>
-                    <th>City</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {newPatient?.map(patient => {
-                    return (
-                      <tr key={patient?._id}>
-                        <td>
-                          {patient?.firstName}&nbsp;{patient?.lastName}
-                        </td>
-                        <td>{patient?.uniqueId}</td>
-                        <td>{patient?.phoneNumber}</td>
-                        <td>{patient?.city}</td>
-                        <td></td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-          {/* </div> */}
         </div>
         <br />
         <br />

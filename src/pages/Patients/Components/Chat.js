@@ -95,7 +95,7 @@ const Chat = ({
       const doctorId = sessionStorage.getItem("id")
       console.log(doctorId)
 
-      socket.current = io("http://socket.appolonia.ae:7052/", {
+      socket.current = io("http://socket.appolonia.ae:7052", {
         transports: ["websocket"],
       })
       //socket.current = io("http://localhost:8900")

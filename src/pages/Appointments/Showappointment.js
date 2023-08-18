@@ -19,6 +19,33 @@ export default function Showappointment() {
     "Dr.Mohammad Tarek Ajaj",
     "Dr.Moaffak Hasan",
   ]
+  const timeOptions = [
+    "Select",
+    "9:00 AM",
+    "9:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
+    "1:00 PM",
+    "1:30 PM",
+    "2:00 PM",
+    "2:30 PM",
+    "3:00 PM",
+    "3:30 PM",
+    "4:00 PM",
+    "4:30 PM",
+    "5:00 PM",
+    "5:30 PM",
+    "6:00 PM",
+    "6:30 PM",
+    "7:00 PM",
+    "7:30 PM",
+    "8:00 PM",
+    "8:30 PM",
+  ]
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
   const [doctorId, setDoctorId] = useState("")
@@ -26,6 +53,7 @@ export default function Showappointment() {
   // const [date, setDate] = useState(new Date())
   const [startDate, setStartDate] = useState("")
   const [time, setTime] = useState("")
+  const [startTime, setStartTime] = useState("")
 
   useEffect(() => {
     console.log(location, "appt loc")
@@ -57,7 +85,7 @@ export default function Showappointment() {
       bookingId: id,
       doctorId: doctorId,
       date: startDate,
-      time: time,
+      time: startTime,
     }).then(res => {
       if (res.data.data.success === 1) {
         setDoctorId("")
@@ -117,13 +145,16 @@ export default function Showappointment() {
                   Assign a Doctor<sup className="text-danger">*</sup>
                 </Form.Label>
                 <br />
+
                 <select
                   className="form-select"
                   aria-label="Default select example"
                   disabled={false}
                   value={doctorId}
+                  defaultValue={"Select"}
                   onChange={e => setDoctorId(e.currentTarget.value)}
                 >
+                  <option>Select</option>
                   {doctors.map(item => (
                     <option key={item._id} value={item._id}>
                       {item.firstName} {item.lastName}
@@ -213,7 +244,7 @@ export default function Showappointment() {
                   name="Date"
                 />
               </Form.Group>
-              <Form.Group className="mt-2" controlId="Date">
+              {/* <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Time</Form.Label>
                 <DatePicker
                   selected={time}
@@ -224,6 +255,24 @@ export default function Showappointment() {
                   timeCaption="Time"
                   dateFormat="h:mm aa"
                 />
+              </Form.Group> */}
+              <Form.Group className="mt-2" controlId="Date">
+                <Form.Label className="mt-2">Select Time</Form.Label>
+                <select
+                  name="Select Time"
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={startTime}
+                  onChange={e => {
+                    setStartTime(e.target.value)
+                  }}
+                >
+                  {timeOptions.map(value => (
+                    <option value={value} key={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
               </Form.Group>
             </Col>
           </Row>

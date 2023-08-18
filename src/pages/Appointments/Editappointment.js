@@ -14,13 +14,42 @@ import { toast } from "react-toastify"
 export default function Editappointment() {
   let history = useHistory()
 
+  const timeOptions = [
+    "Select",
+    "9:00 AM",
+    "9:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
+    "1:00 PM",
+    "1:30 PM",
+    "2:00 PM",
+    "2:30 PM",
+    "3:00 PM",
+    "3:30 PM",
+    "4:00 PM",
+    "4:30 PM",
+    "5:00 PM",
+    "5:30 PM",
+    "6:00 PM",
+    "6:30 PM",
+    "7:00 PM",
+    "7:30 PM",
+    "8:00 PM",
+    "8:30 PM",
+  ]
   const [doctors, setDoctors] = useState([])
   const [doctorName, setDoctorName] = useState("")
   const [doctorId, setDoctorId] = useState("")
   const [id, setId] = useState("")
   // const [date, setDate] = useState(new Date())
   const [startDate, setStartDate] = useState("")
-  const [time, setTime] = useState("")
+  const [time, setTime] = useState()
+  const [status, setStatus] = useState("")
+  const [startTime, setStartTime] = useState("")
 
   useEffect(() => {
     console.log(location, "appt loc")
@@ -41,11 +70,13 @@ export default function Editappointment() {
       getAppointmentById({ bookingId: appointmentId }).then(res => {
         console.log(res.data.data.foundAppointement)
         setDoctorId(res.data.data.foundAppointement[0].doctorId)
-
+        setStatus(res.data.data.foundAppointement[0].status)
         setStartDate(res.data.data.foundAppointement[0]?.date)
-        setTime(Date.parse(res.data.data.foundAppointement[0].time))
+        setStartTime(res.data.data.foundAppointement[0].time)
         // setTime(
-        //   moment(res.data.data.foundAppointement[0].time).format("h:mm A")
+        //   moment(res.data.data.foundAppointement[0].time).format(
+        //     "yyyy-mm-ddThh:mm:ss.sssZ"
+        //   )
         // )
       })
     }
@@ -57,7 +88,7 @@ export default function Editappointment() {
       doctorId: doctorId,
       doctorName,
       date: startDate,
-      time: time,
+      time: startTime,
     }).then(res => {
       console.log(res)
       if (res.data.data.success === 1) {
@@ -71,7 +102,10 @@ export default function Editappointment() {
   const handleClose = () => {
     history.push("/appointments")
   }
-  console.log(startDate, time)
+  console.log(startDate)
+  // console.log(moment(time).format("yyyy-mm-ddThh:mm:ss.sssZ"))
+  console.log(startTime)
+
   return (
     <>
       <div className="form-wrapper">
@@ -99,8 +133,11 @@ export default function Editappointment() {
         <section style={{ padding: "0 25%" }}>
           <Row>
             <Col>
-              <h5 className="mt-2">Reschedule Appointment</h5>
-
+              {status == "Reschedule" ? (
+                <h5 className="mt-2">Reschedule Appointment</h5>
+              ) : (
+                <h5 className="mt-2">Edit Appointment</h5>
+              )}
               <Divider />
               <Form.Group className="mt-2" controlId="Assign a Doctor">
                 <Form.Label>
@@ -113,6 +150,7 @@ export default function Editappointment() {
                   value={doctorId}
                   onChange={e => setDoctorId(e.currentTarget.value)}
                 >
+                  <option>Select</option>
                   {doctors.map(item => (
                     <option key={item._id} value={item._id}>
                       {item.firstName} {item.lastName}
@@ -202,7 +240,7 @@ export default function Editappointment() {
                   name="Date"
                 />
               </Form.Group>
-              <Form.Group className="mt-2" controlId="Date">
+              {/* <Form.Group className="mt-2" controlId="Date">
                 <Form.Label className="mt-2">Select Time</Form.Label>
                 <DatePicker
                   selected={time}
@@ -213,17 +251,44 @@ export default function Editappointment() {
                   timeCaption="Time"
                   dateFormat="h:mm aa"
                 />
+              </Form.Group> */}
+              <Form.Group className="mt-2" controlId="Date">
+                <Form.Label className="mt-2">Select Time</Form.Label>
+                <select
+                  name="Select Time"
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={startTime}
+                  onChange={e => {
+                    setStartTime(e.target.value)
+                  }}
+                >
+                  {timeOptions.map(value => (
+                    <option value={value} key={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
               </Form.Group>
             </Col>
           </Row>
-
-          <Button
-            color="primary"
-            className="btn btn-primary mt-4"
-            onClick={handleUpdateBooking}
-          >
-            Reschedule Appointment
-          </Button>
+          {status == "Reschedule" ? (
+            <Button
+              color="primary"
+              className="btn btn-primary mt-4"
+              onClick={handleUpdateBooking}
+            >
+              Reschedule Appointment
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              className="btn btn-primary mt-4"
+              onClick={handleUpdateBooking}
+            >
+              Edit Appointment
+            </Button>
+          )}
         </section>
       </div>
     </>
