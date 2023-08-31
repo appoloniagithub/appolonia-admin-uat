@@ -61,6 +61,7 @@ import React, {
   useMemo,
   useEffect,
 } from "react"
+import { Row, Col } from "reactstrap"
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import Form from "react-bootstrap/Form"
@@ -121,6 +122,9 @@ const MyCalendar = props => {
   const handleClose = () => {
     setOpen(false)
   }
+  const handleC = () => {
+    history.push("/doctors")
+  }
   const handleEvents = async () => {
     await monthlySchedule({
       title: clinicName,
@@ -168,7 +172,30 @@ const MyCalendar = props => {
   console.log(tempstart, tempend)
   return (
     <>
-      <div className="myCustomHeight">
+      <Row>
+        <div className="border border-secondary rounded  ">
+          <div
+            style={{
+              backgroundColor: "#20507B",
+              color: "white",
+              height: "60px",
+            }}
+            className="d-flex justify-content-start align-items-center "
+          >
+            <div>
+              <button onClick={handleC} className="btn text-light">
+                <i className="fas fa-arrow-left" />
+              </button>
+            </div>
+
+            <h5 className="mt-2 text-light">Work Calender</h5>
+          </div>
+        </div>
+      </Row>
+      <div
+        className="myCustomHeight"
+        style={{ top: "5px", position: "relative" }}
+      >
         <Calendar
           localizer={localizer}
           events={events}
