@@ -88,7 +88,7 @@ const Login = props => {
               response.data.doctorFound.phoneNumber
             )
             sessionStorage.setItem("email", response.data.doctorFound.email)
-            history.push("/patients")
+            history.push("/dashboard")
             // if (response.data.doctorFound.role == "Doctor") {
             //   history.push("/patients")
             // } else {
@@ -125,7 +125,9 @@ const Login = props => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
-
+  const handleBack = () => {
+    history.push("/forgot-password")
+  }
   if (sessionStorage.getItem("loggedIn")) {
     history.push("/patients")
     return
@@ -247,9 +249,9 @@ const Login = props => {
                             <a
                               className="d-flex justify-content-end mt-2"
                               //style={{ paddingLeft: "11.5rem" }}
-                              href="/forgot-password"
+                              // href="/forgot-password"
                             >
-                              Forgot password?
+                              <p onClick={handleBack}> Forgot password?</p>
                             </a>
                           </div>
 
@@ -327,9 +329,9 @@ const Login = props => {
                             <a
                               className="d-flex justify-content-end mt-2"
                               //style={{ paddingLeft: "11.5rem" }}
-                              href="/forgot-password"
+                              //href="/forgot-password"
                             >
-                              Forgot password?
+                              <p onClick={handleBack}> Forgot password?</p>
                             </a>
                           </div>
 

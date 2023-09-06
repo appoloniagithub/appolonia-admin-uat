@@ -120,6 +120,7 @@ const ForgetPasswordPage = props => {
                     ></Alert> */}
 
                     <Form className="form-horizontal">
+                      {message && <Alert color="danger">{message}</Alert>}
                       <div className="mb-3">
                         <Label className="form-label">Phone Number</Label>
                         {/* <Input
