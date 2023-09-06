@@ -98,6 +98,8 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
+              height: 300,
+              overflow: "scroll",
               // border: "solid 0.5px",
             }}
           >
@@ -130,6 +132,8 @@ const Dashboard = () => {
             style={{
               display: "block",
               width: 700,
+              height: 300,
+              overflow: "scroll",
               padding: 30,
             }}
           >
@@ -169,6 +173,8 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
+              height: 300,
+              overflow: "scroll",
             }}
           >
             <h4 className="text-primary">New Scans</h4>
@@ -203,6 +209,8 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
+              height: 300,
+              overflow: "scroll",
             }}
           >
             <h4 className="text-primary">New Patient Requests</h4>
