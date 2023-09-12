@@ -161,6 +161,18 @@ const Navbar = props => {
                         // e.preventDefault()
                         setPatient(!patient)
                       }}
+                      to="/appointments"
+                    >
+                      {props.t("Appointments")}
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link
+                      className="nav-link"
+                      onClick={e => {
+                        // e.preventDefault()
+                        setPatient(!patient)
+                      }}
                       to="/send-notification"
                     >
                       {props.t("Send Notification")}

@@ -76,6 +76,7 @@ import DialogTitle from "@mui/material/DialogTitle"
 import { deleteEvent, getAllEvents, monthlySchedule } from "Connection/Doctors"
 import { useHistory } from "react-router-dom"
 import { getBookingData } from "Connection/Appointments"
+import { getAllDoctors } from "Connection/Doctors"
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
@@ -89,6 +90,8 @@ const MyCalendar = props => {
   const [tempstart, setTempStart] = useState("")
   const [tempend, setTempEnd] = useState("")
   const [time, setTime] = useState("")
+  const [doctors, setDoctors] = useState([])
+  const [doctorId, setDoctorId] = useState("")
   let history = useHistory()
   const [events, setEvents] = useState([])
   // const [myEvents, setMyEvents] = useState(events)
@@ -114,7 +117,13 @@ const MyCalendar = props => {
     },
     [setTempStart || setTempEnd]
   )
-  const handleSelectEvent = useCallback(event => window.alert(event.title), [])
+  const handleSelectEvent = useCallback(
+    event =>
+      window.alert(
+        "Clinic Name: " + event.title + "Doctor Name: " + event.doctorName
+      ),
+    []
+  )
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -131,6 +140,7 @@ const MyCalendar = props => {
       date: date,
       start: tempstart,
       end: tempend,
+      doctorId: doctorId,
     }).then(res => {
       console.log(res)
       if (res.data.data.success === 1) {
@@ -150,6 +160,16 @@ const MyCalendar = props => {
       console.log(res)
       // setServices(res.data.data.services)
       setClinics(res.data.data.clinic)
+    })
+  }, [])
+  useEffect(() => {
+    getAllDoctors().then(res => {
+      if (res.data && res.data.data.doctors) {
+        for (let i = 0; i < res.data.data.doctors.length; i++) {
+          console.log(res.data.data.doctors)
+          setDoctors(res.data.data.doctors)
+        }
+      }
     })
   }, [])
 
@@ -256,6 +276,24 @@ const MyCalendar = props => {
                 value={date}
                 onChange={e => setDate(e.target.value)}
               />
+            </Form.Group>
+            <Form.Group className="mt-2" controlId="Assign a Doctor">
+              <Form.Label>
+                Assign a Doctor<sup className="text-danger">*</sup>
+              </Form.Label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                disabled={false}
+                value={doctorId}
+                onChange={e => setDoctorId(e.currentTarget.value)}
+              >
+                {doctors.map(item => (
+                  <option key={item._id} value={item._id}>
+                    {item.firstName} {item.lastName}
+                  </option>
+                ))}
+              </select>
             </Form.Group>
             <TextField
               margin="dense"
