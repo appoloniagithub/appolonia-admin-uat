@@ -78,6 +78,7 @@ import Zoom from "./zoom"
 import Thumbnail from "./thumbnail"
 import { getCon } from "Connection/Patients"
 import { element } from "prop-types"
+import AdminChat from "./Components/AdminChat"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
@@ -464,11 +465,11 @@ export default function Showpatient({
               </Col>
               <Col>
                 <div>
-                  <Chat
-                    patientConversation={adminConversation}
-                    patientMessages={adminMessages}
+                  <AdminChat
+                    adminConversation={adminConversation}
+                    adminMessages={adminMessages}
                     patientInfo={patientInfo}
-                    handleGetPatientConversation={handleGetAdminConversation}
+                    handleGetAdminConversation={handleGetAdminConversation}
                   />
                 </div>
               </Col>

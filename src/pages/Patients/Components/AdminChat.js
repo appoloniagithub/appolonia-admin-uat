@@ -17,15 +17,15 @@ import { newMessageImage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
 import { toast } from "react-toastify"
 import url from "Connection/Api/api"
-const Chat = ({
-  patientMessages,
+const AdminChat = ({
+  adminMessages,
   patientInfo,
-  patientConversation,
-  handleGetPatientConversation,
+  adminConversation,
+  handleGetAdminConversation,
 }) => {
   //meta title
   document.title = "Patient View | Appolonia Dental Care"
-  console.log(patientConversation, "patcon")
+  console.log(adminConversation, handleGetAdminConversation, "patcon")
   const [messageBox, setMessageBox] = useState(null)
   const [curMessage, setCurMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([])
@@ -53,7 +53,7 @@ const Chat = ({
     setFile(event.target.files[0])
     let file = event.target.files[0]
     var formdata = new FormData()
-    formdata.append("conversationId", patientConversation?.conversationId)
+    formdata.append("conversationId", adminConversation?.conversationId)
     //formdata.append("senderId", "63f70a84bf696efe6d604035")
     formdata.append("senderId", docId)
     formdata.append("message", file, file.name)
@@ -69,7 +69,7 @@ const Chat = ({
       if (res.data.success === 1) {
         setSendMessage({ ...res.data.data })
 
-        handleGetPatientConversation()
+        handleGetAdminConversation()
 
         setChatMessages([...chatMessages, res.data.data])
       } else {
@@ -86,8 +86,8 @@ const Chat = ({
     hiddenFileInput.current.click()
   }
   useEffect(() => {
-    setChatMessages(patientMessages)
-  }, [patientMessages])
+    setChatMessages(adminMessages)
+  }, [adminMessages])
 
   //connect to Socket.io
   useEffect(() => {
@@ -116,12 +116,12 @@ const Chat = ({
       receiverId: patientInfo?.patientId,
       recId: patientInfo?.patientId,
       message: curMessage,
-      conversationId: patientConversation?.conversationId,
+      conversationId: adminConversation?.conversationId,
       format: "text",
       scanId: "",
       type: "Doctor",
       isRead: "0",
-      createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
+      //createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
 
     // send message to socket server
@@ -129,7 +129,7 @@ const Chat = ({
     // send message to database
     try {
       let res = await newMessage({
-        conversationId: patientConversation?.conversationId,
+        conversationId: adminConversation?.conversationId,
         //senderId: "63f70a84bf696efe6d604035",
         senderId: docId,
         receiverId: patientInfo?.patientId,
@@ -144,7 +144,7 @@ const Chat = ({
       setChatMessages([...chatMessages, res.data])
       setCurMessage("")
       if (res.data.data.success === 1) {
-        handleGetPatientConversation()
+        handleGetAdminConversation()
       } else {
         toast.error(res.data.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -166,11 +166,11 @@ const Chat = ({
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("receive-message", data => {
-      console.log(data, "socket receive")
+      console.log(data.conversationId, "socket receive")
 
       if (
         data !== null &&
-        data.conversationId === patientConversation?.conversationId
+        data.conversationId === adminConversation?.conversationId
       ) {
         console.log(data, "in if-data")
         setChatMessages([...chatMessages, data])
@@ -184,7 +184,7 @@ const Chat = ({
     console.log("Message Arrived: ", receivedMessage)
     if (
       receivedMessage !== null &&
-      receivedMessage.conversationId === patientConversation?.conversationId
+      receivedMessage.conversationId === adminConversation?.conversationId
     ) {
       console.log(receivedMessage, "in if-receivedmessage")
       setChatMessages([...chatMessages, receivedMessage])
@@ -364,4 +364,4 @@ const Chat = ({
   )
 }
 
-export default Chat
+export default AdminChat

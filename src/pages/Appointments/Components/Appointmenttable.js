@@ -109,6 +109,7 @@ const Appointmenttable = ({ data }) => {
     }
   }
   console.log(appointmentData)
+
   return (
     <>
       <Card>
@@ -212,7 +213,7 @@ const Appointmenttable = ({ data }) => {
                               // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
                               //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}
                               href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
-                              // target="__blank"
+                              //target="__blank"
                             >
                               <Button
                                 color="primary"
