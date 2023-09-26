@@ -104,7 +104,7 @@ const Dashboard = () => {
             }}
           >
             <h4 className="text-primary">Messages</h4>
-            <Table bordered={true}>
+            <Table style={{ border: "2px solid" }}>
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -138,7 +138,7 @@ const Dashboard = () => {
             }}
           >
             <h4 className="text-primary">Consultation Requests</h4>
-            <Table bordered={true}>
+            <Table style={{ border: "2px solid" }}>
               <thead>
                 <tr>
                   {/* <th>File Number</th> */}
@@ -178,7 +178,7 @@ const Dashboard = () => {
             }}
           >
             <h4 className="text-primary">New Scans</h4>
-            <Table bordered={true}>
+            <Table style={{ border: "2px solid" }}>
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -214,7 +214,7 @@ const Dashboard = () => {
             }}
           >
             <h4 className="text-primary">New Patient Requests</h4>
-            <Table bordered={true}>
+            <Table style={{ border: "2px solid " }}>
               <thead>
                 <tr>
                   <th>Patient Name</th>

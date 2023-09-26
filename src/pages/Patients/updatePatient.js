@@ -417,6 +417,19 @@ const EditPatient = props => {
                           />{" "}
                           <label htmlFor="Female">Female</label>
                         </div>
+                        <div className="form-check form-check-inline">
+                          <input
+                            type="radio"
+                            value="Prefer not to Say"
+                            checked={gender === "Prefer not to Say"}
+                            id="Prefer not to Say"
+                            onClick={e => setGender(e.target.value)}
+                            name={gender}
+                          />{" "}
+                          <label htmlFor="Prefer not to Say">
+                            Prefer not to Say
+                          </label>
+                        </div>
                       </Form.Group>
                     </Col>
                     <Col sm="6">
