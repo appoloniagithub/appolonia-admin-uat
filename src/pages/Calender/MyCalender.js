@@ -236,9 +236,6 @@ import {
 import { useHistory } from "react-router-dom"
 import { getBookingData } from "Connection/Appointments"
 import { getAllDoctors } from "Connection/Doctors"
-import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars"
-import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns"
-import { ButtonComponent } from "@syncfusion/ej2-react-buttons"
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker"
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
@@ -285,7 +282,7 @@ const MyCalendar = props => {
       setStartTime("")
       setEndTime("")
       setClinicName("")
-      setDoctorId("")
+      //setDoctorId("")
       setOpen(true)
 
       //setEvents(prev => [...prev, { start, end }])

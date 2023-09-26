@@ -121,7 +121,7 @@ const AdminChat = ({
       scanId: "",
       type: "Doctor",
       isRead: "0",
-      //createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
+      createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
 
     // send message to socket server

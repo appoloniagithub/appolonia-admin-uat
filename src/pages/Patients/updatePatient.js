@@ -130,6 +130,7 @@ const EditPatient = props => {
     var formdata = new FormData()
     formdata.append("fileId", fileId)
     formdata.append("isFileNumberChanged", "0")
+    formdata.append("isFamilyHead", "1")
     formdata.append("isEmiratesIdChanged", "0")
     formdata.append("city", city)
     formdata.append("fileNumber", fileNumber)
