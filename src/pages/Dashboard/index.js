@@ -98,13 +98,16 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
-              height: 300,
-              overflow: "scroll",
+              // height: 300,
+              //overflow: "scroll",
               // border: "solid 0.5px",
             }}
           >
             <h4 className="text-primary">Messages</h4>
-            <Table style={{ border: "2px solid" }}>
+            <Table
+              className="dashboard-table-class"
+              style={{ border: "2px solid" }}
+            >
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -114,10 +117,10 @@ const Dashboard = () => {
                   <th>Date/Time</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{ height: "200px" }}>
                 {messages.map(msg => {
                   return (
-                    <tr key={msg?._id}>
+                    <tr className="table-tr" key={msg?._id}>
                       <td>{msg?.patientName}</td>
                       <td>{msg?.message}</td>
                       <td>{msg?.name}</td>
@@ -132,8 +135,8 @@ const Dashboard = () => {
             style={{
               display: "block",
               width: 700,
-              height: 300,
-              overflow: "scroll",
+              //height: 300,
+              //overflow: "scroll",
               padding: 30,
             }}
           >
@@ -149,7 +152,7 @@ const Dashboard = () => {
                   <th>Type</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{ height: "200px" }}>
                 {pending.map(appointment => {
                   return (
                     <tr key={appointment?._id}>
@@ -173,12 +176,15 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
-              height: 300,
-              overflow: "scroll",
+              //height: 300,
+              //overflow: "scroll",
             }}
           >
             <h4 className="text-primary">New Scans</h4>
-            <Table style={{ border: "2px solid" }}>
+            <Table
+              className=".dashboard-table-class"
+              style={{ border: "2px solid" }}
+            >
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -187,10 +193,10 @@ const Dashboard = () => {
                   <th>Date/Time</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{ height: "200px" }}>
                 {newScans.map(scan => {
                   return (
-                    <tr key={scan?._id}>
+                    <tr key={scan?._id} className="row-height">
                       <td>{scan?.patientName}</td>
                       <td>{scan?.doctorName}</td>
                       <td>{scan?.Department}</td>
@@ -209,8 +215,8 @@ const Dashboard = () => {
               display: "block",
               width: 700,
               padding: 30,
-              height: 300,
-              overflow: "scroll",
+              //height: 300,
+              // overflow: "scroll",
             }}
           >
             <h4 className="text-primary">New Patient Requests</h4>
@@ -224,7 +230,7 @@ const Dashboard = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{ height: "200px" }}>
                 {newPatient?.map(patient => {
                   return (
                     <tr key={patient?._id}>
