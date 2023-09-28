@@ -126,6 +126,7 @@ const Appointmenttable = ({ data }) => {
                   <th>Service Name</th>
                   <th>Consultation Type</th>
                   <th>Preferred Date/Time</th>
+                  <th>Preferred Doctor</th>
                   <th>Status</th>
                   <th>Action</th>
                   <th>Cancel</th>
@@ -159,6 +160,14 @@ const Appointmenttable = ({ data }) => {
                             {" "}
                             {appointment.pdate} {appointment.ptime}
                           </p>
+                        )}
+                      </td>
+                      <td>
+                        {appointment.status == "Pending" && (
+                          <p> {appointment.pdoctorId}</p>
+                        )}
+                        {appointment.status == "Reschedule" && (
+                          <p> {appointment.pdoctorId}</p>
                         )}
                       </td>
                       <td>
