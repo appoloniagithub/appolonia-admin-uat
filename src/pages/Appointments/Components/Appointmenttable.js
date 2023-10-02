@@ -23,6 +23,7 @@ import {
   CardSubtitle,
   Button,
 } from "reactstrap"
+import moment from "moment"
 
 const Appointmenttable = ({ data }) => {
   console.log(data)
@@ -33,6 +34,11 @@ const Appointmenttable = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
   const socket = useRef()
+  const [currentTime, setCurrentTime] = useState("")
+  const [dateObject, setDateObject] = useState(null)
+  const [oneHourBefore, setOneHourBefore] = useState("")
+  const [oneHourAfter, setOneHourAfter] = useState("")
+  const [date, setDate] = useState("")
 
   const handleConfirmBooking = async appointmentId => {
     await confirmBooking({ bookingId: appointmentId }).then(res => {
@@ -88,28 +94,55 @@ const Appointmenttable = ({ data }) => {
   //     transports: ["websocket"],
   //   })
   // }, [])
-  const handleVideoCall = async () => {
-    try {
-      return navigator.mediaDevices
-        .getUserMedia({
-          audio: true,
-          video: true,
-        })
-        .then(stream => {
-          localStream = stream
-          localVideo.srcObject = stream
 
-          return createConnectionAndAddStream()
-        })
-        .catch(function (e) {
-          alert("getUserMedia() error: " + e.name)
-        })
-    } catch (error) {
-      console.log("JavaScript exception occurred:", error)
-    }
-  }
   console.log(appointmentData)
+  useEffect(() => {
+    for (let i = 0; i < appointmentData.length; i++) {
+      let t1 = appointmentData[i].time
+      setCurrentTime(t1)
+      console.log(t1, typeof t1)
+    }
+  }, [])
 
+  const convertTimeStringToDate = timeString => {
+    const parts = timeString.split(" ") // Split the time and AM/PM
+    console.log(parts)
+    const time = parts[0] // Extract the time part
+    const ampm = parts[1] // Extract the AM/PM part
+
+    const [hours, minutes] = time.split(":").map(Number)
+
+    // Convert 12-hour format to 24-hour format
+    let hours24 = hours
+    if (ampm.toLowerCase() === "pm") {
+      hours24 += 12
+    }
+
+    const currentDate = new Date()
+    currentDate.setHours(hours24, minutes, 0, 0)
+    console.log(currentDate)
+
+    const before = new Date(currentDate)
+    const after = new Date(currentDate)
+
+    const oneHrBefore = before.setHours(currentDate.getHours() - 1)
+    const oneHrAfter = after.setHours(currentDate.getHours() + 1)
+    const hrBefore = new Date(oneHrBefore)
+    const hrAfter = new Date(oneHrAfter)
+    const today = new Date()
+    const todayDate = moment(today).format("YYYY-MM-DD")
+    setDate(todayDate)
+    console.log(todayDate)
+    const newHourBefore = moment(hrBefore).format("hh:mm A")
+    const newHourAfter = moment(hrAfter).format("hh:mm A")
+    setOneHourBefore(newHourBefore)
+    setOneHourAfter(newHourAfter)
+    console.log(newHourBefore, newHourAfter)
+  }
+  useEffect(() => {
+    convertTimeStringToDate("3:00 PM")
+    //convertTimeStringToDate(currentTime)
+  }, [])
   return (
     <>
       <Card>
@@ -164,10 +197,10 @@ const Appointmenttable = ({ data }) => {
                       </td>
                       <td>
                         {appointment.status == "Pending" && (
-                          <p> {appointment.pdoctorId}</p>
+                          <p> {appointment.pdoctorName}</p>
                         )}
                         {appointment.status == "Reschedule" && (
-                          <p> {appointment.pdoctorId}</p>
+                          <p> {appointment.pdoctorName}</p>
                         )}
                       </td>
                       <td>
@@ -217,12 +250,15 @@ const Appointmenttable = ({ data }) => {
                           </Link>
                         )}
                         {appointment.consultationType === "Remote" &&
-                          appointment.status === "Confirmed" && (
+                          appointment.status === "Confirmed" &&
+                          appointment.time > oneHourBefore &&
+                          appointment.time < oneHourAfter &&
+                          appointment.date === date && (
                             <a
                               // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
                               //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}
                               href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
-                              //target="__blank"
+                              target="__blank"
                             >
                               <Button
                                 color="primary"

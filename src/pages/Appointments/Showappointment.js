@@ -3,12 +3,13 @@ import Form from "react-bootstrap/Form"
 import { Row, Col } from "reactstrap"
 import { useHistory, useLocation } from "react-router"
 import { getAllDoctors } from "Connection/Doctors"
-import { confirmBooking } from "Connection/Appointments"
+import { confirmBooking, getAppointmentById } from "Connection/Appointments"
 //const moment = require("moment")
 import DatePicker from "react-datepicker"
 import { Button } from "reactstrap"
 import "react-datepicker/dist/react-datepicker.css"
 import Divider from "@mui/material/Divider"
+import moment from "moment"
 
 export default function Showappointment() {
   let history = useHistory()
@@ -77,6 +78,24 @@ export default function Showappointment() {
           }
         }
       })
+      getAppointmentById({ bookingId: appointmentId }).then(res => {
+        console.log(res.data.data)
+        const one = res.data.data.foundAppointement[0]?.pdate
+        //console.log(new Date(one))
+        const parts = one.split("-") // Split the original date string
+        if (parts.length === 3) {
+          // Check if the split resulted in three parts
+          const [day, month, year] = parts // Extract day, month, and year
+          const convertedDate = `${year}-${month}-${day}` // Rearrange the parts
+          console.log(convertedDate)
+          // return convertedDate;
+          setDoctorId(res.data.data.foundAppointement[0].pdoctorId)
+          // setStatus(res.data.data.foundAppointement[0].status)
+          //setStartDate(res.data.data.foundAppointement[0]?.pdate),
+          setStartDate(convertedDate)
+          setStartTime(res.data.data.foundAppointement[0].ptime)
+        }
+      })
     }
   }, [])
 
@@ -87,6 +106,7 @@ export default function Showappointment() {
       date: startDate,
       time: startTime,
     }).then(res => {
+      console.log(res)
       if (res.data.data.success === 1) {
         setDoctorId("")
         setStartDate("")

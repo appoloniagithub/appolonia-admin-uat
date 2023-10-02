@@ -85,6 +85,7 @@ const EditPatient = props => {
   }
   const handleClose = () => {
     history.push("/patients")
+    window.location.reload()
   }
   useEffect(() => {
     console.log(location)
@@ -130,7 +131,7 @@ const EditPatient = props => {
     var formdata = new FormData()
     formdata.append("fileId", fileId)
     formdata.append("isFileNumberChanged", "0")
-    formdata.append("isFamilyHead", "1")
+    //formdata.append("isFamilyHead", "1")
     formdata.append("isEmiratesIdChanged", "0")
     formdata.append("city", city)
     formdata.append("fileNumber", fileNumber)
@@ -148,6 +149,8 @@ const EditPatient = props => {
       .then(res => {
         console.log(res)
         history.push("/patients")
+
+        window.location.reload()
         toast.success("Patient successfully updated")
       })
       .catch(err => {
@@ -156,6 +159,7 @@ const EditPatient = props => {
   }
 
   console.log(patientData, "phone")
+  console.log(image, "img")
   return (
     <>
       <div className="form-wrapper">
@@ -246,13 +250,13 @@ const EditPatient = props => {
                       <Form.Control
                         type="text"
                         name="emiratesId"
-                        {...register("emiratesId", {
-                          required: true,
-                          //maxLength: 20,
-                        })}
+                        // {...register("emiratesId", {
+                        //   required: true,
+                        //   //maxLength: 20,
+                        // })}
                         value={emiratesId}
                         onChange={e => setEmiratesId(e.target.value)}
-                        autoFocus
+                        disabled
                       />
                     </Form.Group>
                     <Form.Group controlId="File Number">
@@ -381,6 +385,7 @@ const EditPatient = props => {
                           name="phoneNumber"
                           value={phoneNumber}
                           onChange={setPhoneNumber}
+                          disabled
                         />
                       </Form.Group>
                       {!phoneNumber && isPhoneNumber && (
