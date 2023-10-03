@@ -140,7 +140,7 @@ const Appointmenttable = ({ data }) => {
     console.log(newHourBefore, newHourAfter)
   }
   useEffect(() => {
-    convertTimeStringToDate("3:00 PM")
+    convertTimeStringToDate("7:30 PM")
     //convertTimeStringToDate(currentTime)
   }, [])
   return (
