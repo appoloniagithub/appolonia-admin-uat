@@ -18,6 +18,8 @@ import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import { getBookingData } from "Connection/Appointments"
 import { addDoctor } from "Connection/Doctors"
+import * as Yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 //window.Buffer = window.Buffer || require("buffer").Buffer
 
@@ -173,6 +175,7 @@ const CreateDoctor = props => {
   const [education, setEducation] = useState("")
   const [profile, setProfile] = useState("")
   const [password, setPassword] = useState("")
+  const [cpassword, setCPassword] = useState("")
   const [isRole, setIsRole] = useState(false)
   const [isSpeciality, setIsSpeciality] = useState(false)
   const [isPhoneNumber, setIsPhoneNumber] = useState(false)
@@ -181,11 +184,47 @@ const CreateDoctor = props => {
   const [clinicName, setClinicName] = useState("")
   const [clinics, setClinics] = useState([])
 
+  const [toggle1, setToggle1] = useState(false)
+  const [toggle2, setToggle2] = useState(false)
+  //let password
+
+  const formSchema = Yup.object().shape({
+    password: Yup.string()
+      .required("Password is required")
+      .min(4, "Password length should be at least 4 characters")
+      .max(12, "Password cannot exceed more than 12 characters"),
+    cpassword: Yup.string()
+      .required("Confirm Password is required")
+      .min(4, "Password length should be at least 4 characters")
+      .max(12, "Password cannot exceed more than 12 characters")
+      .oneOf([Yup.ref("password")], "Passwords do not match"),
+  })
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+    reset,
+    watch,
+    getValues,
+  } = useForm({
+    mode: "onTouched",
+    resolver: yupResolver(formSchema),
+  })
+  //password = watch("password", "")
+
+  const onSubmit = data => {
+    console.log(data)
+    // reset();
+  }
+
+  console.log(errors)
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm()
 
   const selectCountryHandler = value => setNationality(value)
 
@@ -243,6 +282,7 @@ const CreateDoctor = props => {
       formdata.append("role", role)
       formdata.append("email", email)
       formdata.append("speciality", speciality)
+      formdata.append("clinicName", clinicName)
       formdata.append("emiratesId", emiratesId)
       formdata.append("password", password)
       formdata.append("phoneNumber", phoneNumber)
@@ -263,7 +303,8 @@ const CreateDoctor = props => {
             setPhoneNumber(""),
             setEmiratesId(""),
             setSpeciality(""),
-            setImage(""),
+            setClinicName("")
+          setImage(""),
             setPassword(""),
             setRole(""),
             setGender(""),
@@ -569,6 +610,45 @@ const CreateDoctor = props => {
                         <Form.Label className="mt-2">
                           Password<sup className="text-danger">*</sup>
                         </Form.Label>
+                        {/* <div className="Label1">
+                          <label>Password</label>
+                        </div> */}
+                        <div className="input1">
+                          {/* <i id="passlock" className="fa fa-lock icon"></i>
+                          <i
+                            id="showpass"
+                            className="fa fa-eye icon"
+                            onClick={() => {
+                              setToggle1(!toggle1)
+                            }}
+                          ></i> */}
+                          <input
+                            style={{
+                              width: "433px",
+                              height: "36px",
+                              border: "1px solid #ced4da",
+                              borderRadius: "5px",
+                            }}
+                            className="input-field"
+                            type="password"
+                            name="password"
+                            {...register("password")}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                          ></input>
+                          {/* <div>{errors?.password?.message}</div> */}
+                        </div>
+                      </Form.Group>
+                      <p className="text-danger">{errors.password?.message}</p>
+
+                      {/* <div className="Button">
+                          <button type="submit">Submit</button>
+                        </div> */}
+
+                      {/* <Form.Group controlId="Password">
+                        <Form.Label className="mt-2">
+                          Password<sup className="text-danger">*</sup>
+                        </Form.Label>
                         <Form.Control
                           type="password"
                           {...register("password", {
@@ -587,10 +667,10 @@ const CreateDoctor = props => {
                       {errors.password &&
                         errors.password.type === "pattern" && (
                           <p className="text-danger">Invalid password</p>
-                        )}
+                        )} */}
                     </Col>
                     <Col sm="6">
-                      <Form.Group controlId="Repeat Password">
+                      {/* <Form.Group controlId="Repeat Password">
                         <Form.Label className="mt-2">
                           Repeat Password<sup className="text-danger">*</sup>
                         </Form.Label>
@@ -599,7 +679,37 @@ const CreateDoctor = props => {
                           value={password}
                           onChange={e => setPassword(e.target.value)}
                         />
+                      </Form.Group> */}
+                      <Form.Group controlId="Password">
+                        <Form.Label className="mt-2">
+                          Confirm Password<sup className="text-danger">*</sup>
+                        </Form.Label>
+                        <div className="input2">
+                          {/* <i id="passlock" className="fa fa-lock icon"></i>
+                          <i
+                            id="showpass"
+                            className="fa fa-eye icon"
+                            onClick={() => {
+                              setToggle2(!toggle2)
+                            }}
+                          ></i> */}
+                          <input
+                            style={{
+                              width: "433px",
+                              height: "36px",
+                              border: "1px solid #ced4da",
+                              borderRadius: "5px",
+                            }}
+                            className="input-field"
+                            type="password"
+                            name="cpassword"
+                            {...register("cpassword")}
+                            value={cpassword}
+                            onChange={e => setCPassword(e.target.value)}
+                          ></input>
+                        </div>
                       </Form.Group>
+                      <p className="text-danger">{errors.cpassword?.message}</p>
                     </Col>
                   </Row>
                   <br />

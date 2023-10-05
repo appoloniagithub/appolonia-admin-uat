@@ -97,16 +97,64 @@ const Appointmenttable = ({ data }) => {
 
   console.log(appointmentData)
   useEffect(() => {
+    let tempArr = []
     for (let i = 0; i < appointmentData.length; i++) {
       let t1 = appointmentData[i].time
-      setCurrentTime(t1)
-      console.log(t1, typeof t1)
+      //setCurrentTime(t1)
+      let tempObj = appointmentData[i]
+      if (
+        appointmentData[i].status === "Confirmed" &&
+        appointmentData[i].date === moment(new Date()).format("YYYY-MM-DD")
+      ) {
+        let obj = convertTimeStringToDate(t1)
+        console.log(t1, typeof t1, obj)
+        if (obj?.newHourBefore && obj?.newHourAfter) {
+          const curTime = moment(new Date()).format("hh:mm A")
+          console.log(curTime)
+          let curTimeMin = convertTo24Hour(curTime)
+          let newHourBeforeMin = convertTo24Hour(obj?.newHourBefore)
+          let newHourAfterMin = convertTo24Hour(obj?.newHourAfter)
+          let beforeHrs = (curTimeMin - newHourBeforeMin) / 60
+          let afterHrs = (newHourAfterMin - curTimeMin) / 60
+
+          tempObj = {
+            ...tempObj,
+            // newHourBefore: obj?.newHourBefore,
+            // newHourAfter: obj?.newHourAfter,
+            isStarted: beforeHrs >= 0 && afterHrs >= 0 ? true : false,
+          }
+        }
+      }
+      tempArr.push(tempObj)
     }
+    setAppointmentData([...tempArr])
   }, [])
+
+  function convertTo24Hour(time12) {
+    const [time, period] = time12.split(" ")
+    let [hours, minutes] = time.split(":")
+    hours = parseInt(hours, 10)
+    minutes = parseInt(minutes, 10)
+
+    if (period === "PM" && hours !== 12) {
+      hours += 12
+    } else if (period === "AM" && hours === 12) {
+      hours = 0
+    }
+
+    return hours * 60 + minutes // Convert to minutes for easier calculations
+  }
 
   const convertTimeStringToDate = timeString => {
     const parts = timeString.split(" ") // Split the time and AM/PM
-    console.log(parts)
+    console.log(parts.length, parts, "parts")
+    if (parts.length !== 2) {
+      // throw new Error(
+      //   "Invalid time format. Please include both time and AM/PM."
+      // )
+      return null
+    }
+
     const time = parts[0] // Extract the time part
     const ampm = parts[1] // Extract the AM/PM part
 
@@ -135,8 +183,10 @@ const Appointmenttable = ({ data }) => {
     console.log(todayDate)
     const newHourBefore = moment(hrBefore).format("hh:mm A")
     const newHourAfter = moment(hrAfter).format("hh:mm A")
-    setOneHourBefore(newHourBefore)
-    setOneHourAfter(newHourAfter)
+    //setOneHourBefore(newHourBefore)
+    //setOneHourAfter(newHourAfter)
+
+    return { newHourBefore, newHourAfter }
     console.log(newHourBefore, newHourAfter)
   }
   useEffect(() => {
@@ -251,9 +301,13 @@ const Appointmenttable = ({ data }) => {
                         )}
                         {appointment.consultationType === "Remote" &&
                           appointment.status === "Confirmed" &&
-                          appointment.time > oneHourBefore &&
-                          appointment.time < oneHourAfter &&
-                          appointment.date === date && (
+                          appointment?.isStarted &&
+                          // appointment?.newHourBefore &&
+                          // appointment?.newHourAfter &&
+                          // appointment.time > appointment?.newHourBefore &&
+                          // appointment.time < appointment?.newHourAfter &&
+                          appointment.date ===
+                            moment(new Date()).format("YYYY-MM-DD") && (
                             <a
                               // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
                               //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { Table } from "reactstrap"
+//import { Table } from "reactstrap"
 import { getAllDoctors } from "Connection/Doctors"
+import Divider from "@mui/material/Divider"
 //import "bootstrap/dist/css/bootstrap.min.css"
 import {
   activePatients,
@@ -14,10 +15,54 @@ import {
   pendingAppointments,
 } from "Connection/Appointments"
 import moment from "moment"
+import { styled } from "@mui/material/styles"
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell, { tableCellClasses } from "@mui/material/TableCell"
+import TableContainer from "@mui/material/TableContainer"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
+import Paper from "@mui/material/Paper"
+import { withStyles, makeStyles } from "@material-ui/core/styles"
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+
+  tableRow: {
+    height: 10,
+  },
+  tableCell: {
+    padding: "0px 16px",
+  },
+})
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.common.black,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    height: 10,
+  },
+}))
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}))
 const Dashboard = () => {
   //meta title
   document.title = "Dashboard | Appolonia Dental Care"
+  const classes = useStyles()
+
   const [patients, setPatients] = useState("")
   const [pending, setPending] = useState([])
   const [newPatient, setNewPatient] = useState([])
@@ -26,9 +71,10 @@ const Dashboard = () => {
   const [doctors, setDoctors] = useState("")
   const [messages, setMessages] = useState([])
   const [appointments, setAppointments] = useState("")
+  const [displayedRows, setDisplayedRows] = useState(5)
   useEffect(() => {
     getAllDoctors().then(res => {
-      console.log(res.data.data.doctors)
+      console.log(res)
       setDoctors(res.data.data.doctors)
     })
     getAllPatients().then(res => {
@@ -64,50 +110,103 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <div className="page-content">
+        <h4 style={{ paddingLeft: "30px" }}>Dashboard</h4>
         <br />
-        <div className="d-flex justify-content-around">
-          <div>
+        <div className="d-flex justify-content-center">
+          <div
+            className="border border-2 border-warning mr-2"
+            style={{ padding: "5px", width: "330px" }}
+          >
             <h4 className="text-primary mb-4">Total Patients</h4>
-            <h1 className="text-center" style={{ color: "rgb(32,80,123)" }}>
+            <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
               {patients.length}
             </h1>
           </div>
-          <div>
+          <div
+            className="border border-2 border-warning mr-2"
+            style={{ padding: "5px", width: "330px" }}
+          >
             <h4 className="text-primary mb-4">Active Patients</h4>
-            <h1 className="text-center" style={{ color: "rgb(32,80,123)" }}>
+            <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
               {actPatients.length}
             </h1>
           </div>
-          <div>
+          <div
+            className="border border-2 border-warning mr-2"
+            style={{ padding: "5px", width: "330px" }}
+          >
             <h4 className="text-primary mb-4">Total Doctors</h4>
-            <h1 className="text-center" style={{ color: "rgb(32,80,123)" }}>
+            <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
               {doctors.length}
             </h1>
           </div>
-          <div>
+          <div
+            className="border border-2 border-warning mr-2"
+            style={{ padding: "5px", width: "330px" }}
+          >
             <h4 className="text-primary mb-4">Total Consultations</h4>
-            <h1 className="text-center" style={{ color: "rgb(32,80,123)" }}>
+            <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
               {appointments.length}
             </h1>
           </div>
         </div>
         <br />
-        <div className="d-flex">
+        <div className="d-flex justify-content-around">
           <div
+            className="border rounded"
             style={{
               display: "block",
-              width: 700,
-              padding: 30,
-              // height: 300,
+              width: 650,
+              height: 400,
+              backgroundColor: "#fff",
               //overflow: "scroll",
-              // border: "solid 0.5px",
+              //padding: 30,
             }}
           >
-            <h4 className="text-primary">Messages</h4>
-            <Table
-              className="dashboard-table-class"
-              style={{ border: "2px solid" }}
+            <div style={{ padding: "12px" }}>
+              <h4 className="text-primary">Messages</h4>
+            </div>
+            <Divider />
+            <TableContainer
+              className="border rounded mt-2"
+              style={{ border: "none" }}
+              component={Paper}
             >
+              <Table
+                //sx={{ minWidth: 500, minHeight: 300 }}
+                aria-label="customized table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Patient Name</StyledTableCell>
+                    <StyledTableCell align="left">Message</StyledTableCell>
+                    <StyledTableCell align="left">Received To</StyledTableCell>
+                    <StyledTableCell align="left">Date/Time</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {messages.slice(0, displayedRows).map(msg => {
+                    return (
+                      <StyledTableRow key={msg._id}>
+                        <StyledTableCell align="left">
+                          {msg?.patientName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {msg?.message}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {msg?.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {msg?.createdAt}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* <Table striped>
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -117,10 +216,10 @@ const Dashboard = () => {
                   <th>Date/Time</th>
                 </tr>
               </thead>
-              <tbody style={{ height: "200px" }}>
-                {messages.map(msg => {
+              <tbody >
+              {messages.slice(0, displayedRows).map(msg => {
                   return (
-                    <tr className="table-tr" key={msg?._id}>
+                    <tr key={msg?._id}>
                       <td>{msg?.patientName}</td>
                       <td>{msg?.message}</td>
                       <td>{msg?.name}</td>
@@ -129,59 +228,128 @@ const Dashboard = () => {
                   )
                 })}
               </tbody>
-            </Table>
+            </Table> */}
           </div>
+
           <div
+            className="border rounded"
             style={{
               display: "block",
-              width: 700,
-              //height: 300,
+              width: 650,
+              height: 400,
+              backgroundColor: "#fff",
               //overflow: "scroll",
-              padding: 30,
+              //padding: 30,
             }}
           >
-            <h4 className="text-primary">Consultation Requests</h4>
-            <Table style={{ border: "2px solid" }}>
-              <thead>
-                <tr>
-                  {/* <th>File Number</th> */}
-                  <th>Patient Name</th>
-                  <th>Phone Number</th>
-                  <th>Clinic Name</th>
-                  <th>Department</th>
-                  <th>Type</th>
-                </tr>
-              </thead>
-              <tbody style={{ height: "200px" }}>
-                {pending.map(appointment => {
-                  return (
-                    <tr key={appointment?._id}>
-                      {/* <td>123</td> */}
-
-                      <td>{appointment?.patientName}</td>
-                      <td>{appointment?.phoneNumber}</td>
-                      <td>{appointment?.clinicName}</td>
-                      <td>{appointment?.serviceName}</td>
-                      <td>{appointment?.consultationType}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </Table>
+            <div style={{ padding: "12px" }}>
+              <h4 className="text-primary">Consultation Requests</h4>
+            </div>
+            <Divider />
+            <TableContainer
+              className="border rounded mt-2"
+              style={{ border: "none" }}
+              component={Paper}
+            >
+              <Table
+                //sx={{ minWidth: 500, minHeight: 300 }}
+                aria-label="customized table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Patient Name</StyledTableCell>
+                    <StyledTableCell align="left">Phone Number</StyledTableCell>
+                    <StyledTableCell align="left">Clinic Name</StyledTableCell>
+                    <StyledTableCell align="left">Department</StyledTableCell>
+                    <StyledTableCell align="left">Type</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {pending.slice(0, displayedRows).map(appointment => {
+                    return (
+                      <StyledTableRow key={appointment?._id}>
+                        <StyledTableCell align="left">
+                          {appointment?.patientName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {appointment?.phoneNumber}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {appointment?.clinicName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {appointment?.serviceName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {appointment?.consultationType}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         </div>
-        <div className="d-flex">
+        <br />
+        <div className="d-flex justify-content-around">
           <div
+            className="border rounded"
             style={{
               display: "block",
-              width: 700,
-              padding: 30,
-              //height: 300,
+              width: 650,
+              height: 400,
+              backgroundColor: "#fff",
               //overflow: "scroll",
+              //padding: 30,
             }}
           >
-            <h4 className="text-primary">New Scans</h4>
-            <Table
+            <div style={{ padding: "12px" }}>
+              <h4 className="text-primary">New Scans</h4>
+            </div>
+            <Divider />
+            <TableContainer
+              className="border rounded mt-2"
+              style={{ border: "none" }}
+              component={Paper}
+            >
+              <Table
+                //sx={{ minWidth: 500, minHeight: 300 }}
+                aria-label="customized table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Patient Name</StyledTableCell>
+
+                    <StyledTableCell align="left">Doctor Name</StyledTableCell>
+                    <StyledTableCell align="left">Speciality</StyledTableCell>
+                    <StyledTableCell align="left">Date/Time</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {newScans.slice(0, displayedRows).map(scan => {
+                    return (
+                      <StyledTableRow key={scan?._id}>
+                        <StyledTableCell align="left">
+                          {scan?.patientName}
+                        </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          {scan?.doctorName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {scan?.Department}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {moment(scan?.created).format("DD-MM-YYYY hh:mm A")}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* <Table
               className=".dashboard-table-class"
               style={{ border: "2px solid" }}
             >
@@ -194,7 +362,7 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody style={{ height: "200px" }}>
-                {newScans.map(scan => {
+                {newScans.slice(0, displayedRows).map(scan => {
                   return (
                     <tr key={scan?._id} className="row-height">
                       <td>{scan?.patientName}</td>
@@ -207,20 +375,71 @@ const Dashboard = () => {
                   )
                 })}
               </tbody>
-            </Table>
+            </Table> */}
           </div>
 
           <div
+            className="border rounded"
             style={{
               display: "block",
-              width: 700,
-              padding: 30,
-              //height: 300,
-              // overflow: "scroll",
+              width: 650,
+              height: 400,
+              backgroundColor: "#fff",
+
+              //overflow: "scroll",
+              //padding: 30,
             }}
           >
-            <h4 className="text-primary">New Patient Requests</h4>
-            <Table style={{ border: "2px solid " }}>
+            <div style={{ padding: "12px" }}>
+              <h4 className="text-primary">New Patient Requests</h4>
+            </div>
+            <Divider />
+            <TableContainer
+              className="border rounded mt-2"
+              style={{ border: "none" }}
+              component={Paper}
+            >
+              <Table
+                //sx={{ minWidth: 500, minHeight: 300 }}
+                aria-label="customized table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Patient Name</StyledTableCell>
+                    <StyledTableCell align="left">Emirates ID</StyledTableCell>
+                    <StyledTableCell align="left">Phone Number</StyledTableCell>
+
+                    <StyledTableCell align="left">City</StyledTableCell>
+                    <StyledTableCell align="left">Action</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {newPatient.slice(0, displayedRows).map(patient => {
+                    return (
+                      <StyledTableRow key={patient?._id}>
+                        <StyledTableCell align="left">
+                          {" "}
+                          {patient?.firstName}&nbsp;{patient?.lastName}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {patient?.uniqueId}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {patient?.phoneNumber}
+                        </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          {patient?.city}
+                        </StyledTableCell>
+                        <StyledTableCell align="left"></StyledTableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {/* <Table style={{ border: "2px solid " }}>
               <thead>
                 <tr>
                   <th>Patient Name</th>
@@ -231,7 +450,7 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody style={{ height: "200px" }}>
-                {newPatient?.map(patient => {
+                {newPatient.slice(0, displayedRows).map(patient => {
                   return (
                     <tr key={patient?._id}>
                       <td>
@@ -245,9 +464,10 @@ const Dashboard = () => {
                   )
                 })}
               </tbody>
-            </Table>
+            </Table> */}
           </div>
         </div>
+        <br />
       </div>
     </React.Fragment>
   )
