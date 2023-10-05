@@ -189,10 +189,11 @@ const Appointmenttable = ({ data }) => {
     return { newHourBefore, newHourAfter }
     console.log(newHourBefore, newHourAfter)
   }
-  useEffect(() => {
-    convertTimeStringToDate("7:30 PM")
-    //convertTimeStringToDate(currentTime)
-  }, [])
+  // useEffect(() => {
+  //   //convertTimeStringToDate("7:30 PM")
+  //   convertTimeStringToDate(currentTime)
+  // }, [])
+  console.log(appointmentData)
   return (
     <>
       <Card>
