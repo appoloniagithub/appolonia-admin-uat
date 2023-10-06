@@ -72,37 +72,48 @@ const Dashboard = () => {
   const [messages, setMessages] = useState([])
   const [appointments, setAppointments] = useState("")
   const [displayedRows, setDisplayedRows] = useState(5)
+  const [display, setDisplay] = useState(3)
   useEffect(() => {
     getAllDoctors().then(res => {
       console.log(res)
-      setDoctors(res.data.data.doctors)
+      if (res.data.data.success === 1) {
+        setDoctors(res.data.data.doctors)
+      }
     })
     getAllPatients().then(res => {
-      console.log(res.data.data.allPatients)
-      setPatients(res.data.data.allPatients)
+      console.log(res)
+      if (res.data.data.success === 1) {
+        setPatients(res.data.data.allPatients)
+      }
     })
     getAllAppointments().then(res => {
-      console.log(res.data.appointments)
-      setAppointments(res.data.appointments)
+      console.log(res)
+      if (res.data.success === 1) {
+        setAppointments(res.data.appointments)
+      }
     })
     activePatients().then(res => {
-      console.log(res.data.data.foundPatients)
-      setActPatients(res.data.data.foundPatients)
+      console.log(res)
+      if (res.data.data.success === 1) {
+        setActPatients(res.data.data.foundPatients)
+      }
     })
     newPatientRequests().then(res => {
-      console.log(res.data.data.foundPatients)
-      setNewPatient(res.data.data.foundPatients)
+      console.log(res)
+      if (res.data.data.success === 1) {
+        setNewPatient(res.data.data.foundPatients)
+      }
     })
     pendingAppointments().then(res => {
       console.log(res)
       setPending(res.data.data.pending)
     })
     doctorScans().then(res => {
-      console.log(res.data.data.scans)
+      console.log(res)
       setNewScans(res.data.data.scans)
     })
     unSeenMessages().then(res => {
-      console.log(res.data.data.messages)
+      console.log(res)
       setMessages(res.data.data.messages)
     })
   }, [])
@@ -146,7 +157,7 @@ const Dashboard = () => {
           >
             <h4 className="text-primary mb-4">Total Consultations</h4>
             <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
-              {appointments.length}
+              {appointments.length > 0 ? appointments.length : "0"}
             </h1>
           </div>
         </div>
@@ -164,7 +175,7 @@ const Dashboard = () => {
             }}
           >
             <div style={{ padding: "12px" }}>
-              <h4 className="text-primary">Messages</h4>
+              <h4 className="text-primary">Chat Messages</h4>
             </div>
             <Divider />
             <TableContainer
@@ -265,7 +276,7 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {pending.slice(0, displayedRows).map(appointment => {
+                  {pending.slice(0, display).map(appointment => {
                     return (
                       <StyledTableRow key={appointment?._id}>
                         <StyledTableCell align="left">

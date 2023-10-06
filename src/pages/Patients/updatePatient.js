@@ -129,15 +129,15 @@ const EditPatient = props => {
   }, [phoneNumber])
   const updateData = async () => {
     var formdata = new FormData()
-    formdata.append("fileId", fileId)
-    formdata.append("isFileNumberChanged", "0")
+    //formdata.append("fileId", fileId)
+    //formdata.append("isFileNumberChanged", "0")
     //formdata.append("isFamilyHead", "1")
-    formdata.append("isEmiratesIdChanged", "0")
+    // formdata.append("isEmiratesIdChanged", "0")
     formdata.append("city", city)
     formdata.append("fileNumber", fileNumber)
     formdata.append("emiratesId", emiratesId)
     formdata.append("email", email)
-    formdata.append("phoneNumber", phoneNumber)
+    //formdata.append("phoneNumber", phoneNumber)
     formdata.append("lastName", lastName)
     formdata.append("firstName", firstName)
     formdata.append("gender", gender)
@@ -260,9 +260,7 @@ const EditPatient = props => {
                       />
                     </Form.Group>
                     <Form.Group controlId="File Number">
-                      <Form.Label className="mt-2">
-                        File Number<sup className="text-danger">*</sup>
-                      </Form.Label>
+                      <Form.Label className="mt-2">File Number</Form.Label>
                       <Form.Control
                         type="text"
                         name="fileNumber"

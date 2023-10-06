@@ -26,7 +26,7 @@ const EditDoctor = () => {
   let history = useHistory()
   const location = useLocation()
   const roleOptions = ["Select", "Admin", "Doctor"]
-  const options = ["Select", "Orthodontist", "Pediatric Dentist"]
+  const options = ["Select", "Orthodontics", "Pediatric Dentistry"]
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -238,12 +238,12 @@ const EditDoctor = () => {
           <Col sm="4">
             <div className="border border-secondary rounded mt-4 ml-4 p-2">
               <div className="justify-content-between p-2">
-                <h5>Add New Doctor</h5>
+                <h5>Edit Doctor</h5>
                 <Divider />
                 <img
                   className="m-2"
                   style={{ borderRadius: "50px" }}
-                  src={profilePic}
+                  src={image ? `${url}/api/${image}` : profilePic}
                   width="100"
                   height="100"
                 />

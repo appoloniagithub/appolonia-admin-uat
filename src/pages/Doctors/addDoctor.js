@@ -159,7 +159,7 @@ const CreateDoctor = props => {
   // }
   let history = useHistory()
   const roleOptions = ["Select", "Admin", "Doctor"]
-  const options = ["Select", "Orthodontist", "Pediatric Dentist", "Admin"]
+  const options = ["Select", "Orthodontics", "Pediatric Dentistry", "Admin"]
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")

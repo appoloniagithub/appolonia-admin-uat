@@ -187,7 +187,6 @@ const Appointmenttable = ({ data }) => {
     //setOneHourAfter(newHourAfter)
 
     return { newHourBefore, newHourAfter }
-    console.log(newHourBefore, newHourAfter)
   }
   // useEffect(() => {
   //   //convertTimeStringToDate("7:30 PM")
