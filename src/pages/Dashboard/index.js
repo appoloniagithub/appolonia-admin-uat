@@ -88,8 +88,8 @@ const Dashboard = () => {
     })
     getAllAppointments().then(res => {
       console.log(res)
-      if (res.data.success === 1) {
-        setAppointments(res.data.appointments)
+      if (res.data.data.success === 1) {
+        setAppointments(res.data.data.appointments)
       }
     })
     activePatients().then(res => {
@@ -157,7 +157,7 @@ const Dashboard = () => {
           >
             <h4 className="text-primary mb-4">Total Consultations</h4>
             <h1 className="text-start" style={{ color: "rgb(32,80,123)" }}>
-              {appointments.length > 0 ? appointments.length : "0"}
+              {appointments.length}
             </h1>
           </div>
         </div>
