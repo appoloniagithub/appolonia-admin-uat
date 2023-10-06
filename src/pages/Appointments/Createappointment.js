@@ -25,7 +25,7 @@ export default function Createappointment() {
     "Oral Surgery",
   ]
   //const clinics = ["Khalifa City", "Abu Dhabi City", "Dubai"]
-  const consult = ["Remote", "Face-To-Face Consultation"]
+  const consult = ["Remote", "Face-To-Face"]
   const patients = ["New", "Existing"]
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
@@ -224,6 +224,7 @@ export default function Createappointment() {
                             //setIsRole(false)
                           }}
                         >
+                          <option>Select</option>
                           {clinics.map(value => (
                             <option value={value.address} key={value.address}>
                               {value.address}
@@ -248,6 +249,7 @@ export default function Createappointment() {
                             setServiceName(e.target.value)
                           }}
                         >
+                          <option>Select</option>
                           {services.map(value => (
                             <option value={value} key={value}>
                               {value}
@@ -269,6 +271,7 @@ export default function Createappointment() {
                     value={doctorId}
                     onChange={e => setDoctorId(e.currentTarget.value)}
                   >
+                    <option>Select</option>
                     {doctors.map(item => (
                       <option key={item._id} value={item._id}>
                         {item.firstName} {item.lastName}
@@ -358,6 +361,7 @@ export default function Createappointment() {
                         setConsultationType(e.target.value)
                       }}
                     >
+                      <option>Select</option>
                       {consult.map(value => (
                         <option value={value} key={value}>
                           {value}

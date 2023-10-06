@@ -193,7 +193,7 @@ const Scancarousal = ({ scanImages }) => {
               {/* <Zoom scanImages={scanImages} /> */}
               <img
                 style={{
-                  transform: `rotate(${270}deg) scale(1.8)`,
+                  transform: `rotate(${270}deg) scale(1.5)`,
                   minHeight: "200px",
                   //transform: "scale(1.2)",
                   height: "100%",

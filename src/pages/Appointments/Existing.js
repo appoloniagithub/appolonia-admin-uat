@@ -22,7 +22,7 @@ export default function Existing() {
   //     "Oral Surgery",
   //   ]
   //const clinics = ["Khalifa City", "Abu Dhabi City", "Dubai"]
-  const consult = ["Tele Consultation", "Face-To-Face Consultation"]
+  const consult = ["Remote", "Face-To-Face"]
 
   const [select, setSelected] = useState("")
   const [doctors, setDoctors] = useState([])
@@ -200,6 +200,7 @@ export default function Existing() {
                             //setIsRole(false)
                           }}
                         >
+                          <option>Select</option>
                           {clinics.map(value => (
                             <option value={value.address} key={value.address}>
                               {value.address}
@@ -224,6 +225,7 @@ export default function Existing() {
                             setServiceName(e.target.value)
                           }}
                         >
+                          <option>Select</option>
                           {services.map(value => (
                             <option value={value} key={value}>
                               {value}
@@ -245,6 +247,7 @@ export default function Existing() {
                     value={doctorId}
                     onChange={e => setDoctorId(e.currentTarget.value)}
                   >
+                    <option>Select</option>
                     {doctors.map(item => (
                       <option key={item._id} value={item._id}>
                         {item.firstName} {item.lastName}
@@ -334,6 +337,7 @@ export default function Existing() {
                         setConsultationType(e.target.value)
                       }}
                     >
+                      <option>Select</option>
                       {consult.map(value => (
                         <option value={value} key={value}>
                           {value}

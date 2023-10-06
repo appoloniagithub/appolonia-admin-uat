@@ -114,9 +114,10 @@ const Appointmenttable = ({ data }) => {
           let curTimeMin = convertTo24Hour(curTime)
           let newHourBeforeMin = convertTo24Hour(obj?.newHourBefore)
           let newHourAfterMin = convertTo24Hour(obj?.newHourAfter)
+          console.log(newHourBeforeMin, newHourAfterMin, "min")
           let beforeHrs = (curTimeMin - newHourBeforeMin) / 60
           let afterHrs = (newHourAfterMin - curTimeMin) / 60
-
+          console.log(beforeHrs, afterHrs, "before,after")
           tempObj = {
             ...tempObj,
             // newHourBefore: obj?.newHourBefore,
@@ -162,8 +163,12 @@ const Appointmenttable = ({ data }) => {
 
     // Convert 12-hour format to 24-hour format
     let hours24 = hours
-    if (ampm.toLowerCase() === "pm") {
-      hours24 += 12
+    if (ampm) {
+      if (ampm.toLowerCase() === "pm" && hours < 12) {
+        hours24 += 12
+      } else if (ampm.toLowerCase() === "am" && hours === 12) {
+        hours24 = 0
+      }
     }
 
     const currentDate = new Date()
@@ -211,8 +216,8 @@ const Appointmenttable = ({ data }) => {
                   <th>Preferred Date/Time</th>
                   <th>Preferred Doctor</th>
                   <th>Status</th>
-                  <th>Action</th>
-                  <th>Cancel</th>
+                  <th className="text-center">Action</th>
+                  {/* <th>Cancel</th> */}
                   {/* <th>Confirm</th>
                   <th>Reschedule</th>
 
@@ -259,115 +264,77 @@ const Appointmenttable = ({ data }) => {
                         ) : (
                           <p className="text-danger">{appointment.status}</p>
                         )}
-
-                        {/* <BootstrapSwitchButton
-                          //   onlabel="Confirmed"
-                          //   offlabel="Pending"
-                          checked={
-                            appointment.status === "Confirmed" ? true : false
-                          }
-                          onChange={checked => {
-                            setStatus({ status: checked })
-                            handleConfirmBooking(appointment?._id, checked)
-                          }}
-                        /> */}
                       </td>
                       <td>
                         {appointment.status === "Pending" && (
-                          <a
-                            href={`/appointments/viewappointment/${appointment?._id}`}
-                          >
-                            <Button
-                              color="primary"
-                              className="btn btn-primary "
-                              // onClick={() => handleSelectPatient(patient)}
-                            >
-                              Confirm
-                            </Button>
-                          </a>
+                          <div>
+                            <span>
+                              <a
+                                href={`/appointments/viewappointment/${appointment?._id}`}
+                              >
+                                <Button
+                                  color="primary"
+                                  className="btn btn-primary "
+                                  // onClick={() => handleSelectPatient(patient)}
+                                >
+                                  Confirm
+                                </Button>
+                              </a>
+                            </span>
+                            &nbsp;
+                            <span>
+                              <Button
+                                color="primary"
+                                className="btn btn-primary "
+                                onClick={() => handleClick(appointment?._id)}
+                              >
+                                Cancel
+                              </Button>
+                            </span>
+                          </div>
                         )}
-                        {appointment.status === "Reschedule" && (
-                          <Link
-                            to={`/appointments/edit-appointment/${appointment?._id}`}
-                          >
-                            <Button
-                              color="primary"
-                              className="btn btn-primary "
-                              // onClick={() => handleSelectPatient(patient)}
-                            >
-                              Reschedule
-                            </Button>
-                          </Link>
-                        )}
-                        {appointment.consultationType === "Remote" &&
-                          appointment.status === "Confirmed" &&
-                          appointment?.isStarted &&
-                          // appointment?.newHourBefore &&
-                          // appointment?.newHourAfter &&
-                          // appointment.time > appointment?.newHourBefore &&
-                          // appointment.time < appointment?.newHourAfter &&
-                          appointment.date ===
-                            moment(new Date()).format("YYYY-MM-DD") && (
+                        {appointment.status === "Confirmed" && (
+                          <div>
                             <a
-                              // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
-                              //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}
-                              href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
-                              target="__blank"
+                            //href={`/appointments/viewappointment/${appointment?._id}`}
                             >
                               <Button
                                 color="primary"
                                 className="btn btn-primary "
                                 // onClick={() => handleSelectPatient(patient)}
                               >
+                                Complete
+                              </Button>
+                            </a>
+                            &nbsp;
+                            <Button
+                              color="primary"
+                              className="btn btn-primary "
+                              onClick={() => handleClick(appointment?._id)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        )}
+                        <br />
+                        {appointment.consultationType === "Remote" &&
+                          appointment.status === "Confirmed" &&
+                          appointment?.isStarted &&
+                          appointment.date ===
+                            moment(new Date()).format("YYYY-MM-DD") && (
+                            <a
+                              href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
+                              target="__blank"
+                            >
+                              <Button
+                                color="primary"
+                                className="btn btn-primary "
+                              >
                                 Start VideoCall
                               </Button>
                             </a>
                           )}
-                      </td>
-                      {/* <td>
-                        {" "}
-                        {appointment.status === "Pending" ? (
-                          <a
-                            href={`/appointments/viewappointment/${appointment?._id}`}
-                          >
-                            <Button
-                              color="primary"
-                              className="btn btn-primary "
-                              // onClick={() => handleSelectPatient(patient)}
-                            >
-                              Confirm
-                            </Button>
-                          </a>
-                        ) : (
-                          <Button
-                            disabled
-                            color="primary"
-                            className="btn btn-primary "
-                            // onClick={() => handleSelectPatient(patient)}
-                          >
-                            Confirm
-                          </Button>
-                        )}
-                      </td> */}
-                      {/* <td>
-                        {
-                          appointment.status === "Pending" && (
-                            <i
-                              disabled
-                              className="mdi mdi-square-edit-outline"
-                              style={{ fontSize: "18px", color: "transparent" }}
-                            ></i>
-                          )
 
-                          // <Link
-                          //   to={`/appointments/edit-appointment/${appointment?._id}`}
-                          // >
-                          //   <i
-                          //     className="mdi mdi-square-edit-outline"
-                          //     style={{ fontSize: "18px" }}
-                          //   ></i>
-                          // </Link>
-                        }
                         {appointment.status === "Reschedule" && (
                           <Link
                             to={`/appointments/edit-appointment/${appointment?._id}`}
@@ -381,27 +348,11 @@ const Appointmenttable = ({ data }) => {
                             </Button>
                           </Link>
                         )}
-                      </td> */}
-                      {/* <td>
-                        {appointment.consultationType === "Remote" && (
-                          <a
-                            // href={`http://localhost:8000/chat?roomId=${appointment.roomId}`}
-                            //href={`https://13.51.48.146/chat?roomId=${appointment.roomId}`}
-                            href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
-                            target="__blank"
-                          >
-                            <Button
-                              color="primary"
-                              className="btn btn-primary "
-                              // onClick={() => handleSelectPatient(patient)}
-                            >
-                              Start VideoCall
-                            </Button>
-                          </a>
-                        )}
-                      </td> */}
-                      <td>
-                        {appointment.status === "Cancelled" ? (
+
+                        {/* </td>
+
+                      <td> */}
+                        {/* {appointment.status === "Cancelled" ? (
                           <Button
                             disabled
                             color="primary"
@@ -417,7 +368,7 @@ const Appointmenttable = ({ data }) => {
                           >
                             Cancel
                           </Button>
-                        )}
+                        )} */}
                       </td>
                       <td>
                         <Link
