@@ -39,6 +39,8 @@ import SendNotification from "pages/Notification"
 import Existing from "pages/Appointments/Existing"
 import MyCalendar from "pages/Calender/MyCalender"
 import workCalender from "pages/Calender"
+import Messages from "pages/Messages"
+import ViewMessage from "pages/Messages/ViewMessage"
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
 
@@ -114,6 +116,14 @@ const authProtectedRoutes = [
   {
     path: "/calender",
     component: workCalender,
+  },
+  {
+    path: "/contact-issues",
+    component: Messages,
+  },
+  {
+    path: "/contact-issues/view-issue/:id",
+    component: props => <ViewMessage {...props} />,
   },
   // //profile
   { path: "/profile", component: UserProfile },

@@ -198,6 +198,16 @@ const cronSchedule = async data => {
   console.log(res)
   return res
 }
+const getContacts = async () => {
+  let res = await axios.get(`${url}/api/user/getcontacts`)
+  console.log(res)
+  return res
+}
+const getContactById = async data => {
+  let res = await axios.post(`${url}/api/user/getcontact`, data)
+  console.log(res)
+  return res
+}
 
 export {
   getAllPatients,
@@ -221,4 +231,6 @@ export {
   doctorScans,
   unSeenMessages,
   cronSchedule,
+  getContacts,
+  getContactById,
 }
