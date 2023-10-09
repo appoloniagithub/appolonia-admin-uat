@@ -251,10 +251,10 @@ const Appointmenttable = ({ data }) => {
                             {appointment.pdate} {appointment.ptime}
                           </p>
                         )}
-                        {appointment.status == "Reschedule" && (
+                        {appointment.status == "Confirmed" && (
                           <p>
                             {" "}
-                            {appointment.pdate} {appointment.ptime}
+                            {appointment.date} {appointment.time}
                           </p>
                         )}
                       </td>
@@ -380,14 +380,21 @@ const Appointmenttable = ({ data }) => {
                         )} */}
                       </td>
                       <td>
-                        <Link
-                          to={`/appointments/edit-appointment/${appointment?._id}`}
-                        >
+                        {appointment.status === "Cancelled" ? (
                           <i
                             className="mdi mdi-square-edit-outline"
-                            style={{ fontSize: "18px" }}
+                            style={{ fontSize: "18px", display: "none" }}
                           ></i>
-                        </Link>
+                        ) : (
+                          <Link
+                            to={`/appointments/edit-appointment/${appointment?._id}`}
+                          >
+                            <i
+                              className="mdi mdi-square-edit-outline"
+                              style={{ fontSize: "18px" }}
+                            ></i>
+                          </Link>
+                        )}
                       </td>
                       <td>
                         <i
