@@ -74,7 +74,12 @@ const pendingAppointments = async () => {
   console.log(res)
   return res
 }
+const completeBooking = async data => {
+  let res = await axios.post(`${url}/api/user/complete`, data)
 
+  console.log(res)
+  return res
+}
 export {
   getAllAppointments,
   confirmBooking,
@@ -87,4 +92,5 @@ export {
   getAllBookings,
   pendingAppointments,
   cancelBooking,
+  completeBooking,
 }

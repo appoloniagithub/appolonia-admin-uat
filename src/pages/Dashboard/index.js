@@ -106,15 +106,21 @@ const Dashboard = () => {
     })
     pendingAppointments().then(res => {
       console.log(res)
-      setPending(res.data.data.pending)
+      if (res.data.data.success === 1) {
+        setPending(res.data.data.pending)
+      }
     })
     doctorScans().then(res => {
       console.log(res)
-      setNewScans(res.data.data.scans)
+      if (res.data.data.success === 1) {
+        setNewScans(res.data.data.scans)
+      }
     })
     unSeenMessages().then(res => {
       console.log(res)
-      setMessages(res.data.data.messages)
+      if (res.data.data.success === 1) {
+        setMessages(res.data.data.messages)
+      }
     })
   }, [])
 

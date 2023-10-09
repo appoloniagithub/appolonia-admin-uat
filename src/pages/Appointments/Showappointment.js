@@ -13,13 +13,6 @@ import moment from "moment"
 
 export default function Showappointment() {
   let history = useHistory()
-  const options = [
-    "Select",
-    "Dr.Nada Haouili",
-    "Dr.Nour Alhendawi",
-    "Dr.Mohammad Tarek Ajaj",
-    "Dr.Moaffak Hasan",
-  ]
   const timeOptions = [
     "Select",
     "12:00 AM",
@@ -104,6 +97,7 @@ export default function Showappointment() {
       })
       getAppointmentById({ bookingId: appointmentId }).then(res => {
         console.log(res.data.data)
+        // if (res.data.data.foundAppointement[0]?.status === "Pending") {
         const one = res.data.data.foundAppointement[0]?.pdate
         //console.log(new Date(one))
         const parts = one.split("-") // Split the original date string
@@ -119,6 +113,7 @@ export default function Showappointment() {
           setStartDate(convertedDate)
           setStartTime(res.data.data.foundAppointement[0].ptime)
         }
+        // }
       })
     }
   }, [])

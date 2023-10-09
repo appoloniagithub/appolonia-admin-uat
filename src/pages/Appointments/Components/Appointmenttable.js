@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText"
 import { useHistory, useLocation } from "react-router-dom"
 import {
   cancelBooking,
+  completeBooking,
   confirmBooking,
   deleteBooking,
 } from "Connection/Appointments"
@@ -33,6 +34,7 @@ const Appointmenttable = ({ data }) => {
   const [status, setStatus] = useState(false)
   const [open, setOpen] = useState(false)
   const [show, setShow] = useState(false)
+  const [view, setView] = useState(false)
   const socket = useRef()
   const [currentTime, setCurrentTime] = useState("")
   const [dateObject, setDateObject] = useState(null)
@@ -61,11 +63,16 @@ const Appointmenttable = ({ data }) => {
     setShow(true)
     setApptId(appointmentId)
   }
+  const handleView = appointmentId => {
+    setView(true)
+    setApptId(appointmentId)
+  }
 
   const handleClose = () => {
     history.push("/appointments")
     setOpen(false)
     setShow(false)
+    setView(false)
   }
 
   const deleteData = async () => {
@@ -88,12 +95,13 @@ const Appointmenttable = ({ data }) => {
     })
   }
 
-  //connect to Socket.io
-  // useEffect(() => {
-  //   socket.current = io("http://localhost:8000", {
-  //     transports: ["websocket"],
-  //   })
-  // }, [])
+  const complete = async () => {
+    await completeBooking({ bookingId: apptId }).then(res => {
+      console.log(res)
+      history.push("/appointments")
+      window.location.reload()
+    })
+  }
 
   console.log(appointmentData)
   useEffect(() => {
@@ -216,7 +224,7 @@ const Appointmenttable = ({ data }) => {
                   <th>Preferred Date/Time</th>
                   <th>Preferred Doctor</th>
                   <th>Status</th>
-                  <th className="text-center">Action</th>
+                  <th>Action</th>
                   {/* <th>Cancel</th> */}
                   {/* <th>Confirm</th>
                   <th>Reschedule</th>
@@ -293,48 +301,49 @@ const Appointmenttable = ({ data }) => {
                             </span>
                           </div>
                         )}
-                        {appointment.status === "Confirmed" && (
-                          <div>
-                            <a
-                            //href={`/appointments/viewappointment/${appointment?._id}`}
-                            >
+                        <div className="d-flex">
+                          {appointment.status === "Confirmed" && (
+                            <div className="d-flex">
+                              <a
+                              //href={`/appointments/viewappointment/${appointment?._id}`}
+                              >
+                                <Button
+                                  color="primary"
+                                  className="btn btn-primary "
+                                  onClick={() => handleView(appointment?._id)}
+                                >
+                                  Complete
+                                </Button>
+                              </a>
+                              &nbsp;
                               <Button
                                 color="primary"
                                 className="btn btn-primary "
-                                // onClick={() => handleSelectPatient(patient)}
+                                onClick={() => handleClick(appointment?._id)}
                               >
-                                Complete
+                                Cancel
                               </Button>
-                            </a>
-                            &nbsp;
-                            <Button
-                              color="primary"
-                              className="btn btn-primary "
-                              onClick={() => handleClick(appointment?._id)}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        )}
-                        <br />
-                        {appointment.consultationType === "Remote" &&
-                          appointment.status === "Confirmed" &&
-                          appointment?.isStarted &&
-                          appointment.date ===
-                            moment(new Date()).format("YYYY-MM-DD") && (
-                            <a
-                              href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
-                              target="__blank"
-                            >
-                              <Button
-                                color="primary"
-                                className="btn btn-primary "
-                              >
-                                Start VideoCall
-                              </Button>
-                            </a>
+                            </div>
                           )}
-
+                          &nbsp;
+                          {appointment.consultationType === "Remote" &&
+                            appointment.status === "Confirmed" &&
+                            appointment?.isStarted &&
+                            appointment.date ===
+                              moment(new Date()).format("YYYY-MM-DD") && (
+                              <a
+                                href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
+                                target="__blank"
+                              >
+                                <Button
+                                  color="primary"
+                                  className="btn btn-primary "
+                                >
+                                  Start VideoCall
+                                </Button>
+                              </a>
+                            )}
+                        </div>
                         {appointment.status === "Reschedule" && (
                           <Link
                             to={`/appointments/edit-appointment/${appointment?._id}`}
@@ -443,6 +452,34 @@ const Appointmenttable = ({ data }) => {
                   className="btn btn-primary m-2 "
                   color="primary"
                   onClick={() => cancelData()}
+                >
+                  YES
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={view}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to complete?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  NO
+                </Button>
+                <Button
+                  className="btn btn-primary m-2 "
+                  color="primary"
+                  onClick={() => complete()}
                 >
                   YES
                 </Button>

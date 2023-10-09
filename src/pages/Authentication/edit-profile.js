@@ -23,7 +23,13 @@ const EditProfile = () => {
   let history = useHistory()
   const location = useLocation()
   const roleOptions = ["Select", "Admin", "Doctor"]
-  const options = ["Select", "Orthodontics", "Pediatric Dentistry"]
+  const options = [
+    "Select",
+    "Orthodontics",
+    "Pediatric Dentistry",
+    "Endodontics",
+    "Oral Surgery",
+  ]
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")

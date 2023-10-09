@@ -16,8 +16,8 @@ const Allappointments = props => {
     console.log(res)
     try {
       if (res.data.data.success === 1) {
-        console.log(res.data.appointments)
-        setAppointments(res.data.appointments)
+        console.log(res.data)
+        setAppointments(res.data.data.appointments)
       }
     } catch (err) {
       toast.error(res.data.message, {
