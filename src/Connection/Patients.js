@@ -130,12 +130,7 @@ const getNotes = async data => {
 //   return res
 // }
 const clinicVerify = async data => {
-  let res = await axios.post(`${url}/api/file/clinicverify`, data, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + sessionStorage.getItem("token"),
-    },
-  })
+  let res = await axios.post(`${url}/api/file/clinicverify`, data)
 
   console.log(res)
   return res
@@ -208,6 +203,19 @@ const getContactById = async data => {
   console.log(res)
   return res
 }
+const getAllNotifications = async data => {
+  let res = await axios.post(
+    `${url}/api/notification/getallnotifications`,
+    data
+  )
+  console.log(res)
+  return res
+}
+const getNotifications = async data => {
+  let res = await axios.post(`${url}/api/notification/getnoti`, data)
+  console.log(res)
+  return res
+}
 
 export {
   getAllPatients,
@@ -233,4 +241,6 @@ export {
   cronSchedule,
   getContacts,
   getContactById,
+  getAllNotifications,
+  getNotifications,
 }

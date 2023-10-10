@@ -185,7 +185,10 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               <div className="m-2">
                 <strong>Clinic Verify</strong>{" "}
                 <BootstrapSwitchButton
-                  checked={clinic.clinicVerified}
+                  onstyle="light"
+                  // checked={clinic.clinicVerified}
+                  checked={true}
+                  disabled={true}
                   onChange={checked => {
                     setClinic({ ...clinic, clinicVerified: checked })
                     handleUpdate("clinicVerified", checked)

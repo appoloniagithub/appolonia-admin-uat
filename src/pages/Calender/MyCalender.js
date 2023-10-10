@@ -1,211 +1,3 @@
-// import * as React from "react"
-// import { useRef, useState, useEffect } from "react"
-// //import * as ReactDOM from "react-dom"
-// import {
-//   ScheduleComponent,
-//   Day,
-//   Week,
-//   WorkWeek,
-//   Month,
-//   Inject,
-//   ViewsDirective,
-//   ViewDirective,
-// } from "@syncfusion/ej2-react-schedule"
-// import { ButtonComponent } from "@syncfusion/ej2-react-buttons"
-// import {
-//   getAllDoctors,
-//   getAllEvents,
-//   monthlySchedule,
-// } from "Connection/Doctors"
-
-// const MyCalendar = props => {
-//   const scheduleObj = useRef(null)
-//   const [Id, setId] = useState("")
-//   const [StartTime, setStartTime] = useState("")
-//   const [EndTime, setEndTime] = useState("")
-//   const [Subject, setSubject] = useState("")
-//   const [IsAllDay, setIsAllDay] = useState("")
-//   const [doctors, setDoctors] = useState([])
-//   const [doctorId, setDoctorId] = useState("")
-//   const [events, setEvents] = useState([])
-//   const scheduleData = [
-//     {
-//       Id: 3,
-//       Subject: "Testing",
-//       StartTime: new Date(2018, 1, 11, 9, 0),
-//       EndTime: new Date(2018, 1, 11, 10, 0),
-//       IsAllDay: false,
-//     },
-//     {
-//       Id: 4,
-//       Subject: "Vacation",
-//       StartTime: new Date(2018, 1, 13, 9, 0),
-//       EndTime: new Date(2018, 1, 13, 10, 0),
-//       IsAllDay: false,
-//     },
-//   ]
-
-//   const onSave = args => {
-//     console.log("Save event triggered:", args)
-//     // alert("testing")
-//     const titleInput = document.querySelector("#Subject")
-//     const descriptionInput = document.querySelector("#Description")
-//     const locationInput = document.querySelector("#Location")
-//     const startInput = document.querySelector("#StartTime")
-//     const endInput = document.querySelector("#EndTime")
-//     const allDayCheckbox = document.querySelector("#IsAllDay")
-//     const repeatCheckbox = document.querySelector(".e-repeat")
-
-//     const title = titleInput ? titleInput.value : ""
-//     const description = descriptionInput ? descriptionInput.value : ""
-//     const location = locationInput ? locationInput.value : ""
-//     const start = startInput ? startInput.value : ""
-//     const end = endInput ? endInput.value : ""
-//     const allDay = allDayCheckbox ? allDayCheckbox.checked : false
-//     const repeat = repeatCheckbox ? repeatCheckbox.checked : false
-//     // titleInput.addEventListener("change", e => {
-//     //   title += e.target.value
-//     // })
-//     // console.log("Title:", title, titleInput)
-
-//     // console.log("Description:", description, descriptionInput)
-
-//     // console.log("Location:", location, locationInput)
-//     // console.log("Start:", start, startInput)
-//     // console.log("End:", end, endInput)
-//     // console.log("All Day:", allDay, allDayCheckbox)
-//     // console.log("Repeat:", repeat, repeatCheckbox)
-//   }
-//   const eventSettings = {
-//     dataSource: events,
-//   }
-
-//   const onClickAdd = () => {
-//     let Data = [
-//       {
-//         Id: 1,
-//         Subject: "Conference",
-//         StartTime: new Date(2018, 1, 12, 9, 0),
-//         EndTime: new Date(2018, 1, 12, 10, 0),
-//         IsAllDay: false,
-//       },
-//       {
-//         Id: 2,
-//         Subject: "Meeting",
-//         StartTime: new Date(2018, 1, 15, 10, 0),
-//         EndTime: new Date(2018, 1, 15, 11, 30),
-//         IsAllDay: false,
-//       },
-//     ]
-//     scheduleObj.current.addEvent(Data)
-//   }
-//   const handleEvents = async () => {
-//     let data = {
-//       Id: Id,
-//       Subject: Subject,
-//       StartTime: StartTime,
-//       EndTime: EndTime,
-//       IsAllDay: IsAllDay,
-//       // doctorId: doctorId,
-//     }
-//     await monthlySchedule({ data }).then(res => {
-//       console.log(res)
-//       if (res.data.data.success === 1) {
-//         //events.current.addEvent(data)
-//         window.location.reload()
-//       }
-//     })
-//   }
-//   const onClickSave = () => {
-//     let Data = {
-//       Id: 3,
-//       Subject: "Testing-edited",
-//       StartTime: new Date(2018, 1, 11, 10, 0),
-//       EndTime: new Date(2018, 1, 11, 11, 0),
-//       IsAllDay: false,
-//     }
-//     scheduleObj.current.saveEvent(Data)
-//   }
-//   const onClickDelete = () => {
-//     scheduleObj.current.deleteEvent(4)
-//   }
-//   const onEventClick = args => {
-//     // if (!args.event.RecurrenceRule) {
-//     //   scheduleObj.current.openEditor(args.event, "Save")
-//     // } else {
-//     //   scheduleObj.current.quickPopup.openRecurrenceAlert()
-//     // }
-//     console.log(args, "args")
-//   }
-
-//   useEffect(() => {
-//     const saveButton = document.querySelector(".e-event-save")
-//     if (saveButton) {
-//       saveButton.addEventListener("click", onSave)
-//     }
-
-//     return () => {
-//       if (saveButton) {
-//         saveButton.removeEventListener("click", onSave)
-//       }
-//     }
-//   }, [])
-//   useEffect(() => {
-//     getAllEvents().then(res => {
-//       console.log(res.data.data.events)
-//       setEvents(res.data.data.events)
-//     })
-//   }, [])
-//   useEffect(() => {
-//     getAllDoctors().then(res => {
-//       if (res.data && res.data.data.doctors) {
-//         for (let i = 0; i < res.data.data.doctors.length; i++) {
-//           console.log(res.data.data.doctors)
-//           setDoctors(res.data.data.doctors)
-//         }
-//       }
-//     })
-//   }, [])
-
-//   const handlePopUpClosed = args => {
-//     console.log(args)
-//   }
-//   return (
-//     <div>
-//       <ButtonComponent id="add" title="Add" onClick={handleEvents}>
-//         Add
-//       </ButtonComponent>
-//       <ButtonComponent id="edit" title="Edit" onClick={onClickSave}>
-//         Edit
-//       </ButtonComponent>
-//       <ButtonComponent id="delete" title="Delete" onClick={onClickDelete}>
-//         Delete
-//       </ButtonComponent>{" "}
-//       <ScheduleComponent
-//         ref={scheduleObj}
-//         width="100%"
-//         height="550px"
-//         selectedDate={new Date()}
-//         eventSettings={eventSettings}
-//         eventClick={onEventClick}
-//         popupClose={handlePopUpClosed}
-//       >
-//         <ViewsDirective>
-//           <ViewDirective option="Day" />
-//           <ViewDirective option="Week" />
-//           <ViewDirective option="WorkWeek" />
-//           <ViewDirective option="Month" />
-//         </ViewsDirective>
-//         <Inject services={[Day, Week, WorkWeek, Month]} />
-//       </ScheduleComponent>
-//     </div>
-//   )
-// }
-
-// export default MyCalendar
-// const root = ReactDOM.createRoot(document.getElementById('schedule'));
-// root.render(<App />);
-
 import React, {
   Fragment,
   useState,
@@ -282,7 +74,7 @@ const MyCalendar = props => {
       setStartTime("")
       setEndTime("")
       setClinicName("")
-      //setDoctorId("")
+      setDoctorId("")
       setOpen(true)
 
       //setEvents(prev => [...prev, { start, end }])
@@ -409,7 +201,7 @@ const MyCalendar = props => {
   console.log(doctorId)
   return (
     <>
-      <Form.Group className="mb-2" controlId="Assign a Doctor">
+      {/* <Form.Group className="mb-2" controlId="Assign a Doctor">
         <Form.Label>
           Assign a Doctor<sup className="text-danger">*</sup>
         </Form.Label>
@@ -428,8 +220,8 @@ const MyCalendar = props => {
           ))}
           <option>All doctors</option>
         </select>
-      </Form.Group>
-      <br />
+      </Form.Group> */}
+
       <div className="myCustomHeight">
         <Calendar
           localizer={localizer}
@@ -477,22 +269,22 @@ const MyCalendar = props => {
               <Form.Label>
                 Assign a Doctor<sup className="text-danger">*</sup>
               </Form.Label>
-              {doctorId == "All doctors" ? (
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  disabled={false}
-                  value={doctorId}
-                  onChange={e => setDoctorId(e.currentTarget.value)}
-                >
-                  <option>Select</option>
-                  {doctors.map(item => (
-                    <option key={item._id} value={item._id}>
-                      {item.firstName} {item.lastName}
-                    </option>
-                  ))}
-                </select>
-              ) : (
+              {/* {doctorId == "All doctors" ? ( */}
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                disabled={false}
+                value={doctorId}
+                onChange={e => setDoctorId(e.currentTarget.value)}
+              >
+                <option>Select</option>
+                {doctors.map(item => (
+                  <option key={item._id} value={item._id}>
+                    {item.firstName} {item.lastName}
+                  </option>
+                ))}
+              </select>
+              {/* ) : (
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -507,7 +299,7 @@ const MyCalendar = props => {
                     </option>
                   ))}
                 </select>
-              )}
+              )} */}
             </Form.Group>
 
             <Form.Group className="mt-2" controlId="Start Time">
@@ -536,6 +328,7 @@ const MyCalendar = props => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DateTimePicker"]}>
                   <DateTimePicker
+                    minDate={dayjs(startTime)}
                     value={endTime}
                     onChange={e => setEndTime(e)}
                   />
@@ -627,6 +420,7 @@ const MyCalendar = props => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DateTimePicker"]}>
                   <DateTimePicker
+                    minDate={dayjs(startTime)}
                     value={endTime ? dayjs(endTime) : null}
                     onChange={e => setEndTime(e)}
                   />
