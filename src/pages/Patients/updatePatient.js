@@ -42,7 +42,7 @@ const EditPatient = props => {
   const [isRole, setIsRole] = useState(false)
   const [isCity, setIsCity] = useState(false)
   const [isPhoneNumber, setIsPhoneNumber] = useState(false)
-
+  const [file, setFile] = useState("")
   const {
     register,
     handleSubmit,
@@ -77,7 +77,10 @@ const EditPatient = props => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
-    setImage(event.target.files[0])
+    if (event.target.files.length !== 0) {
+      setImage(event.target.files[0])
+      setFile(URL.createObjectURL(event.target.files[0]))
+    }
   }
 
   const handleClick = event => {
@@ -189,30 +192,62 @@ const EditPatient = props => {
               <div className="justify-content-between p-2">
                 <h5>Edit Patient</h5>
                 <Divider />
-                <img
-                  className="m-2"
-                  style={{ borderRadius: "50px" }}
-                  src={image ? `${url}/api/${image}` : profilePic}
-                  width="100"
-                  height="100"
-                />
-                <div>
-                  <Button
-                    color="primary"
-                    className="btn btn-primary m-2"
-                    onClick={handleClick}
-                  >
-                    Upload Photo
-                  </Button>
-                  <input
-                    type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleChange}
-                    style={{ display: "none" }}
-                  />
+                {file.length > 0 ? (
+                  <div>
+                    <img
+                      className="m-2"
+                      style={{ borderRadius: "50px" }}
+                      src={file}
+                      width="100"
+                      height="100"
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
 
-                  <p>Only .png .jpg allowed</p>
-                </div>
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      className="m-2"
+                      style={{ borderRadius: "50px" }}
+                      src={image ? `${url}/api/${image}` : profilePic}
+                      width="100"
+                      height="100"
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* <div className="form-wrapper">
                   <Form>
                     <Form.Group controlId="Role">

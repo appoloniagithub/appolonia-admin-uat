@@ -216,6 +216,16 @@ const getNotifications = async data => {
   console.log(res)
   return res
 }
+const sendNotification = async data => {
+  let res = await axios.post(`${url}/api/notification/send`, data)
+  console.log(res)
+  return res
+}
+const createNewChat = async data => {
+  let res = await axios.post(`${url}/api/chat/createchat`, data)
+  console.log(res)
+  return res
+}
 
 export {
   getAllPatients,
@@ -243,4 +253,6 @@ export {
   getContactById,
   getAllNotifications,
   getNotifications,
+  sendNotification,
+  createNewChat,
 }

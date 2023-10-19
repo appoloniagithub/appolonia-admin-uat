@@ -5,16 +5,19 @@ import Divider from "@mui/material/Divider"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { getAllDoctors } from "Connection/Doctors"
-import { getAllPatients } from "Connection/Patients"
+import { getAllPatients, sendNotification } from "Connection/Patients"
+import Select from "react-select"
 
 export default function SendNotification() {
   const [heading, setHeading] = useState("")
   const [message, setMessage] = useState("")
   const [doctors, setDoctors] = useState([])
   const [patients, setPatients] = useState([])
-  const [sendTo, setSendTo] = useState([])
-  const options = ["All patients", "All Doctors"]
-  //const options = [doctors, patients]
+  //const [sendTo, setSendTo] = useState([])
+  //const [doctorId, setDoctorId] = useState("")
+  const [selectedOptions, setSelectedOptions] = useState([])
+  const [ids, setIds] = useState()
+  //const options = ["All patients", "All Doctors"]
 
   useEffect(() => {
     getAllDoctors().then(res => {
@@ -31,8 +34,38 @@ export default function SendNotification() {
       // }
     })
   }, [])
-  console.log(patients, doctors)
-  console.log(sendTo)
+  // Create options for "All Doctors" and "All Patients"
+  const allDoctorsOption = {
+    value: "allDoctors",
+    label: "All Doctors",
+  }
+
+  const allPatientsOption = {
+    value: "allPatients",
+    label: "All Patients",
+  }
+
+  const allDoctorIds = doctors.map(doctor => doctor._id)
+  const allPatientIds = patients.map(patient => patient._id)
+
+  const handleSelectChange = selectedValues => {
+    setSelectedOptions(selectedValues)
+  }
+  const handleNoti = async () => {
+    await sendNotification({
+      title: heading,
+      body: message,
+      sendTo: ids,
+    }).then(res => {
+      console.log(res)
+      if (res.data.data.success === 1) {
+        setHeading("")
+        setMessage("")
+        setIds("")
+      }
+    })
+  }
+  console.log(ids)
   return (
     <>
       <div className="page-content">
@@ -88,24 +121,43 @@ export default function SendNotification() {
                 <Form.Group controlId="Send To">
                   <Form.Label>Send To</Form.Label>
                   <div>
-                    <select
-                      name="Consultation Type"
+                    {/* <select
+                      //multiple={true}
                       className="form-select"
-                      aria-label="Default select example"
-                      value={sendTo}
-                      onChange={e => {
-                        setSendTo(e.target.value)
-                      }}
+                      value={
+                        selectedOption.length === doctors.length
+                          ? "All Doctors"
+                          : selectedOption.length === patients.length
+                          ? "All Patients"
+                          : ""
+                      }
+                      onChange={handleSelectChange}
                     >
-                      <option value={patients}>All patients</option>
-                      <option value={doctors}>All doctors</option>
-
-                      {/* {patients.map(value => (
-                        <option value={value._id} key={value._id}>
-                          All patients
-                        </option>
-                      ))} */}
-                    </select>
+                      <option value="">Select an option</option>
+                      <option value="All Doctors">All Doctors</option>
+                      <option value="All Patients">All Patients</option>
+                    </select> */}
+                    <Select
+                      isMulti
+                      options={[allDoctorsOption, allPatientsOption]}
+                      value={selectedOptions}
+                      onChange={selectedValues => {
+                        setSelectedOptions(selectedValues)
+                        const selectedIds = selectedValues.map(option => {
+                          if (option.value === "allDoctors") {
+                            return allDoctorIds
+                          }
+                          if (option.value === "allPatients") {
+                            return allPatientIds
+                          }
+                          return option.value
+                        })
+                        const newSelectedIds = selectedIds.flat()
+                        setIds(newSelectedIds)
+                        console.log(newSelectedIds)
+                        console.log("Selected IDs:", selectedIds.flat())
+                      }}
+                    />
                   </div>
                 </Form.Group>
                 <br /> <br />
@@ -113,7 +165,7 @@ export default function SendNotification() {
                   type="submit"
                   color="primary"
                   className="btn btn-primary mt-2 mr-4"
-                  // onClick={postData}
+                  onClick={handleNoti}
                 >
                   SAVE
                 </Button>

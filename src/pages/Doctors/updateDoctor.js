@@ -55,6 +55,46 @@ const EditDoctor = () => {
   const [id, setId] = useState("")
   const [clinicName, setClinicName] = useState("")
   const [clinics, setClinics] = useState([])
+  //const [selectedImage, setSelectedImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
+
+  const handleImageChange = e => {
+    const file = e.target.files[0]
+
+    if (
+      file
+      //&& file.type.startsWith("image/")
+    ) {
+      const reader = new FileReader()
+
+      reader.onload = event => {
+        // Generate a unique file name using Date.now()
+        const fileName = `uploads/doctors/${Date.now()}.png`
+        const dataURL = event.target.result
+        //setImage({ dataURL: event.target.result, fileName })
+        //if (e.target.files.length !== 0) {
+        setImage(fileName)
+        //}
+        console.log(image)
+      }
+
+      reader.readAsDataURL(file)
+    } else {
+      setImage(null) // Clear the preview if the selected file is not an image
+    }
+  }
+  // const handleImageChange = e => {
+  //   const file = e.target.files[0]
+  //   if (file) {
+  //     const reader = new FileReader()
+
+  //     reader.onload = event => {
+  //       setSelectedImage(event.target.result)
+  //     }
+
+  //     reader.readAsDataURL(file)
+  //   }
+  // }
 
   const formSchema = Yup.object().shape({
     password: Yup.string()
@@ -103,8 +143,10 @@ const EditDoctor = () => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
-    //setFile(URL.createObjectURL(event.target.files[0]))
-    setImage(event.target.files[0])
+    if (event.target.files.length !== 0) {
+      setImage(event.target.files[0])
+      setFile(URL.createObjectURL(event.target.files[0]))
+    }
   }
 
   const handleClick = event => {
@@ -216,7 +258,8 @@ const EditDoctor = () => {
         toast.error("Error while updating a doctor")
       })
   }
-  console.log(gender)
+  //console.log(gender)
+  console.log(image, file)
   return (
     <>
       <div className="form-wrapper">
@@ -246,30 +289,72 @@ const EditDoctor = () => {
               <div className="justify-content-between p-2">
                 <h5>Edit Doctor</h5>
                 <Divider />
-                <img
-                  className="m-2"
-                  style={{ borderRadius: "50px" }}
-                  src={image ? `${url}/api/${image}` : profilePic}
-                  width="100"
-                  height="100"
-                />
-                <div>
-                  <Button
-                    color="primary"
-                    className="btn btn-primary m-2"
-                    onClick={handleClick}
-                  >
-                    Upload Photo
-                  </Button>
-                  <input
-                    type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleChange}
-                    style={{ display: "none" }}
-                  />
 
-                  <p>Only .png .jpg allowed</p>
-                </div>
+                {/* {image && (
+                  <img
+                    className="m-2"
+                    style={{ borderRadius: "50px" }}
+                    src={image ? `${url}/api/${image}` : profilePic}
+                    width="100"
+                    height="100"
+                  />
+                )} */}
+                {file.length > 0 ? (
+                  <div>
+                    <img
+                      className="m-2"
+                      style={{ borderRadius: "50px" }}
+                      src={file}
+                      width="100"
+                      height="100"
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      className="m-2"
+                      style={{ borderRadius: "50px" }}
+                      src={`${url}/api/${image}`}
+                      width="100"
+                      height="100"
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="form-wrapper">
                   <Form>
                     <Form.Group controlId="Role">

@@ -174,30 +174,27 @@ const ViewMessage = () => {
                 <Divider />
                 <Form className="m-2">
                   <Row>
-                    <Col sm="6">
-                      <Form.Group className="mt-2" controlId="Subject">
-                        <Form.Label className="mt-2">Subject</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="subject"
-                          value={subject}
-                          onChange={e => setSubject(e.target.value)}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col sm="6">
-                      <Form.Group className="mt-2" controlId="Message">
-                        <Form.Label className="mt-2">Message</Form.Label>
-                        <div className="form-floating">
-                          <textarea
-                            className="form-control"
-                            id="floatingTextarea"
-                            value={message}
-                            onChange={e => setMessage(e.target.value)}
-                          ></textarea>
-                        </div>
-                      </Form.Group>
-                    </Col>
+                    <Form.Group className="mt-2" controlId="Subject">
+                      <Form.Label className="">Subject</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="subject"
+                        value={subject}
+                        onChange={e => setSubject(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="" controlId="Message">
+                      <Form.Label className="mt-2">Message</Form.Label>
+                      <div className="form-floating">
+                        <textarea
+                          className="form-control"
+                          id="floatingTextarea"
+                          value={message}
+                          onChange={e => setMessage(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </Form.Group>
                   </Row>
                 </Form>
               </Col>

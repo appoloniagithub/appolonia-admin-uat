@@ -12,11 +12,12 @@ import { Link } from "react-router-dom"
 //Import Scrollbar
 import PerfectScrollbar from "react-perfect-scrollbar"
 import "react-perfect-scrollbar/dist/css/styles.css"
-import { newMessage } from "../../../Connection/Patients"
+import { createNewChat, newMessage } from "../../../Connection/Patients"
 import { newMessageImage } from "../../../Connection/Patients"
 import { io } from "socket.io-client"
 import { toast } from "react-toastify"
 import url from "Connection/Api/api"
+
 const Chat = ({
   patientMessages,
   patientInfo,
@@ -123,11 +124,18 @@ const Chat = ({
       isRead: "0",
       createdAt: moment(Date.now()).format("DD-MM-YY hh:mm"),
     }
-
+    console.log(message)
     // send message to socket server
     setSendMessage({ ...message })
     // send message to database
     try {
+      // if (conversationId == undefined) {
+      //   let res = await createNewChat({
+      //     senderId: docId,
+      //     receiverId: patientInfo?.patientId,
+      //   })
+      //   console.log(res)
+      // }
       let res = await newMessage({
         conversationId: patientConversation?.conversationId,
         //senderId: "63f70a84bf696efe6d604035",

@@ -190,10 +190,23 @@ const CreateDoctor = props => {
   const [response, setResponse] = useState("")
   const [clinicName, setClinicName] = useState("")
   const [clinics, setClinics] = useState([])
-
+  const [file, setFile] = useState("")
   const [toggle1, setToggle1] = useState(false)
   const [toggle2, setToggle2] = useState(false)
-  //let password
+  const [selectedImage, setSelectedImage] = useState(null)
+
+  const handleImageChange = e => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onload = event => {
+        setSelectedImage(event.target.result)
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
 
   const formSchema = Yup.object().shape({
     password: Yup.string()
@@ -205,6 +218,15 @@ const CreateDoctor = props => {
       .min(4, "Password length should be at least 4 characters")
       .max(12, "Password cannot exceed more than 12 characters")
       .oneOf([Yup.ref("password")], "Passwords do not match"),
+    firstName: Yup.string()
+      .required("First Name is required")
+      .min(4, "Length should be at least 4 characters")
+      .max(12, "Length cannot exceed more than 12 characters"),
+    lastName: Yup.string()
+      .required("Last Name is required")
+      .min(4, "Length should be at least 4 characters")
+      .max(12, "Length cannot exceed more than 12 characters"),
+    email: Yup.string().required("Email is required"),
   })
 
   const {
@@ -219,11 +241,6 @@ const CreateDoctor = props => {
     resolver: yupResolver(formSchema),
   })
   //password = watch("password", "")
-
-  const onSubmit = data => {
-    console.log(data)
-    // reset();
-  }
 
   console.log(errors)
 
@@ -261,7 +278,8 @@ const CreateDoctor = props => {
   const hiddenFileInput = React.useRef(null)
 
   const handleChange = event => {
-    setImage(URL.createObjectURL(event.target.files[0]))
+    setFile(URL.createObjectURL(event.target.files[0]))
+    setImage(event.target.files[0])
   }
 
   const handleClick = event => {
@@ -347,7 +365,7 @@ const CreateDoctor = props => {
       console.log("else in false data", isRole)
     }
   }
-  console.log(image)
+  console.log(image, file)
   console.log(gender)
 
   return (
@@ -379,30 +397,62 @@ const CreateDoctor = props => {
               <div className="justify-content-between p-2">
                 <h5>Add New Doctor</h5>
                 <Divider />
-                <img
-                  className="m-2"
-                  style={{ borderRadius: "50px" }}
-                  src={profilePic}
-                  width="100"
-                  height="100"
-                />
-                <div>
-                  <Button
-                    color="primary"
-                    className="btn btn-primary m-2"
-                    onClick={handleClick}
-                  >
-                    Upload Photo
-                  </Button>
-                  <input
-                    type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleChange}
-                    style={{ display: "none" }}
-                  />
+                {file.length > 0 ? (
+                  <div>
+                    <img
+                      src={file}
+                      className="m-2"
+                      width="100"
+                      height="100"
+                      style={{ borderRadius: "50px" }}
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
 
-                  <p>Only .png .jpg allowed</p>
-                </div>
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      className="m-2"
+                      style={{ borderRadius: "50px" }}
+                      src={profilePic}
+                      width="100"
+                      height="100"
+                    />
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        Upload Photo
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+
+                      <p>Only .png .jpg allowed</p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="form-wrapper">
                   <Form>
                     <Form.Group controlId="Role">

@@ -275,7 +275,7 @@ const Dashboard = () => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="left">Patient Name</StyledTableCell>
-                    <StyledTableCell align="left">Phone Number</StyledTableCell>
+                    {/* <StyledTableCell align="left">Phone Number</StyledTableCell> */}
                     <StyledTableCell align="left">Clinic Name</StyledTableCell>
                     <StyledTableCell align="left">Department</StyledTableCell>
                     <StyledTableCell align="left">Type</StyledTableCell>
@@ -288,9 +288,9 @@ const Dashboard = () => {
                         <StyledTableCell align="left">
                           {appointment?.patientName}
                         </StyledTableCell>
-                        <StyledTableCell align="left">
+                        {/* <StyledTableCell align="left">
                           {appointment?.phoneNumber}
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                         <StyledTableCell align="left">
                           {appointment?.clinicName}
                         </StyledTableCell>

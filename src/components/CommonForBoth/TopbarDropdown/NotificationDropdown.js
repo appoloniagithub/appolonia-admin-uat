@@ -69,7 +69,10 @@ const NotificationDropdown = props => {
           <span className="badge bg-danger rounded-pill">{count}</span>
         </DropdownToggle>
 
-        <DropdownMenu className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+        <DropdownMenu
+          style={{ width: "400px" }}
+          className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+        >
           <div className="p-3">
             <Row className="align-items-center">
               <Col>
@@ -84,7 +87,7 @@ const NotificationDropdown = props => {
             </Row>
           </div>
 
-          <SimpleBar style={{ height: "230px" }}>
+          <SimpleBar style={{ height: "500px" }}>
             <div className="text-reset notification-item">
               {notifications.length > 0 &&
                 notifications.map(notification => {

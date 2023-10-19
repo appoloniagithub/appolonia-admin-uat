@@ -166,11 +166,13 @@ const Patienttable = ({ data, conversations }) => {
                         </Link>
                       </td>
                       <td>
-                        <i
-                          onClick={() => handleClickOpen(patient?._id)}
-                          className="mdi mdi-delete-outline"
-                          style={{ fontSize: "18px" }}
-                        ></i>
+                        {patient?.isHead === "1" && (
+                          <i
+                            onClick={() => handleClickOpen(patient?._id)}
+                            className="mdi mdi-delete-outline"
+                            style={{ fontSize: "18px" }}
+                          ></i>
+                        )}
                       </td>
                     </tr>
                   )
