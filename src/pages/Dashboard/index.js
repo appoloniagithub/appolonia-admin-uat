@@ -205,9 +205,11 @@ const Dashboard = () => {
                   {messages.slice(0, displayedRows).map(msg => {
                     return (
                       <StyledTableRow key={msg._id}>
-                        <StyledTableCell align="left">
-                          {msg?.patientName}
-                        </StyledTableCell>
+                        <a href={`/patients/showpatient/${msg?.senderId}`}>
+                          <StyledTableCell align="left">
+                            <u>{msg?.patientName}</u>
+                          </StyledTableCell>
+                        </a>
                         <StyledTableCell align="left">
                           {msg?.message}
                         </StyledTableCell>
@@ -275,6 +277,7 @@ const Dashboard = () => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="left">Patient Name</StyledTableCell>
+
                     {/* <StyledTableCell align="left">Phone Number</StyledTableCell> */}
                     <StyledTableCell align="left">Clinic Name</StyledTableCell>
                     <StyledTableCell align="left">Department</StyledTableCell>
@@ -285,9 +288,11 @@ const Dashboard = () => {
                   {pending.slice(0, display).map(appointment => {
                     return (
                       <StyledTableRow key={appointment?._id}>
-                        <StyledTableCell align="left">
-                          {appointment?.patientName}
-                        </StyledTableCell>
+                        <a href="/appointments">
+                          <StyledTableCell align="left">
+                            <u>{appointment?.patientName}</u>
+                          </StyledTableCell>
+                        </a>
                         {/* <StyledTableCell align="left">
                           {appointment?.phoneNumber}
                         </StyledTableCell> */}
@@ -347,9 +352,11 @@ const Dashboard = () => {
                   {newScans.slice(0, displayedRows).map(scan => {
                     return (
                       <StyledTableRow key={scan?._id}>
-                        <StyledTableCell align="left">
-                          {scan?.patientName}
-                        </StyledTableCell>
+                        <a href={`/patients/showpatient/${scan?.userId}`}>
+                          <StyledTableCell align="left">
+                            <u>{scan?.patientName}</u>
+                          </StyledTableCell>
+                        </a>
 
                         <StyledTableCell align="left">
                           {scan?.doctorName}
@@ -434,10 +441,14 @@ const Dashboard = () => {
                   {newPatient.slice(0, displayedRows).map(patient => {
                     return (
                       <StyledTableRow key={patient?._id}>
-                        <StyledTableCell align="left">
-                          {" "}
-                          {patient?.firstName}&nbsp;{patient?.lastName}
-                        </StyledTableCell>
+                        <a href="/patients">
+                          <StyledTableCell align="left">
+                            {" "}
+                            <u>
+                              {patient?.firstName}&nbsp;{patient?.lastName}
+                            </u>
+                          </StyledTableCell>
+                        </a>
                         <StyledTableCell align="left">
                           {patient?.uniqueId}
                         </StyledTableCell>

@@ -332,6 +332,8 @@ export default function Showpatient({
         conversationId: foundConversations[1]?.conversationId,
         //conversationId: con?._id,
         userId: data?._id,
+        isSeen: "1",
+        isRead: "0",
       })
       console.log(res, "i am messages")
       if (res.data.data.success === 1) {
@@ -356,6 +358,8 @@ export default function Showpatient({
       //conversationId: foundConversations[0]?.conversationId,
       conversationId: conversations[0]?.conversationId,
       userId: data?._id,
+      isSeen: "1",
+      isRead: "0",
     })
     console.log(res, "i am messages")
     if (res.data.data.success === 1) {

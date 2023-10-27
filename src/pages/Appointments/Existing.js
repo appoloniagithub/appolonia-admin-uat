@@ -195,6 +195,7 @@ export default function Existing() {
                     value={patientId}
                     onChange={e => setPatientId(e.currentTarget.value)}
                   >
+                    <option>Select</option>
                     {allPatients.map(item => (
                       <option key={item._id} value={item._id}>
                         {item.firstName} {item.lastName} &nbsp;&nbsp; (Emirates
