@@ -89,12 +89,20 @@ const Librarytable = ({ data }) => {
                         />
                         {/* </a> */}
                       </td>
-                      <td style={{ width: "300px", overflowY: "scroll" }}>
+                      <td
+                        style={{
+                          width: "300px",
+                          overflowY: "hidden",
+                        }}
+                      >
                         {article.title}
                       </td>
                       {/* <td>{article.description}</td> */}
                       <td>{article.author.authorName}</td>
-                      <td>{article.date}</td>
+                      <td>
+                        {" "}
+                        {moment(article.created).format("DD-MM-YY HH:mm")}
+                      </td>
                       {/* <td>
                         {moment(article.created).format("DD-MM-YY HH:mm")}
                       </td> */}

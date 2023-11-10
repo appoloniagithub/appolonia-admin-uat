@@ -14,9 +14,10 @@ import {
   Input,
   FormFeedback,
   Label,
+  Spinner,
 } from "reactstrap"
 import PhoneInput from "react-phone-input-2"
-//import "react-phone-input-2/lib/style.css"
+import "react-phone-input-2/lib/style.css"
 import { withRouter, Link } from "react-router-dom"
 
 // import images
@@ -28,6 +29,10 @@ import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
 import TabPanel from "@mui/lab/TabPanel"
 import Box from "@mui/material/Box"
+import showPwdImg from "../../assets/images/show-password.svg"
+import hidePwdImg from "../../assets/images/hide-password.svg"
+
+//import Input from "@material-ui/core/Input"
 
 const Login = props => {
   //meta title
@@ -43,7 +48,8 @@ const Login = props => {
   const [isPhoneNum, setIsPhoneNum] = useState(false)
   const [isPassword, setIsPassword] = useState(false)
   const [value, setValue] = React.useState("1")
-
+  const [isRevealPwd, setIsRevealPwd] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const handleLoginDetails = () => {
     if (phoneNumber || password || emiratesId || isPhoneNumber) {
       const axios = require("axios")
@@ -67,6 +73,7 @@ const Login = props => {
         .then(response => {
           console.log(response.data)
           if (response.data && response.data.success === 1) {
+            setIsLoading(true)
             setPhoneNumber("")
             setPassword("")
             setEmiratesId("")
@@ -139,70 +146,83 @@ const Login = props => {
           <i className="fas fa-home h2" />
         </Link>
       </div> */}
-      <div className="account-pages">
-        <Container>
-          <Row
-            className="justify-content-center mt-4"
-            style={{ paddingTop: "10px" }}
-          >
-            <Col style={{ width: "48.78%" }} md={8} lg={6} xl={5}>
-              <Card className="overflow-hidden">
-                <div className="bg-primary bg-soft">
-                  <Row>
-                    <Col xs={7}>
-                      <div className="text-primary p-4">
-                        <h5 className="text-primary">Appolonia Dental Care</h5>
-                        <p>Sign in to Doctor Portal.</p>
-                      </div>
-                    </Col>
-                    <Col className="col-5 align-self-end">
-                      <img src={profile} alt="" className="img-fluid" />
-                    </Col>
-                  </Row>
-                </div>
-                <CardBody className="pt-0">
-                  <div>
-                    <Link to="/" className="auth-logo-light">
-                      <div className="avatar-md profile-user-wid mb-2">
-                        <span
-                          style={{ backgroundColor: "#20507B" }}
-                          className="avatar-title rounded-circle "
-                        >
-                          <img src={applogo} alt="" className="" height="34" />
-                        </span>
-                      </div>
-                    </Link>
+      {isLoading ? (
+        <div>
+          <h1>Logging in...</h1>
+          <Spinner className="ms-2" color="primary" />
+        </div>
+      ) : (
+        <div className="account-pages">
+          <Container>
+            <Row
+              className="justify-content-center mt-4"
+              style={{ paddingTop: "10px" }}
+            >
+              <Col style={{ width: "48.78%" }} md={8} lg={6} xl={5}>
+                <Card className="overflow-hidden">
+                  <div className="bg-primary bg-soft">
+                    <Row>
+                      <Col xs={7}>
+                        <div className="text-primary p-4">
+                          <h5 className="text-primary">
+                            Appolonia Dental Care
+                          </h5>
+                          <p>Sign in to Doctor Portal.</p>
+                        </div>
+                      </Col>
+                      <Col className="col-5 align-self-end">
+                        <img src={profile} alt="" className="img-fluid" />
+                      </Col>
+                    </Row>
                   </div>
-                  <TabContext value={value}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                      <TabList
-                        onChange={handleChange}
-                        aria-label="lab API tabs example"
-                      >
-                        <Tab
-                          className="text-primary"
-                          style={{ width: "50%" }}
-                          label="Phone Number"
-                          value="1"
-                          onClick={() => setIsPhoneNumber("1")}
-                        />
-                        <Tab
-                          className="text-primary"
-                          style={{ width: "50%" }}
-                          label="Emirates ID"
-                          value="2"
-                          onClick={() => setIsPhoneNumber("0")}
-                        />
-                      </TabList>
-                    </Box>
-                    {/* {isPhoneNumber === true && ( */}
-                    <TabPanel value="1">
-                      <div className="p-2">
-                        <Form className="form-horizontal">
-                          {message && <Alert color="danger">{message}</Alert>}
-                          <div className="mb-3">
-                            <Label className="form-label">Phone Number</Label>
-                            {/* <Input
+                  <CardBody className="pt-0">
+                    <div>
+                      <Link to="/" className="auth-logo-light">
+                        <div className="avatar-md profile-user-wid mb-2">
+                          <span
+                            style={{ backgroundColor: "#20507B" }}
+                            className="avatar-title rounded-circle "
+                          >
+                            <img
+                              src={applogo}
+                              alt=""
+                              className=""
+                              height="34"
+                            />
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
+                    <TabContext value={value}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            className="text-primary"
+                            style={{ width: "50%" }}
+                            label="Phone Number"
+                            value="1"
+                            onClick={() => setIsPhoneNumber("1")}
+                          />
+                          <Tab
+                            className="text-primary"
+                            style={{ width: "50%" }}
+                            label="Emirates ID"
+                            value="2"
+                            onClick={() => setIsPhoneNumber("0")}
+                          />
+                        </TabList>
+                      </Box>
+                      {/* {isPhoneNumber === true && ( */}
+                      <TabPanel value="1">
+                        <div className="p-2">
+                          <Form className="form-horizontal">
+                            {message && <Alert color="danger">{message}</Alert>}
+                            <div className="mb-3">
+                              <Label className="form-label">Phone Number</Label>
+                              {/* <Input
                           name="phone number"
                           className="form-control"
                           placeholder="Enter phone number"
@@ -211,51 +231,103 @@ const Login = props => {
                           onChange={e => setPhoneNumber(e.target.value)}
                         /> */}
 
-                            <PhoneInput
-                              country={"ae"}
-                              placeholder="Enter phone number"
-                              name="phoneNumber"
-                              value={phoneNumber}
-                              onChange={setPhoneNumber}
-                            />
-                            {!phoneNumber && isPhoneNum && (
-                              <p className="text-danger">
-                                Please Enter phone number
-                              </p>
-                            )}
-                          </div>
+                              <PhoneInput
+                                country={"ae"}
+                                placeholder="Enter phone number"
+                                name="phoneNumber"
+                                value={phoneNumber}
+                                onChange={setPhoneNumber}
+                              />
+                              {!phoneNumber && isPhoneNum && (
+                                <p className="text-danger">
+                                  Please Enter phone number
+                                </p>
+                              )}
+                            </div>
 
-                          <div className="mb-3">
-                            <Label className="form-label">Password</Label>
-                            <Input
-                              className=""
-                              name="password"
-                              type="password"
-                              placeholder="Enter Password"
-                              value={password}
-                              onChange={e => setPassword(e.target.value)}
-                            />
-                            {!password && isPassword && (
-                              <p className="text-danger">
-                                Please Enter password
-                              </p>
-                            )}
-                            {/* {validation.touched.password &&
+                            <div className="mb-3">
+                              <Label className="form-label">Password</Label>
+                              <div
+                                style={{
+                                  position: "relative",
+                                }}
+                              >
+                                <Input
+                                  name="password"
+                                  placeholder="Enter Password"
+                                  type={isRevealPwd ? "text" : "password"}
+                                  value={password}
+                                  onChange={e => setPassword(e.target.value)}
+                                />
+                                <img
+                                  style={{
+                                    cursor: "pointer",
+                                    position: "absolute",
+                                    width: "20px",
+                                    right: "10px",
+                                    top: "8px",
+                                  }}
+                                  title={
+                                    isRevealPwd
+                                      ? "Hide password"
+                                      : "Show password"
+                                  }
+                                  src={isRevealPwd ? hidePwdImg : showPwdImg}
+                                  onClick={() =>
+                                    setIsRevealPwd(prevState => !prevState)
+                                  }
+                                />
+                              </div>
+                              {/* <div
+                              style={{
+                                position: "relative",
+                              }}
+                            >
+                              <Input
+                                className=""
+                                name="password"
+                                type="password"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                              />
+                              <i
+                                style={{
+                                  position: "absolute",
+                                  top: "11px",
+                                  fontSize: "16px",
+                                  right: "4%",
+                                  cursor: "pointer",
+                                  //color: "lightgray",
+                                }}
+                                className="fa fa-eye icon"
+                                onClick={() => {
+                                  setToggle1(!toggle1)
+                                }}
+                              ></i>
+                            </div> */}
+
+                              {!password && isPassword && (
+                                <p className="text-danger">
+                                  Please Enter password
+                                </p>
+                              )}
+                              {/* {validation.touched.password &&
                         validation.errors.password ? (
                           <FormFeedback type="invalid">
                             {validation.errors.password}
                           </FormFeedback>
                         ) : null} */}
-                            <a
-                              className="d-flex justify-content-end mt-2"
-                              //style={{ paddingLeft: "11.5rem" }}
-                              // href="/forgot-password"
-                            >
-                              <p onClick={handleBack}> Forgot password?</p>
-                            </a>
-                          </div>
+                              <a
+                                className="d-flex justify-content-end mt-2"
+                                //style={{ paddingLeft: "11.5rem" }}
+                                // href="/forgot-password"
+                              >
+                                <p onClick={handleBack}> Forgot password?</p>
+                              </a>
+                            </div>
 
-                          {/* <div className="form-check">
+                            {/* <div className="form-check">
                             <input
                               type="checkbox"
                               className="form-check-input mt-2"
@@ -269,73 +341,130 @@ const Login = props => {
                             </label>
                           </div> */}
 
-                          <div className="mt-3 d-grid">
-                            <button
-                              className="btn btn-primary btn-block"
-                              type="submit"
-                              onClick={e => {
-                                e.preventDefault()
-                                handleLoginDetails()
-                                handleValidation()
+                            <div className="mt-3 d-grid">
+                              <button
+                                className="btn btn-primary btn-block"
+                                type="submit"
+                                onClick={e => {
+                                  e.preventDefault()
+                                  handleLoginDetails()
+                                  handleValidation()
+                                }}
+                              >
+                                Log In
+                              </button>
+                              <br />
+                            </div>
+                          </Form>
+                        </div>
+                      </TabPanel>
+                      {/* )} */}
+                      {/* {isPhoneNumber === false && ( */}
+                      <TabPanel value="2">
+                        <div className="p-2">
+                          <Form className="form-horizontal">
+                            {message && <Alert color="danger">{message}</Alert>}
+                            <div className="mb-3">
+                              <Label className="form-label">Emirates ID</Label>
+
+                              <Input
+                                name="Emirates ID"
+                                className="form-control"
+                                placeholder="Enter emirates ID"
+                                type="number"
+                                value={emiratesId}
+                                onChange={e => setEmiratesId(e.target.value)}
+                              />
+                              {!emiratesId && isEmiratesId && (
+                                <p className="text-danger">
+                                  Please Enter emirates Id
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="mb-3">
+                              <Label className="form-label">Password</Label>
+                              <div
+                                style={{
+                                  position: "relative",
+                                }}
+                              >
+                                <Input
+                                  name="password"
+                                  placeholder="Enter Password"
+                                  type={isRevealPwd ? "text" : "password"}
+                                  value={password}
+                                  onChange={e => setPassword(e.target.value)}
+                                />
+                                <img
+                                  style={{
+                                    cursor: "pointer",
+                                    position: "absolute",
+                                    width: "20px",
+                                    right: "10px",
+                                    top: "8px",
+                                  }}
+                                  title={
+                                    isRevealPwd
+                                      ? "Hide password"
+                                      : "Show password"
+                                  }
+                                  src={isRevealPwd ? hidePwdImg : showPwdImg}
+                                  onClick={() =>
+                                    setIsRevealPwd(prevState => !prevState)
+                                  }
+                                />
+                              </div>
+                              {/* <div
+                              style={{
+                                position: "relative",
                               }}
                             >
-                              Log In
-                            </button>
-                            <br />
-                          </div>
-                        </Form>
-                      </div>
-                    </TabPanel>
-                    {/* )} */}
-                    {/* {isPhoneNumber === false && ( */}
-                    <TabPanel value="2">
-                      <div className="p-2">
-                        <Form className="form-horizontal">
-                          {message && <Alert color="danger">{message}</Alert>}
-                          <div className="mb-3">
-                            <Label className="form-label">Emirates ID</Label>
+                              <Input
+                                className=""
+                                name="password"
+                                type="password"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                              />
+                              <i
+                                style={{
+                                  position: "absolute",
+                                  top: "11px",
+                                  fontSize: "16px",
+                                  right: "4%",
+                                  cursor: "pointer",
+                                  //color: "lightgray",
+                                }}
+                                className="fa fa-eye icon"
+                                onClick={() => {
+                                  setToggle1(!toggle1)
+                                }}
+                              ></i>
+                            </div> */}
 
-                            <Input
-                              name="Emirates ID"
-                              className="form-control"
-                              placeholder="Enter emirates ID"
-                              type="number"
-                              value={emiratesId}
-                              onChange={e => setEmiratesId(e.target.value)}
-                            />
-                            {!emiratesId && isEmiratesId && (
-                              <p className="text-danger">
-                                Please Enter emirates Id
-                              </p>
-                            )}
-                          </div>
+                              {!password && isPassword && (
+                                <p className="text-danger">
+                                  Please Enter password
+                                </p>
+                              )}
+                              {/* {validation.touched.password &&
+                        validation.errors.password ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.password}
+                          </FormFeedback>
+                        ) : null} */}
+                              <a
+                                className="d-flex justify-content-end mt-2"
+                                //style={{ paddingLeft: "11.5rem" }}
+                                // href="/forgot-password"
+                              >
+                                <p onClick={handleBack}> Forgot password?</p>
+                              </a>
+                            </div>
 
-                          <div className="mb-3">
-                            <Label className="form-label">Password</Label>
-                            <Input
-                              className=""
-                              name="password"
-                              type="password"
-                              placeholder="Enter Password"
-                              value={password}
-                              onChange={e => setPassword(e.target.value)}
-                            />
-                            {!password && isPassword && (
-                              <p className="text-danger">
-                                Please Enter password
-                              </p>
-                            )}
-
-                            <a
-                              className="d-flex justify-content-end mt-2"
-                              //style={{ paddingLeft: "11.5rem" }}
-                              //href="/forgot-password"
-                            >
-                              <p onClick={handleBack}> Forgot password?</p>
-                            </a>
-                          </div>
-
-                          {/* <div className="form-check">
+                            {/* <div className="form-check">
                             <input
                               type="checkbox"
                               className="form-check-input "
@@ -349,27 +478,27 @@ const Login = props => {
                             </label>
                           </div> */}
 
-                          <div className="mt-3 d-grid">
-                            <button
-                              className="btn btn-primary btn-block"
-                              type="submit"
-                              onClick={e => {
-                                e.preventDefault()
-                                handleLoginDetails()
-                                handleValidation1()
-                              }}
-                            >
-                              Log In
-                            </button>
-                            <br />
-                          </div>
-                        </Form>
-                      </div>
-                    </TabPanel>
-                    {/* )} */}
-                  </TabContext>
+                            <div className="mt-3 d-grid">
+                              <button
+                                className="btn btn-primary btn-block"
+                                type="submit"
+                                onClick={e => {
+                                  e.preventDefault()
+                                  handleLoginDetails()
+                                  handleValidation1()
+                                }}
+                              >
+                                Log In
+                              </button>
+                              <br />
+                            </div>
+                          </Form>
+                        </div>
+                      </TabPanel>
+                      {/* )} */}
+                    </TabContext>
 
-                  {/* 
+                    {/* 
                       <div className="mt-4 text-center">
                         <h5 className="font-size-14 mb-3">Sign in with</h5>
 
@@ -409,24 +538,25 @@ const Login = props => {
                         </ul>
                       </div>*/}
 
-                  {/* <div className="mt-4 text-center">
+                    {/* <div className="mt-4 text-center">
                         <Link to="/forgot-password" className="text-muted">
                           <i className="mdi mdi-lock me-1" />
                           Forgot your password?
                         </Link>
                       </div> */}
-                  <div className="mt-2 text-center">
-                    <p>
-                      © {new Date().getFullYear()} Appolonia Dental Care{" "}
-                      {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+                    <div className="mt-2 text-center">
+                      <p>
+                        © {new Date().getFullYear()} Appolonia Dental Care{" "}
+                        {/* <i className="mdi mdi-heart text-danger" /> by Themesbrand */}
+                      </p>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      )}
     </React.Fragment>
   )
 }

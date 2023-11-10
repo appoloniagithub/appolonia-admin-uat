@@ -263,7 +263,7 @@ const AdminChat = ({
                               src={`${url}/api/${message.message}`}
                               onClick={() =>
                                 window.open(
-                                  message.message,
+                                  `${url}/api/${message.message}`,
                                   "_blank",
                                   "noopener,noreferrer"
                                 )

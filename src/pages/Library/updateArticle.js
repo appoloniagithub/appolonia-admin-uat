@@ -46,6 +46,8 @@ const EditArticle = () => {
         if (res.data.data.article) {
           setTitle(res.data.data.article.title)
           setDescription(res.data.data.article.description)
+          //setDescription(window.tinymce.activeEditor.setDescription(""))
+
           setImage(res.data.data.article.image[0])
           setAuthorName(res.data.data.article.author.authorName)
           setDate(res.data.data.article.date)
@@ -138,14 +140,14 @@ const EditArticle = () => {
                 </Form.Group>
                 <Form.Group controlId="Description">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    className="mb-4"
-                    style={{ lineHeight: "9.5" }}
-                    type="text"
+
+                  <textarea
+                    className="form-control mb-4"
+                    id="exampleFormControlTextarea1"
+                    rows="4"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
-                    name="Description"
-                  />
+                  ></textarea>
                 </Form.Group>
                 <Form.Group controlId="Image">
                   <Form.Label>Image</Form.Label>
@@ -184,7 +186,7 @@ const EditArticle = () => {
                     name="Author"
                   />
                 </Form.Group>
-                <Form.Group controlId="Date">
+                {/* <Form.Group controlId="Date">
                   <Form.Label>Date</Form.Label>
                   <Form.Control
                     className="mb-4"
@@ -193,7 +195,7 @@ const EditArticle = () => {
                     onChange={e => setDate(e.target.value)}
                     name="Date"
                   />
-                </Form.Group>
+                </Form.Group> */}
 
                 <Button
                   type="submit"

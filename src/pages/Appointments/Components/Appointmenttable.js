@@ -214,6 +214,7 @@ const Appointmenttable = ({ data }) => {
             <Table className="table mb-0">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Patient Name</th>
                   {/* <th>Email</th> */}
                   <th>Phone Number</th>
@@ -238,6 +239,7 @@ const Appointmenttable = ({ data }) => {
                 {appointmentData?.map(appointment => {
                   return (
                     <tr key={appointment?._id}>
+                      <td>{appointment.appId}</td>
                       <td>{appointment.patientName}</td>
                       <td>{appointment.phoneNumber}</td>
                       <td>{appointment.clinicName}</td>
@@ -332,7 +334,8 @@ const Appointmenttable = ({ data }) => {
                             appointment.date ===
                               moment(new Date()).format("YYYY-MM-DD") && (
                               <a
-                                href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
+                                //href={`https://appolonia-rtc-d4683cd32c2c.herokuapp.com/chat?roomId=${appointment.roomId}`}
+                                href={`https://socket.appoloniaapp.com:7055/chat?roomId=${appointment.roomId}`}
                                 target="__blank"
                               >
                                 <Button

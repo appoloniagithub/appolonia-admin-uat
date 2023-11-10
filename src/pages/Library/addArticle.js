@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Row, Col } from "reactstrap"
 import { useHistory } from "react-router-dom"
 import Divider from "@mui/material/Divider"
@@ -8,6 +8,8 @@ import url from "Connection/Api/api"
 import axios from "axios"
 import { toast } from "react-toastify"
 import Footer from "components/HorizontalLayout/Footer"
+import { Editor } from "@tinymce/tinymce-react"
+//import TinyMCE from "react-tinymce"
 
 const CreateArticle = props => {
   let history = useHistory()
@@ -16,7 +18,8 @@ const CreateArticle = props => {
   const [image, setImage] = useState("")
   const [authorName, setAuthorName] = useState("")
   const [date, setDate] = useState("")
-
+  const [fName, setFName] = useState("")
+  const [lName, setLName] = useState("")
   const handleClose = () => {
     history.push("/library")
   }
@@ -29,6 +32,20 @@ const CreateArticle = props => {
   const handleClick = event => {
     hiddenFileInput.current.click()
   }
+
+  useEffect(() => {
+    if (sessionStorage.getItem("firstName")) {
+      const firstName = sessionStorage.getItem("firstName")
+      console.log(firstName)
+      setFName(firstName)
+    }
+    if (sessionStorage.getItem("lastName")) {
+      const lastName = sessionStorage.getItem("lastName")
+      console.log(lastName)
+      setLName(lastName)
+    }
+    setAuthorName(`${fName} ${lName}`)
+  }, [])
   const postData = () => {
     var formdata = new FormData()
     formdata.append("title", title)
@@ -97,14 +114,56 @@ const CreateArticle = props => {
                 </Form.Group>
                 <Form.Group controlId="Description">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control
+                  {/* <div>
+                    <label htmlFor="content">Description:</label>
+
+                    <Editor
+                      value={description}
+                      onChange={e => setDescription(e.target.value)}
+                      tinymceScriptSrc={
+                        process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"
+                      }
+                      id="content"
+                      apiKey="lr6omlalxf5cdr3r7iwodlyvf16622x2xrosm5odqburg1tf"
+                      init={{
+                        height: 300,
+                        plugins: [
+                          "a11ychecker advcode advlist advtable anchor autocorrect autosave editimage image link linkchecker lists media mediaembed pageembed powerpaste searchreplace table template tinymcespellchecker typography visualblocks wordcount",
+                        ],
+                        toolbar:
+                          "undo redo | blocks fontfamily fontsize | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify lineheight | removeformat | link ",
+                        menubar: false,
+                        block_formats:
+                          "Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3",
+                        content_style: `
+            body {
+              font-family: Arial, sans-serif;
+              margin: 12px;
+            }
+            h1, h2, h3, p {
+              color: #4D66CB;
+              margin: 10px;
+            }
+            `,
+                      }}
+                    />
+                  </div> */}
+
+                  <textarea
+                    className="form-control mb-4"
+                    id="exampleFormControlTextarea1"
+                    rows="4"
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                  ></textarea>
+                  {/* <Form.Control
                     className="mb-4"
                     style={{ lineHeight: "9.5" }}
                     type="text"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     name="Description"
-                  />
+                  /> */}
                 </Form.Group>
                 <Form.Group controlId="Image">
                   <Form.Label>Image</Form.Label>
@@ -122,19 +181,21 @@ const CreateArticle = props => {
                       onChange={handleChange}
                       style={{ display: "none" }}
                     />
+                    &nbsp; <span>{image.name}</span>
                   </div>
                 </Form.Group>
                 <Form.Group controlId="Author">
                   <Form.Label>Author</Form.Label>
                   <Form.Control
-                    value={authorName}
+                    disabled
+                    value={`${fName} ${lName}`}
                     onChange={e => setAuthorName(e.target.value)}
                     className="mb-4"
                     type="text"
                     name="Author"
                   />
                 </Form.Group>
-                <Form.Group controlId="Date">
+                {/* <Form.Group controlId="Date">
                   <Form.Label>Date</Form.Label>
                   <Form.Control
                     className="mb-4"
@@ -143,7 +204,7 @@ const CreateArticle = props => {
                     onChange={e => setDate(e.target.value)}
                     name="Date"
                   />
-                </Form.Group>
+                </Form.Group> */}
 
                 <Button
                   type="submit"

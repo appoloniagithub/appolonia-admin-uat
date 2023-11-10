@@ -6,12 +6,12 @@ import { Button } from "reactstrap"
 import "react-datepicker/dist/react-datepicker.css"
 import Divider from "@mui/material/Divider"
 import { useHistory, useLocation } from "react-router"
-import { getAllDoctors } from "Connection/Doctors"
+import { getAllDoctors, getDoctorsByTime } from "Connection/Doctors"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import { createBooking, getBookingData } from "Connection/Appointments"
 import { toast } from "react-toastify"
-import { getAllPatients } from "Connection/Patients"
+import { getAllPatients, getPatientById } from "Connection/Patients"
 
 export default function Existing() {
   let history = useHistory()
@@ -115,6 +115,31 @@ export default function Existing() {
       setAllPatients(res.data.data.allPatients)
     })
   }, [])
+  useEffect(() => {
+    if (patientId) {
+      getPatientById({ userId: patientId }).then(async res => {
+        //setImage(res.data.data.foundPatient.image[0])
+
+        console.log(res.data.data.foundPatient)
+        setPhoneNumber(res.data.data.foundPatient.phoneNumber)
+        setEmail(res.data.data.foundPatient.email)
+      })
+    }
+  }, [patientId])
+
+  useEffect(() => {
+    if ((serviceName, clinicName, startDate, startTime)) {
+      const time = `${startDate} ${startTime}`
+      console.log(new Date(time))
+      getDoctorsByTime({
+        date: startDate,
+        speciality: serviceName,
+        clinicName: clinicName,
+      }).then(res => {
+        console.log(res)
+      })
+    }
+  }, [serviceName, clinicName])
   const handleBooking = async () => {
     let res = await createBooking({
       userId: patientId,
@@ -152,7 +177,8 @@ export default function Existing() {
     history.push("/appointments")
   }
   console.log(services)
-  console.log(patientId)
+  console.log(patientId, serviceName, clinicName)
+  console.log(startDate, startTime)
   return (
     <>
       <div className="form-wrapper">
@@ -287,6 +313,50 @@ export default function Existing() {
                     </Form.Group>
                   </Col>
                 </Row>
+                <Form.Group className="" controlId="Date">
+                  <Form.Label className="mt-2">Select Date</Form.Label>
+                  {/* <DatePicker
+                    selected={startDate}
+                    onChange={date => setStartDate(date)}
+                  /> */}
+                  <Form.Control
+                    className=""
+                    type="date"
+                    value={startDate}
+                    onChange={e => setStartDate(e.target.value)}
+                    name="Date"
+                  />
+                </Form.Group>
+                {/* <Form.Group className="" controlId="Date">
+                  <Form.Label className="mt-2">Select Time</Form.Label>
+                  <DatePicker
+                    selected={time}
+                    onChange={time => setTime(time)}
+                    showTimeSelect
+                    showTimeSelectOnly
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="h:mm aa"
+                  />
+                </Form.Group> */}
+                <Form.Group className="mt-2" controlId="Date">
+                  <Form.Label className="mt-2">Select Time</Form.Label>
+                  <select
+                    name="Select Time"
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={startTime}
+                    onChange={e => {
+                      setStartTime(e.target.value)
+                    }}
+                  >
+                    {timeOptions.map(value => (
+                      <option value={value} key={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                </Form.Group>
                 <Form.Group className="mt-2" controlId="Assign a Doctor">
                   <Form.Label>
                     Assign a Doctor<sup className="text-danger">*</sup>
@@ -396,50 +466,6 @@ export default function Existing() {
                       ))}
                     </select>
                   </div>
-                </Form.Group>
-                <Form.Group className="" controlId="Date">
-                  <Form.Label className="mt-2">Select Date</Form.Label>
-                  {/* <DatePicker
-                    selected={startDate}
-                    onChange={date => setStartDate(date)}
-                  /> */}
-                  <Form.Control
-                    className=""
-                    type="date"
-                    value={startDate}
-                    onChange={e => setStartDate(e.target.value)}
-                    name="Date"
-                  />
-                </Form.Group>
-                {/* <Form.Group className="" controlId="Date">
-                  <Form.Label className="mt-2">Select Time</Form.Label>
-                  <DatePicker
-                    selected={time}
-                    onChange={time => setTime(time)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    timeCaption="Time"
-                    dateFormat="h:mm aa"
-                  />
-                </Form.Group> */}
-                <Form.Group className="mt-2" controlId="Date">
-                  <Form.Label className="mt-2">Select Time</Form.Label>
-                  <select
-                    name="Select Time"
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={startTime}
-                    onChange={e => {
-                      setStartTime(e.target.value)
-                    }}
-                  >
-                    {timeOptions.map(value => (
-                      <option value={value} key={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
                 </Form.Group>
               </Form>
             </Col>

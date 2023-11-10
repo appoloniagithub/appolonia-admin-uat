@@ -70,11 +70,22 @@
         min-height: 100vh;
     }
 }
+// @media (min-width: 1430px) {
+// .react-tel-input .form-control{
+//     width: 435px !important;
+// }
+// }
+
+// @media (min-width: 992px) {
+//     .react-tel-input .form-control{
+//         width: 286px;
+//     }
+//     }
 
 .react-tel-input .form-control{
-    width: 435px;
-}
-
+            width: inherit !important;
+        }  
+    
 .lg-css3.lg-slide.lg-use-css3 .lg-item.lg-current{
     transform: rotate(270deg) !important;
 }
@@ -88,7 +99,12 @@
     border: 1px solid #ced4da !important;
     border-radius: 0.25rem !important;
   }
-
+  
+  .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+    font-size: 0.8125rem !important;
+    color: #495057 !important;
+    width: 264px !important;
+  }
  .MuiTabs-indicator{
     background-color: purple !important;
 }
@@ -112,6 +128,9 @@
 .rbc-month-view {
    flex: inherit !important;
     height: 600px !important;
+  }
+  .rbc-allday-cell {
+    display: none;
   }
 
   .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{

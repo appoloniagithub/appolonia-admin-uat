@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import { getContactById } from "Connection/Patients"
+import url from "Connection/Api/api"
 
 const ViewMessage = () => {
   const [contact, setContact] = useState("")
@@ -18,6 +19,7 @@ const ViewMessage = () => {
   const [email, setEmail] = useState("")
   const [source, setSource] = useState("")
   const [platform, setPlatform] = useState("")
+  const [files, setFiles] = useState("")
   const history = useHistory()
 
   const handleClose = () => {
@@ -42,6 +44,7 @@ const ViewMessage = () => {
           setMessage(res.data.data.foundContact[0]?.message)
           setOs(res.data.data.foundContact[0]?.appOsVersion)
           setPlatform(res.data.data.foundContact[0]?.source)
+          setFiles(res.data.data.foundContact[0]?.files[0])
         }
       })
     }
@@ -88,6 +91,7 @@ const ViewMessage = () => {
                       <Form.Group className="mt-2" controlId="Name">
                         <Form.Label className="mt-2">Name</Form.Label>
                         <Form.Control
+                          readOnly
                           type="text"
                           name="name"
                           value={name}
@@ -99,6 +103,7 @@ const ViewMessage = () => {
                       <Form.Group className="mt-2" controlId="Platform">
                         <Form.Label className="mt-2">Platform</Form.Label>
                         <Form.Control
+                          readOnly
                           type="text"
                           name="Platform"
                           value={platform}
@@ -112,6 +117,7 @@ const ViewMessage = () => {
                       <Form.Group controlId="Email">
                         <Form.Label className="mt-2">Email</Form.Label>
                         <Form.Control
+                          readOnly
                           type="email"
                           value={email}
                           onChange={e => setEmail(e.target.value)}
@@ -123,6 +129,7 @@ const ViewMessage = () => {
                         <Form.Label className="mt-2">OS</Form.Label>
 
                         <Form.Control
+                          readOnly
                           type="text"
                           value={os}
                           onChange={e => setOs(e.target.value)}
@@ -136,6 +143,7 @@ const ViewMessage = () => {
                         <Form.Label className="test mt-2">Mobile</Form.Label>
 
                         <PhoneInput
+                          disabled
                           country={"ae"}
                           placeholder="Enter phone number"
                           name="phoneNumber"
@@ -148,6 +156,7 @@ const ViewMessage = () => {
                       <Form.Group controlId="App Version">
                         <Form.Label className="mt-2">App Version</Form.Label>
                         <Form.Control
+                          readOnly
                           type="text"
                           value={appVersion}
                           onChange={e => setAppVersion(e.target.value)}
@@ -177,6 +186,7 @@ const ViewMessage = () => {
                     <Form.Group className="mt-2" controlId="Subject">
                       <Form.Label className="">Subject</Form.Label>
                       <Form.Control
+                        readOnly
                         type="text"
                         name="subject"
                         value={subject}
@@ -188,11 +198,23 @@ const ViewMessage = () => {
                       <Form.Label className="mt-2">Message</Form.Label>
                       <div className="form-floating">
                         <textarea
+                          readOnly
                           className="form-control"
                           id="floatingTextarea"
                           value={message}
                           onChange={e => setMessage(e.target.value)}
                         ></textarea>
+                      </div>
+                    </Form.Group>
+                    <Form.Group className="" controlId="Files">
+                      <Form.Label className="mt-2">Files</Form.Label>
+                      <div className="form-floating">
+                        <img
+                          width="100"
+                          height="100"
+                          src={`${url}/api/${files}`}
+                          //onChange={e => setFiles(e.target.value)}
+                        />
                       </div>
                     </Form.Group>
                   </Row>

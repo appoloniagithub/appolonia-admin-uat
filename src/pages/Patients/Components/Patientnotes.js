@@ -86,11 +86,7 @@ const Patientnotes = ({ view, handleView, data }) => {
           {notes.length > 0 && (
             <div>
               {notes?.map((note, i) => {
-                return (
-                  <p key={i}>
-                    {i} {note}
-                  </p>
-                )
+                return <p key={i}> - {note}</p>
               })}
             </div>
           )}

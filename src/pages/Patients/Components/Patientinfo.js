@@ -208,15 +208,30 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               </div>
             </div>
           ) : (
-            <div className="m-2">
-              <strong>Clinic Verify</strong>{" "}
-              <BootstrapSwitchButton
-                checked={clinic.connected}
-                onChange={checked => {
-                  setClinic({ ...clinic, connected: checked })
-                  handleUpdate("connected", checked)
-                }}
-              />
+            <div>
+              <div className="m-2">
+                <strong>Clinic Verify</strong>{" "}
+                <BootstrapSwitchButton
+                  onstyle="light"
+                  // checked={clinic.clinicVerified}
+                  checked={true}
+                  disabled={true}
+                  onChange={checked => {
+                    setClinic({ ...clinic, clinicVerified: checked })
+                    handleUpdate("clinicVerified", checked)
+                  }}
+                />
+              </div>
+              <div className="m-2">
+                <strong>Active</strong>{" "}
+                <BootstrapSwitchButton
+                  checked={clinic.connected}
+                  onChange={checked => {
+                    setClinic({ ...clinic, connected: checked })
+                    handleUpdate("connected", checked)
+                  }}
+                />
+              </div>
             </div>
           )}
         </div>

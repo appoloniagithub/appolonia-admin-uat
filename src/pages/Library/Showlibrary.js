@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react"
 import { getSingleArticle } from "Connection/Libraries"
 import { Row, Col } from "reactstrap"
 import { useHistory, useLocation } from "react-router"
+import url from "Connection/Api/api"
 const moment = require("moment")
+
 export default function Showlibrary() {
   let history = useHistory()
   const [data, setData] = useState("")
@@ -55,10 +57,10 @@ export default function Showlibrary() {
             {data.title}
           </h1>
 
-          <img src={image} width="700" height="500" />
+          <img src={`${url}/api/${image}`} width="700" height="500" />
 
           <h5 className="pt-4 pb-4">
-            {moment(data.date).format("MMM Do YYYY, h:mm a")}
+            {moment(data.created).format("MMM Do YYYY, h:mm a")}
           </h5>
           <div
             style={{

@@ -89,6 +89,13 @@ const getEvent = async data => {
   console.log(res)
   return res
 }
+const getDoctorsByTime = async data => {
+  let res = await axios.post(`${url}/api/doctors/gettime`, data)
+
+  console.log(res)
+  return res
+}
+
 export {
   getAllDoctors,
   addDoctor,
@@ -101,4 +108,5 @@ export {
   deleteEvent,
   editEvent,
   getEvent,
+  getDoctorsByTime,
 }

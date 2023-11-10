@@ -89,6 +89,9 @@ const NotificationDropdown = props => {
 
           <SimpleBar style={{ height: "500px" }}>
             <div className="text-reset notification-item">
+              {notifications.length === 0 && (
+                <p>No Notifications are available</p>
+              )}
               {notifications.length > 0 &&
                 notifications.map(notification => {
                   return (

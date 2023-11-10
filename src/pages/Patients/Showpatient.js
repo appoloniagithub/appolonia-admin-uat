@@ -420,14 +420,14 @@ export default function Showpatient({
       {role === "Admin" ? (
         <div>
           <Row className="mb-2">
-            <div className="border border-secondary rounded  ">
+            <div className="border border-secondary rounded">
               <div
                 style={{
                   backgroundColor: "#20507B",
                   color: "white",
                   height: "60px",
                 }}
-                className="d-flex justify-content-start align-items-center "
+                className="d-flex justify-content-start align-items-center"
               >
                 <div>
                   <button onClick={handleOpen} className="btn text-light">
