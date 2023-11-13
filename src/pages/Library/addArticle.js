@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Row, Col } from "reactstrap"
+import { Row, Col, Spinner } from "reactstrap"
 import { useHistory } from "react-router-dom"
 import Divider from "@mui/material/Divider"
 import Form from "react-bootstrap/Form"
@@ -20,6 +20,7 @@ const CreateArticle = props => {
   const [date, setDate] = useState("")
   const [fName, setFName] = useState("")
   const [lName, setLName] = useState("")
+  const [loading, setLoading] = useState()
   const handleClose = () => {
     history.push("/library")
   }
@@ -46,7 +47,9 @@ const CreateArticle = props => {
     }
     setAuthorName(`${fName} ${lName}`)
   }, [])
-  const postData = () => {
+  const postData = e => {
+    e.preventDefault()
+    setLoading("adding")
     var formdata = new FormData()
     formdata.append("title", title)
     formdata.append("description", description)
@@ -73,48 +76,61 @@ const CreateArticle = props => {
   console.log(image, "image")
   return (
     <>
-      <div className="form-wrapper">
-        <Row>
-          <div className="border border-secondary rounded">
-            <div
-              style={{
-                backgroundColor: "#20507B",
-                color: "white",
-                height: "60px",
-              }}
-              className="d-flex justify-content-start align-items-center "
-            >
-              <div>
-                <button onClick={handleClose} className="btn text-light">
-                  <i className="fas fa-arrow-left" />
-                </button>
-              </div>
+      {loading === "adding" ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <p>Your article is being added.</p>
+          <Spinner className="ms-2" color="primary" />
+        </div>
+      ) : (
+        <div className="form-wrapper">
+          <Row>
+            <div className="border border-secondary rounded">
+              <div
+                style={{
+                  backgroundColor: "#20507B",
+                  color: "white",
+                  height: "60px",
+                }}
+                className="d-flex justify-content-start align-items-center "
+              >
+                <div>
+                  <button onClick={handleClose} className="btn text-light">
+                    <i className="fas fa-arrow-left" />
+                  </button>
+                </div>
 
-              <h5 className="mt-2 text-light">Article Details</h5>
+                <h5 className="mt-2 text-light">Article Details</h5>
+              </div>
             </div>
-          </div>
-        </Row>
-        <Row>
-          <Col>
-            <div className="">
-              <div className="justify-content-between m-4">
-                <h5>Add New Article</h5>
-                <Divider style={{ border: "0.5px solid" }} />
-                <br />
-                <Form.Group controlId="Title">
-                  <Form.Label>Title</Form.Label>
-                  <Form.Control
-                    className="mb-4"
-                    type="text"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    name="title"
-                    autoFocus
-                  />
-                </Form.Group>
-                <Form.Group controlId="Description">
-                  <Form.Label>Description</Form.Label>
-                  {/* <div>
+          </Row>
+          <Row>
+            <Col>
+              <div className="">
+                <div className="justify-content-between m-4">
+                  <h5>Add New Article</h5>
+                  <Divider style={{ border: "0.5px solid" }} />
+                  <br />
+                  <Form.Group controlId="Title">
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control
+                      className="mb-4"
+                      type="text"
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      name="title"
+                      autoFocus
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="Description">
+                    <Form.Label>Description</Form.Label>
+                    {/* <div>
                     <label htmlFor="content">Description:</label>
 
                     <Editor
@@ -149,14 +165,14 @@ const CreateArticle = props => {
                     />
                   </div> */}
 
-                  <textarea
-                    className="form-control mb-4"
-                    id="exampleFormControlTextarea1"
-                    rows="4"
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                  ></textarea>
-                  {/* <Form.Control
+                    <textarea
+                      className="form-control mb-4"
+                      id="exampleFormControlTextarea1"
+                      rows="4"
+                      value={description}
+                      onChange={e => setDescription(e.target.value)}
+                    ></textarea>
+                    {/* <Form.Control
                     className="mb-4"
                     style={{ lineHeight: "9.5" }}
                     type="text"
@@ -164,38 +180,38 @@ const CreateArticle = props => {
                     onChange={e => setDescription(e.target.value)}
                     name="Description"
                   /> */}
-                </Form.Group>
-                <Form.Group controlId="Image">
-                  <Form.Label>Image</Form.Label>
-                  <div>
-                    <Button
-                      color="primary"
-                      className="btn btn-primary m-2"
-                      onClick={handleClick}
-                    >
-                      CHOOSE FILE
-                    </Button>
-                    <input
-                      type="file"
-                      ref={hiddenFileInput}
-                      onChange={handleChange}
-                      style={{ display: "none" }}
+                  </Form.Group>
+                  <Form.Group controlId="Image">
+                    <Form.Label>Image</Form.Label>
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn btn-primary m-2"
+                        onClick={handleClick}
+                      >
+                        CHOOSE FILE
+                      </Button>
+                      <input
+                        type="file"
+                        ref={hiddenFileInput}
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+                      &nbsp; <span>{image.name}</span>
+                    </div>
+                  </Form.Group>
+                  <Form.Group controlId="Author">
+                    <Form.Label>Author</Form.Label>
+                    <Form.Control
+                      disabled
+                      value={`${fName} ${lName}`}
+                      onChange={e => setAuthorName(e.target.value)}
+                      className="mb-4"
+                      type="text"
+                      name="Author"
                     />
-                    &nbsp; <span>{image.name}</span>
-                  </div>
-                </Form.Group>
-                <Form.Group controlId="Author">
-                  <Form.Label>Author</Form.Label>
-                  <Form.Control
-                    disabled
-                    value={`${fName} ${lName}`}
-                    onChange={e => setAuthorName(e.target.value)}
-                    className="mb-4"
-                    type="text"
-                    name="Author"
-                  />
-                </Form.Group>
-                {/* <Form.Group controlId="Date">
+                  </Form.Group>
+                  {/* <Form.Group controlId="Date">
                   <Form.Label>Date</Form.Label>
                   <Form.Control
                     className="mb-4"
@@ -206,26 +222,29 @@ const CreateArticle = props => {
                   />
                 </Form.Group> */}
 
-                <Button
-                  type="submit"
-                  color="primary"
-                  className="btn btn-primary m-2 "
-                  onClick={postData}
-                >
-                  Add Article
-                </Button>
-                <Button
-                  onClick={handleClose}
-                  color="primary"
-                  className="btn btn-primary m-2 "
-                >
-                  Cancel
-                </Button>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    className="btn btn-primary m-2 "
+                    onClick={e => {
+                      postData(e)
+                    }}
+                  >
+                    Add Article
+                  </Button>
+                  <Button
+                    onClick={handleClose}
+                    color="primary"
+                    className="btn btn-primary m-2 "
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
+            </Col>
+          </Row>
+        </div>
+      )}
     </>
   )
 }

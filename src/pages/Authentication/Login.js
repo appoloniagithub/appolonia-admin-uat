@@ -49,8 +49,11 @@ const Login = props => {
   const [isPassword, setIsPassword] = useState(false)
   const [value, setValue] = React.useState("1")
   const [isRevealPwd, setIsRevealPwd] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const handleLoginDetails = () => {
+  const [isLoading, setIsLoading] = useState()
+
+  const handleLoginDetails = e => {
+    e.preventDefault()
+    setIsLoading("logging in")
     if (phoneNumber || password || emiratesId || isPhoneNumber) {
       const axios = require("axios")
       const data = JSON.stringify({
@@ -73,7 +76,6 @@ const Login = props => {
         .then(response => {
           console.log(response.data)
           if (response.data && response.data.success === 1) {
-            setIsLoading(true)
             setPhoneNumber("")
             setPassword("")
             setEmiratesId("")
@@ -146,9 +148,16 @@ const Login = props => {
           <i className="fas fa-home h2" />
         </Link>
       </div> */}
-      {isLoading ? (
-        <div>
-          <h1>Logging in...</h1>
+      {isLoading === "logging in" ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <h6>Logging in...</h6>
           <Spinner className="ms-2" color="primary" />
         </div>
       ) : (
@@ -347,7 +356,7 @@ const Login = props => {
                                 type="submit"
                                 onClick={e => {
                                   e.preventDefault()
-                                  handleLoginDetails()
+                                  handleLoginDetails(e)
                                   handleValidation()
                                 }}
                               >
