@@ -46,7 +46,7 @@ const CreateArticle = props => {
       setLName(lastName)
     }
     setAuthorName(`${fName} ${lName}`)
-  }, [])
+  }, [fName, lName])
   const postData = e => {
     e.preventDefault()
     setLoading("adding")
@@ -203,8 +203,7 @@ const CreateArticle = props => {
                   <Form.Group controlId="Author">
                     <Form.Label>Author</Form.Label>
                     <Form.Control
-                      disabled
-                      value={`${fName} ${lName}`}
+                      value={authorName}
                       onChange={e => setAuthorName(e.target.value)}
                       className="mb-4"
                       type="text"
