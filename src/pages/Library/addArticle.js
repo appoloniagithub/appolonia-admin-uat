@@ -8,7 +8,7 @@ import url from "Connection/Api/api"
 import axios from "axios"
 import { toast } from "react-toastify"
 import Footer from "components/HorizontalLayout/Footer"
-import { Editor } from "@tinymce/tinymce-react"
+//import { Editor } from "@tinymce/tinymce-react"
 //import TinyMCE from "react-tinymce"
 
 const CreateArticle = props => {
