@@ -18,6 +18,7 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import DialogTitle from "@mui/material/DialogTitle"
+import { StyledEngineProvider } from "@mui/material/styles"
 import {
   deleteEvent,
   editEvent,
@@ -33,7 +34,10 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { toast } from "react-toastify"
-import DatePicker from "react-datepicker"
+import { DatePicker } from "@mui/x-date-pickers/DatePicker"
+import { TimePicker } from "@mui/x-date-pickers/TimePicker"
+
+//import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
@@ -47,6 +51,8 @@ const MyCalendar = props => {
   const [date, setDate] = useState("")
   const [tempstart, setTempStart] = useState("")
   const [tempend, setTempEnd] = useState("")
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
   const [startTime, setStartTime] = useState("")
   const [endTime, setEndTime] = useState("")
   const [doctors, setDoctors] = useState([])
@@ -55,22 +61,19 @@ const MyCalendar = props => {
   let history = useHistory()
   const [events, setEvents] = useState([])
   // const [myEvents, setMyEvents] = useState(events)
-  const dateFormat = moment(tempstart).format("MM/DD/YYYY hh:mm a")
-  console.log(dateFormat)
-  const timeFormat = moment(tempstart).format("h:mm A")
-  console.log(timeFormat, "start")
-  const timeFormatEnd = moment(tempend).format("h:mm A")
-  console.log(timeFormatEnd, "end")
+
   const handleSelectSlot = useCallback(
     ({ start, end }) => {
-      console.log(typeof start, end)
+      console.log(start, end)
       // const title = window.prompt("New Event name")
       // if (title) {
       //   setEvents(prev => [...prev, { start, end, title }])
       // }
 
-      // setTempStart(start)
-      // setTempEnd(end)
+      //setTempStart(start)
+      //setTempEnd(end)
+      setStartDate(start)
+      setEndDate(end)
       setStartTime("")
       setEndTime("")
       setClinicName("")
@@ -79,41 +82,48 @@ const MyCalendar = props => {
 
       //setEvents(prev => [...prev, { start, end }])
     },
-    [setTempStart || setTempEnd]
-    //[setStartTime || setEndTime]
+    // [setTempStart || setTempEnd]
+    [setStartDate || setEndDate]
   )
   const handleSelectEvent = async eve => {
     //window.alert("Clinic Name: " + eve._id),
     setEditOpen(true)
     setEventId(eve._id)
   }
+
+  const sdate = moment(startDate).format("MM/DD/YYYY")
+  console.log(sdate)
+
   useEffect(() => {
     getEvent({ eventId }).then(res => {
       console.log(res)
       if (res.data.data.success == 1) {
         setClinicName(res.data.data.event[0].title)
+        setStartDate(res.data.data.event[0].start)
+        setEndDate(res.data.data.event[0].end)
         setStartTime(res.data.data.event[0].start)
         setEndTime(res.data.data.event[0].end)
         setDoctorId(res.data.data.event[0].doctorId)
       }
     })
-  }, [eventId])
+  }, [eventId, sdate])
   const handleClickOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
     setEditOpen(false)
+    window.location.reload()
   }
 
   const handleEvents = async () => {
     await monthlySchedule({
       title: clinicName,
       //date: date,
-      //start: tempstart,
-      //end: tempend,
-      start: startTime,
-      end: endTime,
+      start: time,
+      end: time1,
+      //start: startTime,
+      //end: endTime,
       doctorId: doctorId,
     }).then(res => {
       console.log(res)
@@ -130,8 +140,8 @@ const MyCalendar = props => {
       //date: date,
       //start: tempstart,
       //end: tempend,
-      start: startTime,
-      end: endTime,
+      start: time,
+      end: time1,
       doctorId: doctorId,
     }).then(res => {
       console.log(res)
@@ -187,18 +197,39 @@ const MyCalendar = props => {
       },
     }
   }
-
+  const MyCustomEvent = ({ event }) => {
+    // setEditOpen(true)
+    setEventId(event._id)
+    handleSelectEvent(event)
+    return (
+      <div>
+        <strong>{event.title}</strong>
+        <br />
+        {`Time: ${moment(event.start).format("hh:mm A")} - ${moment(
+          event.end
+        ).format("hh:mm A")}`}
+      </div>
+    )
+  }
   console.log(events)
-  console.log(tempstart, tempend)
-  console.log(startTime.$d, "start time")
-  const stime = moment(startTime.$d).format("MM/DD/YYYY hh:mm a")
-  console.log(stime)
-  console.log(endTime.$d, "end time")
-  const etime = moment(endTime.$d).format("MM/DD/YYYY hh:mm a")
-  console.log(etime)
+  const t = new Date(endDate)
+  console.log(startDate, endDate)
+  const t1 = t.getTime() - 1
+  console.log(t1)
+
+  const edate = moment(t1).format("MM/DD/YYYY")
+  console.log(edate)
   console.log(eventId, "eventId")
-  console.log(typeof startTime)
   console.log(doctorId)
+  console.log(startTime.$d, endTime.$d, "start time and end time")
+  const stime = moment(startTime.$d).format("hh:mm a")
+  console.log(stime)
+  const etime = moment(endTime.$d).format("hh:mm a")
+  console.log(etime)
+  const time = `${sdate} ${stime}`
+  const time1 = `${edate} ${etime}`
+  console.log(time, time1)
+
   return (
     <>
       {/* <Form.Group className="mb-2" controlId="Assign a Doctor">
@@ -239,11 +270,29 @@ const MyCalendar = props => {
           onSelectSlot={handleSelectSlot}
           eventPropGetter={eventStyleGetter}
           selectable
+          //showAllEvents
+          //showMultiDayTimes
+          views={{ month: true, week: true, day: true, agenda: false }}
+          // components={{
+          //   event: MyCustomEvent,
+          // }}
+          formats={{
+            timeGutterFormat: "h:mm A",
+
+            eventTimeRangeFormat: ({ start, end }) =>
+              `${moment(start).format("h:mm A")} - ${moment(end).format(
+                "h:mm A"
+              )}`,
+            agendaTimeRangeFormat: ({ start, end }) =>
+              `${moment(start).format("h:mm A")} - ${moment(end).format(
+                "h:mm A"
+              )}`,
+          }}
         />
       </div>
       <div>
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle className="text-center">New Event</DialogTitle>
+          <DialogTitle className="text-center">Add Schedule</DialogTitle>
           <DialogContent>
             <DialogContentText></DialogContentText>
 
@@ -301,40 +350,84 @@ const MyCalendar = props => {
                 </select>
               )} */}
             </Form.Group>
+            <Row>
+              <Col sm="6">
+                <Form.Group className="mt-2" controlId="Start Date">
+                  <Form.Label>
+                    Start Date<sup className="text-danger">*</sup>
+                  </Form.Label>
 
-            <Form.Group className="mt-2" controlId="Start Time">
-              <Form.Label>
-                Start Time<sup className="text-danger">*</sup>
-              </Form.Label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateTimePicker"]}>
-                  <DateTimePicker
-                    value={startTime}
-                    onChange={e => setStartTime(e)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              {/* <DatePicker
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        //value={startTime}
+                        value={dayjs(sdate)}
+                        onChange={e => setStartDate(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+
+                  {/* <DatePicker
                 selected={startTime}
                 onChange={date => setStartTime(date)}
                 showTimeSelect
                 dateFormat="MMMM d, yyyy h:mm aa"
               /> */}
-            </Form.Group>
-            <Form.Group className="mt-2" controlId="End Time">
-              <Form.Label>
-                End Time<sup className="text-danger">*</sup>
-              </Form.Label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateTimePicker"]}>
-                  <DateTimePicker
-                    minDate={dayjs(startTime)}
-                    value={endTime}
-                    onChange={e => setEndTime(e)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Form.Group>
+                </Form.Group>
+              </Col>
+              <Col sm="6">
+                {" "}
+                <Form.Group className="mt-2" controlId="End Date">
+                  <Form.Label>
+                    End Date<sup className="text-danger">*</sup>
+                  </Form.Label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        // minDate={dayjs(startTime)}
+                        //value={endTime}
+                        value={dayjs(edate)}
+                        onChange={e => setEndDate(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <Form.Group className="mt-2" controlId="Start Time">
+                  <Form.Label>
+                    Start Shift Time<sup className="text-danger">*</sup>
+                  </Form.Label>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["TimePicker"]}>
+                      <TimePicker
+                        value={startTime}
+                        onChange={e => setStartTime(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+              <Col sm="6">
+                {" "}
+                <Form.Group className="mt-2" controlId="End Time">
+                  <Form.Label>
+                    End Shift Time<sup className="text-danger">*</sup>
+                  </Form.Label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["TimePicker"]}>
+                      <TimePicker
+                        value={endTime}
+                        onChange={e => setEndTime(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+            </Row>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
@@ -350,7 +443,7 @@ const MyCalendar = props => {
           >
             <Button onClick={handleClose}>Cancel</Button>
 
-            <DialogTitle>Edit Event</DialogTitle>
+            <DialogTitle>Edit Schedule</DialogTitle>
             <Button onClick={handleEditEvent}>Save</Button>
           </div>
           <DialogContent>
@@ -393,40 +486,73 @@ const MyCalendar = props => {
                 ))}
               </select>
             </Form.Group>
+            <Row>
+              <Col sm="6">
+                <Form.Group className="mt-2" controlId="Start Date">
+                  <Form.Label>
+                    Start Date<sup className="text-danger">*</sup>
+                  </Form.Label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        value={startDate ? dayjs(startDate) : null}
+                        onChange={e => setStartDate(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+              <Col sm="6">
+                <Form.Group className="mt-2" controlId="End Date">
+                  <Form.Label>
+                    End Date<sup className="text-danger">*</sup>
+                  </Form.Label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        minDate={dayjs(startDate)}
+                        value={endDate ? dayjs(endDate) : null}
+                        onChange={e => setEndDate(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <Form.Group className="mt-2" controlId="Start Shift Time">
+                  <Form.Label>
+                    Start Shift Time<sup className="text-danger">*</sup>
+                  </Form.Label>
 
-            <Form.Group className="mt-2" controlId="Start Time">
-              <Form.Label>
-                Start Time<sup className="text-danger">*</sup>
-              </Form.Label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateTimePicker"]}>
-                  <DateTimePicker
-                    value={startTime ? dayjs(startTime) : null}
-                    onChange={e => setStartTime(e)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              {/* <DatePicker
-                selected={startTime}
-                onChange={date => setStartTime(date)}
-                showTimeSelect
-                dateFormat="MMMM d, yyyy h:mm aa"
-              /> */}
-            </Form.Group>
-            <Form.Group className="mt-2" controlId="End Time">
-              <Form.Label>
-                End Time<sup className="text-danger">*</sup>
-              </Form.Label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateTimePicker"]}>
-                  <DateTimePicker
-                    minDate={dayjs(startTime)}
-                    value={endTime ? dayjs(endTime) : null}
-                    onChange={e => setEndTime(e)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Form.Group>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["TimePicker"]}>
+                      <TimePicker
+                        value={dayjs(startTime)}
+                        onChange={e => setStartTime(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+              <Col sm="6">
+                {" "}
+                <Form.Group className="mt-2" controlId="End Shift Time">
+                  <Form.Label>
+                    End Shift Time<sup className="text-danger">*</sup>
+                  </Form.Label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["TimePicker"]}>
+                      <TimePicker
+                        value={dayjs(endTime)}
+                        onChange={e => setEndTime(e)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Form.Group>
+              </Col>
+            </Row>
           </DialogContent>
           <DialogActions></DialogActions>
 

@@ -99,7 +99,7 @@ export default function Existing() {
       if (res.data && res.data.data.doctors) {
         for (let i = 0; i < res.data.data.doctors.length; i++) {
           console.log(res.data.data.doctors)
-          setDoctors(res.data.data.doctors)
+          //setDoctors(res.data.data.doctors)
         }
       }
     })
@@ -130,16 +130,21 @@ export default function Existing() {
   useEffect(() => {
     if ((serviceName, clinicName, startDate, startTime)) {
       const time = `${startDate} ${startTime}`
-      console.log(new Date(time))
+      //console.log(new Date(time).toISOString())
+      console.log(time)
       getDoctorsByTime({
-        date: startDate,
+        date: time,
         speciality: serviceName,
         clinicName: clinicName,
       }).then(res => {
-        console.log(res)
+        console.log(res.data)
+        if (res.data.data.success === 1) {
+          setDoctors(res.data.data.doctors)
+        }
       })
     }
-  }, [serviceName, clinicName])
+  }, [serviceName, clinicName, startDate, startTime])
+
   const handleBooking = async () => {
     let res = await createBooking({
       userId: patientId,
@@ -369,11 +374,17 @@ export default function Existing() {
                     onChange={e => setDoctorId(e.currentTarget.value)}
                   >
                     <option>Select</option>
-                    {doctors.map(item => (
-                      <option key={item._id} value={item._id}>
-                        {item.firstName} {item.lastName}
+                    {doctors.length === 0 && (
+                      <option>
+                        No doctors found at requested time and date
                       </option>
-                    ))}
+                    )}
+                    {doctors.length > 0 &&
+                      doctors.map(item => (
+                        <option key={item.doctorId} value={item.doctorId}>
+                          {item.firstName} {item.lastName}
+                        </option>
+                      ))}
                   </select>
                   {/* <div className="border border-secondary rounded mb-2">
                     <div className="form-check">
@@ -470,13 +481,20 @@ export default function Existing() {
               </Form>
             </Col>
           </Row>
-
           <Button
             color="primary"
             className="btn btn-primary mt-4 mb-4"
             onClick={handleBooking}
           >
             Book Appointment
+          </Button>{" "}
+          &nbsp;
+          <Button
+            color="primary"
+            className="btn btn-primary mt-4 mb-4"
+            onClick={handleClose}
+          >
+            Cancel
           </Button>
         </section>
       </div>

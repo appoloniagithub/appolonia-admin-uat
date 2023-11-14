@@ -6,7 +6,7 @@ import { Button } from "reactstrap"
 import "react-datepicker/dist/react-datepicker.css"
 import Divider from "@mui/material/Divider"
 import { useHistory, useLocation } from "react-router"
-import { getAllDoctors } from "Connection/Doctors"
+import { getAllDoctors, getDoctorsByTime } from "Connection/Doctors"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import {
@@ -102,7 +102,7 @@ export default function Createappointment() {
       if (res.data && res.data.data.doctors) {
         for (let i = 0; i < res.data.data.doctors.length; i++) {
           console.log(res.data.data.doctors)
-          setDoctors(res.data.data.doctors)
+          //setDoctors(res.data.data.doctors)
         }
       }
     })
@@ -114,6 +114,25 @@ export default function Createappointment() {
       setClinics(res.data.data.clinic)
     })
   }, [])
+
+  useEffect(() => {
+    if ((serviceName, clinicName, startDate, startTime)) {
+      const time = `${startDate} ${startTime}`
+      //console.log(new Date(time).toISOString())
+      console.log(time)
+      getDoctorsByTime({
+        date: time,
+        speciality: serviceName,
+        clinicName: clinicName,
+      }).then(res => {
+        console.log(res.data)
+        if (res.data.data.success === 1) {
+          setDoctors(res.data.data.doctors)
+        }
+      })
+    }
+  }, [serviceName, clinicName, startDate, startTime])
+
   const handleBooking = async () => {
     let res = await newBooking({
       patientName: patientName,
@@ -312,6 +331,39 @@ export default function Createappointment() {
                     </Form.Group>
                   </Col>
                 </Row>
+                <Form.Group className="" controlId="Date">
+                  <Form.Label className="mt-2">Select Date</Form.Label>
+                  {/* <DatePicker
+                    selected={startDate}
+                    onChange={date => setStartDate(date)}
+                  /> */}
+                  <Form.Control
+                    className=""
+                    type="date"
+                    value={startDate}
+                    onChange={e => setStartDate(e.target.value)}
+                    name="Date"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mt-2" controlId="Date">
+                  <Form.Label className="mt-2">Select Time</Form.Label>
+                  <select
+                    name="Select Time"
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={startTime}
+                    onChange={e => {
+                      setStartTime(e.target.value)
+                    }}
+                  >
+                    {timeOptions.map(value => (
+                      <option value={value} key={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                </Form.Group>
                 <Form.Group className="mt-2" controlId="Assign a Doctor">
                   <Form.Label>
                     Assign a Doctor<sup className="text-danger">*</sup>
@@ -324,8 +376,13 @@ export default function Createappointment() {
                     onChange={e => setDoctorId(e.currentTarget.value)}
                   >
                     <option>Select</option>
+                    {doctors.length === 0 && (
+                      <option>
+                        No doctors found at requested time and date
+                      </option>
+                    )}
                     {doctors.map(item => (
-                      <option key={item._id} value={item._id}>
+                      <option key={item.doctorId} value={item.doctorId}>
                         {item.firstName} {item.lastName}
                       </option>
                     ))}
@@ -421,50 +478,6 @@ export default function Createappointment() {
                       ))}
                     </select>
                   </div>
-                </Form.Group>
-                <Form.Group className="" controlId="Date">
-                  <Form.Label className="mt-2">Select Date</Form.Label>
-                  {/* <DatePicker
-                    selected={startDate}
-                    onChange={date => setStartDate(date)}
-                  /> */}
-                  <Form.Control
-                    className=""
-                    type="date"
-                    value={startDate}
-                    onChange={e => setStartDate(e.target.value)}
-                    name="Date"
-                  />
-                </Form.Group>
-                {/* <Form.Group className="" controlId="Date">
-                  <Form.Label className="mt-2">Select Time</Form.Label>
-                  <DatePicker
-                    selected={time}
-                    onChange={time => setTime(time)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    timeCaption="Time"
-                    dateFormat="h:mm aa"
-                  />
-                </Form.Group> */}
-                <Form.Group className="mt-2" controlId="Date">
-                  <Form.Label className="mt-2">Select Time</Form.Label>
-                  <select
-                    name="Select Time"
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={startTime}
-                    onChange={e => {
-                      setStartTime(e.target.value)
-                    }}
-                  >
-                    {timeOptions.map(value => (
-                      <option value={value} key={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
                 </Form.Group>
               </Form>
             </Col>
