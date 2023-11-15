@@ -28,6 +28,13 @@ export default function Showlibrary() {
     history.push("/library")
   }
   console.log(data)
+  const stripHtmlTags = html => {
+    const doc = new DOMParser().parseFromString(html, "text/html")
+    return doc.body.textContent || ""
+  }
+  const strippedContent = stripHtmlTags(data.content)
+
+  console.log(strippedContent)
   return (
     <>
       <div className="form-wrapper">
@@ -70,7 +77,7 @@ export default function Showlibrary() {
               lineHeight: "2",
             }}
           >
-            {data.description}
+            {strippedContent}
           </div>
         </section>
       </div>

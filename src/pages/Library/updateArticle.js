@@ -1,7 +1,7 @@
 import { useHistory, useLocation } from "react-router"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Row, Col } from "reactstrap"
-
+import JoditEditor from "jodit-react"
 import Divider from "@mui/material/Divider"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
@@ -12,10 +12,11 @@ import axios from "axios"
 import { toast } from "react-toastify"
 
 const EditArticle = () => {
+  const editor = useRef(null)
   let history = useHistory()
   const location = useLocation()
   const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  const [content, setContent] = useState("")
   const [image, setImage] = useState("")
   const [authorName, setAuthorName] = useState("")
   const [date, setDate] = useState("")
@@ -45,7 +46,7 @@ const EditArticle = () => {
         console.log(res.data.data.article)
         if (res.data.data.article) {
           setTitle(res.data.data.article.title)
-          setDescription(res.data.data.article.description)
+          setContent(res.data.data.article.content)
           //setDescription(window.tinymce.activeEditor.setDescription(""))
 
           setImage(res.data.data.article.image[0])
@@ -65,7 +66,7 @@ const EditArticle = () => {
       var formdata = new FormData()
       formdata.append("_id", id)
       formdata.append("title", title)
-      formdata.append("description", description)
+      formdata.append("content", content)
       formdata.append("image", image)
       formdata.append("authorName", authorName)
       //formdata.append("authorImage", "img")
@@ -77,7 +78,7 @@ const EditArticle = () => {
       let tempObj = {
         _id: id,
         title,
-        description,
+        content,
         image: updateImage,
         authorName,
         date,
@@ -138,16 +139,26 @@ const EditArticle = () => {
                     autoFocus
                   />
                 </Form.Group>
-                <Form.Group controlId="Description">
-                  <Form.Label>Description</Form.Label>
+                {/* <Form.Group controlId="Content">
+                  <Form.Label>Content</Form.Label>
 
                   <textarea
                     className="form-control mb-4"
                     id="exampleFormControlTextarea1"
                     rows="4"
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    value={content}
+                    onChange={e => setContent(e.target.value)}
                   ></textarea>
+                </Form.Group> */}
+                <Form.Group controlId="Content">
+                  <Form.Label>Content</Form.Label>
+
+                  <JoditEditor
+                    className="mb-4"
+                    ref={editor}
+                    value={content}
+                    onChange={newContent => setContent(newContent)}
+                  />
                 </Form.Group>
                 <Form.Group controlId="Image">
                   <Form.Label>Image</Form.Label>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Row, Col, Spinner } from "reactstrap"
 import { useHistory } from "react-router-dom"
 import Divider from "@mui/material/Divider"
@@ -7,11 +7,11 @@ import Button from "react-bootstrap/Button"
 import url from "Connection/Api/api"
 import axios from "axios"
 import { toast } from "react-toastify"
-import Footer from "components/HorizontalLayout/Footer"
-//import { Editor } from "@tinymce/tinymce-react"
-//import TinyMCE from "react-tinymce"
+import JoditEditor from "jodit-react"
 
 const CreateArticle = props => {
+  const editor = useRef(null)
+  const [content, setContent] = useState("")
   let history = useHistory()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -47,12 +47,13 @@ const CreateArticle = props => {
     }
     setAuthorName(`${fName} ${lName}`)
   }, [fName, lName])
+
   const postData = e => {
     e.preventDefault()
     setLoading("adding")
     var formdata = new FormData()
     formdata.append("title", title)
-    formdata.append("description", description)
+    formdata.append("content", content)
     formdata.append("image", image)
     formdata.append("authorName", authorName)
     //formdata.append("authorImage", "img")
@@ -60,7 +61,7 @@ const CreateArticle = props => {
     console.log(formdata)
     axios.post(`${url}/api/library/addarticle`, formdata).then(res => {
       setTitle("")
-      setDescription("")
+      setContent("")
       setImage("")
       setAuthorName("")
       setDate("")
@@ -73,6 +74,13 @@ const CreateArticle = props => {
       }
     })
   }
+  const stripHtmlTags = html => {
+    const doc = new DOMParser().parseFromString(html, "text/html")
+    return doc.body.textContent || ""
+  }
+  const strippedContent = stripHtmlTags(content)
+
+  console.log(strippedContent)
   console.log(image, "image")
   return (
     <>
@@ -128,58 +136,26 @@ const CreateArticle = props => {
                       autoFocus
                     />
                   </Form.Group>
-                  <Form.Group controlId="Description">
-                    <Form.Label>Description</Form.Label>
-                    {/* <div>
-                    <label htmlFor="content">Description:</label>
-
-                    <Editor
-                      value={description}
-                      onChange={e => setDescription(e.target.value)}
-                      tinymceScriptSrc={
-                        process.env.PUBLIC_URL + "/tinymce/tinymce.min.js"
-                      }
-                      id="content"
-                      apiKey="lr6omlalxf5cdr3r7iwodlyvf16622x2xrosm5odqburg1tf"
-                      init={{
-                        height: 300,
-                        plugins: [
-                          "a11ychecker advcode advlist advtable anchor autocorrect autosave editimage image link linkchecker lists media mediaembed pageembed powerpaste searchreplace table template tinymcespellchecker typography visualblocks wordcount",
-                        ],
-                        toolbar:
-                          "undo redo | blocks fontfamily fontsize | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify lineheight | removeformat | link ",
-                        menubar: false,
-                        block_formats:
-                          "Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3",
-                        content_style: `
-            body {
-              font-family: Arial, sans-serif;
-              margin: 12px;
-            }
-            h1, h2, h3, p {
-              color: #4D66CB;
-              margin: 10px;
-            }
-            `,
-                      }}
-                    />
-                  </div> */}
+                  {/* <Form.Group controlId="Content">
+                    <Form.Label>Content</Form.Label>
 
                     <textarea
                       className="form-control mb-4"
                       id="exampleFormControlTextarea1"
                       rows="4"
-                      value={description}
-                      onChange={e => setDescription(e.target.value)}
+                      value={content}
+                      onChange={e => setContent(e.target.value)}
                     ></textarea>
-                    {/* <Form.Control
-                    className="mb-4"
-                    style={{ lineHeight: "9.5" }}
-                    type="text"
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    name="Description"
-                  /> */}
+                  </Form.Group> */}
+                  <Form.Group controlId="Content">
+                    <Form.Label>Content</Form.Label>
+
+                    <JoditEditor
+                      className="mb-4"
+                      ref={editor}
+                      value={content}
+                      onChange={newContent => setContent(newContent)}
+                    />
                   </Form.Group>
                   <Form.Group controlId="Image">
                     <Form.Label>Image</Form.Label>
@@ -210,16 +186,6 @@ const CreateArticle = props => {
                       name="Author"
                     />
                   </Form.Group>
-                  {/* <Form.Group controlId="Date">
-                  <Form.Label>Date</Form.Label>
-                  <Form.Control
-                    className="mb-4"
-                    type="date"
-                    value={date}
-                    onChange={e => setDate(e.target.value)}
-                    name="Date"
-                  />
-                </Form.Group> */}
 
                   <Button
                     type="submit"
