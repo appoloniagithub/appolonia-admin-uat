@@ -52,8 +52,6 @@ const Login = props => {
   const [isLoading, setIsLoading] = useState()
 
   const handleLoginDetails = e => {
-    e.preventDefault()
-    setIsLoading("logging in")
     if (phoneNumber || password || emiratesId || isPhoneNumber) {
       const axios = require("axios")
       const data = JSON.stringify({
@@ -98,13 +96,15 @@ const Login = props => {
             )
             sessionStorage.setItem("email", response.data.doctorFound.email)
             history.push("/dashboard")
-            // if (response.data.doctorFound.role == "Doctor") {
-            //   history.push("/patients")
-            // } else {
-            //   history.push("/patients")
-            // }
+            if (response.data.doctorFound.role == "Doctor") {
+              history.push("/patients")
+            } else {
+              history.push("/dashboard")
+            }
           }
           setMessage(response.data.message)
+          // e.preventDefault()
+          // setIsLoading("logging in")
         })
         .catch(error => {
           console.log(error)
@@ -358,6 +358,7 @@ const Login = props => {
                                   e.preventDefault()
                                   handleLoginDetails(e)
                                   handleValidation()
+                                  //setIsLoading("logging in")
                                 }}
                               >
                                 Log In

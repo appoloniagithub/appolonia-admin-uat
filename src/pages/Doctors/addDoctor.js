@@ -1108,27 +1108,32 @@ const CreateDoctor = props => {
                           <Form.Label className="mt-2">
                             Total Experience
                           </Form.Label>
-                          <div className="form-floating">
-                            <textarea
-                              className="form-control"
-                              id="floatingTextarea"
-                              value={totalExperience}
-                              onChange={e => setTotalExperience(e.target.value)}
-                            ></textarea>
-                          </div>
+
+                          <textarea
+                            className="form-control mb-4"
+                            id="exampleFormControlTextarea1"
+                            value={totalExperience}
+                            onChange={e => setTotalExperience(e.target.value)}
+                          ></textarea>
+                          {/* <textarea
+                              className="form-control mb-4"
+                              id="exampleFormControlTextarea1"
+                              rows="4"
+                              value={content}
+                              onChange={e => setContent(e.target.value)}
+                            ></textarea> */}
                         </Form.Group>
                       </Col>
                       <Col sm="6">
                         <Form.Group controlId="Profile">
                           <Form.Label className="mt-2">Profile</Form.Label>
-                          <div className="form-floating">
-                            <textarea
-                              className="form-control"
-                              id="floatingTextarea"
-                              value={profile}
-                              onChange={e => setProfile(e.target.value)}
-                            ></textarea>
-                          </div>
+
+                          <textarea
+                            className="form-control"
+                            id="floatingTextarea"
+                            value={profile}
+                            onChange={e => setProfile(e.target.value)}
+                          ></textarea>
                         </Form.Group>
                       </Col>
                     </Row>
@@ -1139,27 +1144,24 @@ const CreateDoctor = props => {
                             Certifications
                           </Form.Label>
 
-                          <div className="form-floating">
-                            <textarea
-                              className="form-control"
-                              id="floatingTextarea"
-                              value={certifications}
-                              onChange={e => setCertifications(e.target.value)}
-                            ></textarea>
-                          </div>
+                          <textarea
+                            className="form-control"
+                            id="floatingTextarea"
+                            value={certifications}
+                            onChange={e => setCertifications(e.target.value)}
+                          ></textarea>
                         </Form.Group>
                       </Col>
                       <Col sm="6">
                         <Form.Group controlId="Education">
                           <Form.Label className="mt-2">Education</Form.Label>
-                          <div className="form-floating">
-                            <textarea
-                              className="form-control"
-                              id="floatingTextarea"
-                              value={education}
-                              onChange={e => setEducation(e.target.value)}
-                            ></textarea>
-                          </div>
+
+                          <textarea
+                            className="form-control"
+                            id="floatingTextarea"
+                            value={education}
+                            onChange={e => setEducation(e.target.value)}
+                          ></textarea>
                         </Form.Group>
                       </Col>
                     </Row>

@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button"
 import { getAllDoctors } from "Connection/Doctors"
 import { getAllPatients, sendNotification } from "Connection/Patients"
 import Select from "react-select"
+import { toast } from "react-toastify"
 
 export default function SendNotification() {
   const [heading, setHeading] = useState("")
@@ -62,6 +63,7 @@ export default function SendNotification() {
         setHeading("")
         setMessage("")
         setIds("")
+        toast.success("Notification sent successfully")
       }
     })
   }
