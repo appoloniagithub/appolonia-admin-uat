@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react"
 import { Row, Col } from "reactstrap"
+import { useForm } from "react-hook-form"
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import Form from "react-bootstrap/Form"
@@ -47,6 +48,8 @@ const MyCalendar = props => {
   const [open, setOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [clinicName, setClinicName] = useState("")
+  const [isClinicName, setIsClinicName] = useState(false)
+  const [isDoctorId, setIsDoctorId] = useState(false)
   const [clinics, setClinics] = useState([])
   const [date, setDate] = useState("")
   const [tempstart, setTempStart] = useState("")
@@ -58,6 +61,7 @@ const MyCalendar = props => {
   const [doctors, setDoctors] = useState([])
   const [doctorId, setDoctorId] = useState("")
   const [eventId, setEventId] = useState("")
+  const [selectedEvent, setSelectedEvent] = useState(null)
   let history = useHistory()
   const [events, setEvents] = useState([])
   // const [myEvents, setMyEvents] = useState(events)
@@ -86,7 +90,9 @@ const MyCalendar = props => {
     [setStartDate || setEndDate]
   )
   const handleSelectEvent = async eve => {
+    console.log(eve)
     //window.alert("Clinic Name: " + eve._id),
+    setSelectedEvent(eve._id)
     setEditOpen(true)
     setEventId(eve._id)
   }
@@ -95,7 +101,7 @@ const MyCalendar = props => {
   console.log(sdate)
 
   useEffect(() => {
-    getEvent({ eventId }).then(res => {
+    getEvent({ eventId: eventId }).then(res => {
       console.log(res)
       if (res.data.data.success == 1) {
         setClinicName(res.data.data.event[0].title)
@@ -106,32 +112,37 @@ const MyCalendar = props => {
         setDoctorId(res.data.data.event[0].doctorId)
       }
     })
-  }, [eventId, sdate])
+  }, [eventId])
   const handleClickOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
     setEditOpen(false)
-    window.location.reload()
+    setSelectedEvent(null)
   }
 
-  const handleEvents = async () => {
-    await monthlySchedule({
-      title: clinicName,
-      //date: date,
-      start: time,
-      end: time1,
-      //start: startTime,
-      //end: endTime,
-      doctorId: doctorId,
-    }).then(res => {
-      console.log(res)
-      if (res.data.data.success === 1) {
-        handleClose()
-        window.location.reload()
-      }
-    })
+  const handleEvents = async e => {
+    if (clinicName && doctorId) {
+      await monthlySchedule({
+        title: clinicName,
+        //date: date,
+        start: time,
+        end: time1,
+        //start: startTime,
+        //end: endTime,
+        doctorId: doctorId,
+      }).then(res => {
+        console.log(res)
+        if (res.data.data.success === 1) {
+          handleClose()
+          window.location.reload()
+        }
+      })
+    } else {
+      setIsClinicName(true)
+      setIsDoctorId(true)
+    }
   }
   const handleEditEvent = async () => {
     await editEvent({
@@ -150,6 +161,17 @@ const MyCalendar = props => {
         window.location.reload()
       }
     })
+  }
+  const handleValidation = () => {
+    if (!clinicName) {
+      setIsClinicName(true)
+    }
+    if (!doctorId) {
+      setIsDoctorId(true)
+    }
+    // if (!phoneNumber) {
+    //   setIsPhoneNumber(true)
+    // }
   }
   useEffect(() => {
     getAllEvents().then(res => {
@@ -197,20 +219,22 @@ const MyCalendar = props => {
       },
     }
   }
-  const MyCustomEvent = ({ event }) => {
-    // setEditOpen(true)
-    setEventId(event._id)
-    handleSelectEvent(event)
-    return (
-      <div>
-        <strong>{event.title}</strong>
-        <br />
-        {`Time: ${moment(event.start).format("hh:mm A")} - ${moment(
-          event.end
-        ).format("hh:mm A")}`}
-      </div>
-    )
-  }
+  const MyCustomEvent = ({ event, onSelectEvent, open }) => (
+    <div>
+      <strong>{event.title}</strong>
+      <br />
+
+      {`Time: ${moment(event.start).format("HH:mm")} - ${moment(
+        event.end
+      ).format("HH:mm")}`}
+    </div>
+  )
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
   console.log(events)
   const t = new Date(endDate)
   console.log(startDate, endDate)
@@ -265,6 +289,11 @@ const MyCalendar = props => {
           endAccessor={event => {
             return new Date(event.end)
           }}
+          // components={{
+          //   event: props => (
+          //     <MyCustomEvent {...props} onSelectEvent={handleSelectEvent} />
+          //   ),
+          // }}
           onSelectEvent={handleSelectEvent}
           // onSelectSlot={handleClickOpen}
           onSelectSlot={handleSelectSlot}
@@ -273,9 +302,6 @@ const MyCalendar = props => {
           //showAllEvents
           //showMultiDayTimes
           views={{ month: true, week: true, day: true, agenda: false }}
-          // components={{
-          //   event: MyCustomEvent,
-          // }}
           formats={{
             timeGutterFormat: "h:mm A",
 
@@ -303,6 +329,9 @@ const MyCalendar = props => {
                 className="form-select"
                 aria-label="Default select example"
                 value={clinicName}
+                {...register("title", {
+                  required: true,
+                })}
                 onChange={e => setClinicName(e.target.value)}
               >
                 <option>Select</option>
@@ -313,7 +342,9 @@ const MyCalendar = props => {
                 ))}
               </select>
             </Form.Group>
-
+            {!clinicName && isClinicName && (
+              <p className="text-danger">Please select Clinic Name</p>
+            )}
             <Form.Group className="mt-2" controlId="Assign a Doctor">
               <Form.Label>
                 Assign a Doctor<sup className="text-danger">*</sup>
@@ -324,6 +355,9 @@ const MyCalendar = props => {
                 aria-label="Default select example"
                 disabled={false}
                 value={doctorId}
+                {...register("doctorId", {
+                  required: true,
+                })}
                 onChange={e => setDoctorId(e.currentTarget.value)}
               >
                 <option>Select</option>
@@ -350,6 +384,9 @@ const MyCalendar = props => {
                 </select>
               )} */}
             </Form.Group>
+            {!doctorId && isDoctorId && (
+              <p className="text-danger">Please select Doctor Name</p>
+            )}
             <Row>
               <Col sm="6">
                 <Form.Group className="mt-2" controlId="Start Date">
@@ -431,7 +468,13 @@ const MyCalendar = props => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleEvents}>Save</Button>
+            <Button
+              onClick={e => {
+                handleSubmit(handleEvents(e))
+              }}
+            >
+              Save
+            </Button>
           </DialogActions>
         </Dialog>
       </div>
