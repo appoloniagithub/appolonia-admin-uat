@@ -69,7 +69,7 @@ const Login = props => {
         },
         data: data,
       }
-
+      setIsLoading("logging in")
       axios(config)
         .then(response => {
           console.log(response.data)
@@ -103,11 +103,13 @@ const Login = props => {
             }
           }
           setMessage(response.data.message)
-          // e.preventDefault()
-          // setIsLoading("logging in")
         })
         .catch(error => {
           console.log(error)
+        })
+        .finally(() => {
+          //e.preventDefault()
+          setIsLoading("")
         })
     } else {
       setMessage("No field should be empty.")
