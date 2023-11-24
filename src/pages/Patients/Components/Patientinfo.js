@@ -175,9 +175,9 @@ const Patientinfo = ({ data, view, handleView, handleOpen }) => {
               <li>
                 <strong>Emirates Id</strong>: {data.emiratesId}
               </li>
-              <li>
+              {/* <li>
                 <strong>Expiry</strong>:
-              </li>
+              </li> */}
             </ul>
           </div>
           {data?.isHead === "1" ? (

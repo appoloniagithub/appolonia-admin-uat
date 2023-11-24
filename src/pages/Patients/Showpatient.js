@@ -991,10 +991,10 @@ export default function Showpatient({
                                 // md="6"
                               >
                                 <div
-                                  style={{
-                                    maxHeight: "760px",
-                                    height: "auto",
-                                  }}
+                                  // style={{
+                                  //   maxHeight: "760px",
+                                  //   height: "auto",
+                                  // }}
                                   className="border border-secondary bg-white rounded p-2"
                                 >
                                   <br />

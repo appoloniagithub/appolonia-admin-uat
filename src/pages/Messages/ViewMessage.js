@@ -210,10 +210,18 @@ const ViewMessage = () => {
                       <Form.Label className="mt-2">Files</Form.Label>
                       <div className="form-floating">
                         <img
+                          style={{ cursor: "pointer" }}
                           width="100"
                           height="100"
                           src={`${url}/api/${files}`}
                           //onChange={e => setFiles(e.target.value)}
+                          onClick={() =>
+                            window.open(
+                              `${url}/api/${files}`,
+                              "_blank",
+                              "noopener,noreferrer"
+                            )
+                          }
                         />
                       </div>
                     </Form.Group>

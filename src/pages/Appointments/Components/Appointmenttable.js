@@ -259,6 +259,18 @@ const Appointmenttable = ({ data }) => {
                             {appointment.date} {appointment.time}
                           </p>
                         )}
+                        {appointment.status == "Completed" && (
+                          <p>
+                            {" "}
+                            {appointment.date} {appointment.time}
+                          </p>
+                        )}
+                        {appointment.status === "Cancelled" && (
+                          <p>
+                            {" "}
+                            {appointment.pdate} {appointment.ptime}
+                          </p>
+                        )}
                       </td>
                       <td>
                         {appointment.status == "Pending" && (
@@ -266,6 +278,12 @@ const Appointmenttable = ({ data }) => {
                         )}
                         {appointment.status == "Confirmed" && (
                           <p> {appointment.doctorName}</p>
+                        )}
+                        {appointment.status == "Completed" && (
+                          <p> {appointment.doctorName}</p>
+                        )}
+                        {appointment.status == "Cancelled" && (
+                          <p> {appointment.pdoctorName}</p>
                         )}
                       </td>
                       <td>
@@ -383,12 +401,29 @@ const Appointmenttable = ({ data }) => {
                         )} */}
                       </td>
                       <td>
-                        {appointment.status === "Cancelled" ? (
+                        {appointment.status === "Cancelled" && (
                           <i
                             className="mdi mdi-square-edit-outline"
                             style={{ fontSize: "18px", display: "none" }}
                           ></i>
-                        ) : (
+                        )}
+                        {appointment.status === "Completed" && (
+                          <i
+                            className="mdi mdi-square-edit-outline"
+                            style={{ fontSize: "18px", display: "none" }}
+                          ></i>
+                        )}
+                        {appointment.status === "Pending" && (
+                          <Link
+                            to={`/appointments/edit-appointment/${appointment?._id}`}
+                          >
+                            <i
+                              className="mdi mdi-square-edit-outline"
+                              style={{ fontSize: "18px" }}
+                            ></i>
+                          </Link>
+                        )}
+                        {appointment.status === "Confirmed" && (
                           <Link
                             to={`/appointments/edit-appointment/${appointment?._id}`}
                           >

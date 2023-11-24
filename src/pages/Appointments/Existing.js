@@ -155,9 +155,9 @@ export default function Existing() {
       emiratesId: emiratesId,
       consultationType: consultationType,
       serviceName: serviceName,
-      time: startTime,
-      date: startDate,
-      doctorId: doctorId,
+      ptime: startTime,
+      pdate: startDate,
+      pdoctorId: doctorId,
     })
     console.log(res)
     setPatientName("")

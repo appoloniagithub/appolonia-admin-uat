@@ -90,7 +90,7 @@ const NotificationDropdown = props => {
           <SimpleBar style={{ height: "500px" }}>
             <div className="text-reset notification-item">
               {notifications.length === 0 && (
-                <p>No Notifications are available</p>
+                <p className="text-center">No Notifications are available</p>
               )}
               {notifications.length > 0 &&
                 notifications.map(notification => {
@@ -144,6 +144,14 @@ const NotificationDropdown = props => {
                         </Link>
                       )}
                       {notification?.actionName === "Chat" && (
+                        <Link
+                          to={`/patients/showpatient/${notification.patientId}`}
+                          className="small"
+                        >
+                          View
+                        </Link>
+                      )}
+                      {notification?.actionName === "Scan" && (
                         <Link
                           to={`/patients/showpatient/${notification.patientId}`}
                           className="small"
